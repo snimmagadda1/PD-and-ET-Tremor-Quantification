@@ -1,0 +1,15 @@
+*.pdf
+*.pyc
+*.xml
+*.bin
+*.iml
+.idea/*
+__pycache__
+idea/
+idea
+.idea
+.idea/workspace.xml
+.idea/
+.cache
+cache
+.cach/*
