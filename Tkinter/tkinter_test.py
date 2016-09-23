@@ -17,7 +17,7 @@ if __name__ == "__main__":
             self.hi_there.pack(side=LEFT)
 
         def say_hi(self):
-            print("DAVID SUCKS DICK")
+            print("Hello Friends")
 
 
     root = Tk()
