@@ -1,24 +1,29 @@
-def my_first_gui():
-    import tkinter as Tk
-
-    # make root window (one per program)
-    root = Tk.Tk()
-
-    # make a label widget as a child to the root window
-    # label can display either text or icon or image
-
-    hello_widget = Tk.Label(root, text="Hello, world!")
-
-    # pack method sizes widget and makes visible
-    hello_widget.pack()
-
-    # must enter main loop for window to appear
-    root.mainloop()
-
-
-
-
 if __name__ == "__main__":
-    print("Hi")
-    my_first_gui()
+
+    from tkinter import *
+
+
+    class App:
+        def __init__(self, master):
+            frame = Frame(master)
+            frame.pack()
+
+            self.button = Button(
+                frame, text="QUIT", fg="red", command=frame.quit
+            )
+            self.button.pack(side=LEFT)
+
+            self.hi_there = Button(frame, text="Hello", command=self.say_hi)
+            self.hi_there.pack(side=LEFT)
+
+        def say_hi(self):
+            print("DAVID SUCKS DICK")
+
+
+    root = Tk()
+
+    app = App(root)
+
+    root.mainloop()
+    root.destroy()  # optional; see description below
     pass
