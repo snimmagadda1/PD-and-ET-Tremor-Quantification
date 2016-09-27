@@ -52,7 +52,7 @@ class MainWindow:
 
         # configure main window root to frame
         self.master = master
-        self.frame = tk.Frame(self.master, width=768, height=576, bg="", colormap="new")
+        self.frame = tk.Frame(self.master, width=768, height=576, bg=None, colormap="new")
 
         # how much to pad by (almost entire screen used)
         pad = 3
