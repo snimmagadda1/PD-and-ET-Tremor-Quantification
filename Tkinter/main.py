@@ -1,6 +1,10 @@
+import tkinter as tk
+
+
 # Class to make HelpMenu for a window
 class HelpMenu:
     counter = 0
+
     def __init__(self, master):
         # make the menu, add to root
         menu = tk.Menu(master)
@@ -31,18 +35,7 @@ class HelpMenu:
 
 
 # Class to make main window
-class MainWindow:
-
-    # function to change window size
-    def toggle_geom(self, event):
-        geom = self.master.winfo_geometry()
-        print(geom, self._geom)
-
-        # resize window according to stored value
-        self.master.geometry(self._geom)
-
-        # store previous size in _geom variable for continuous reverts
-        self._geom = geom
+class MainWindow(tk.Tk):
 
     # initialize the main window
     def __init__(self, master):
@@ -57,14 +50,9 @@ class MainWindow:
         # how much to pad by (almost entire screen used)
         pad = 3
 
-        # define resize shape
-        self._geom = '800x800+0+0'
-
         # set geometry of window to be full screen
         master.geometry("{0}x{1}+0+0".format(master.winfo_screenwidth() - pad, master.winfo_screenheight() - pad))
 
-        # bind the escape key to window resize event
-        master.bind('<Escape>', self.toggle_geom)
         self.frame.pack()
 
 
@@ -73,10 +61,13 @@ if __name__ == "__main__":
     import tkinter as tk
 
     root = tk.Tk()
+
     main = MainWindow(root)
     main_menu = HelpMenu(root)
+
+    # start the GUI loop
     root.mainloop()
-   # root.destroy()
+    #root.destroy()
 
 
 
