@@ -1,7 +1,51 @@
+# for plotting and GUI
+import matplotlib
 import tkinter as tk
+# allow to draw matploblib to canvas using TkAgg and zoom toolbar stuff
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.figure import Figure
+from matplotlib import style
+# for live graphs
+import matplotlib.animation as animation
+# for reading data from url
+import urllib
+import json
+# for data manipulation
+import pandas as pd
+import numpy as np
 
-# define constants
+# define backend for graphics
+matplotlib.use("TkAgg")
+
+
+# define constants and styles
 LARGE_FONT = ("Verdana", 12)
+style.use("ggplot")
+
+# figure is global variable
+f = Figure(figsize=(5,5), dpi=100)
+a = f.add_subplot(111)
+
+
+def animate(i):
+    """
+    Function to make live matplotlib graphs
+    :param i:
+    :return:
+    """
+    # pull some example data
+    pullData = open("sampleData.txt", "r").read()
+    dataList = pullData.split('\n')
+    xList = []
+    yList = []
+    for eachLine in dataList:
+        if len(eachLine)>1:
+            x , y = eachLine.split(',')
+            xList.append(int(x))
+            yList.append(int(y))
+
+    a.clear()
+    a.plot(xList,yList)
 
 
 # class for demo application
@@ -28,7 +72,7 @@ class SeaofBTCapp(tk.Tk):
 
         # to make new page and add to application:
         # make class that inherits tk.Frame and add to tuple below
-        for F in (StartPage, PageOne, PageTwo):
+        for F in (StartPage, PageOne, BTCE_Page):
 
             # make a frame that hasn't been created will stuff into frame dictionary above for switching windows
             frame = F(container, self)
@@ -57,19 +101,22 @@ class StartPage(tk.Frame):
 
         # parent class is SeaofBTC app
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Start Page", font=LARGE_FONT)
+        label = tk.Label(self, text="""ALPHA Application
+        Use at your own risk. There is no promise of warranty
+        """, font=LARGE_FONT)
 
         # pack the label into start window
         label.pack(pady=10, padx=10)
 
         # make simple button and add to start page. To pass arguments to functions, must use lambda: syntax
-        button1 = tk.Button(self, text="Visit Page 1",
-                            command=lambda: controller.show_frame(PageOne))
+        button1 = tk.Button(self, text="Agree",
+                            command=lambda: controller.show_frame(BTCE_Page))
         button1.pack()
 
-        button2 = tk.Button(self, text="Visit Page 2",
-                            command=lambda: controller.show_frame(PageTwo))
+        button2 = tk.Button(self, text="Disagree",
+                            command=quit)
         button2.pack()
+
 
 
 class PageOne(tk.Frame):
@@ -83,25 +130,30 @@ class PageOne(tk.Frame):
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
 
-        button2 = tk.Button(self, text="Visit Page Two",
-                            command=lambda: controller.show_frame(PageTwo))
-        button2.pack()
 
 
-class PageTwo(tk.Frame):
+
+
+# graph page
+class BTCE_Page(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page Two", font=LARGE_FONT)
+        label = tk.Label(self, text="Graph Page", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
         button1 = tk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
 
-        button2 = tk.Button(self, text="Visig Page One",
-                            command=lambda: controller.show_frame(PageOne))
-        button2.pack()
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # add toolbar to canvas
+        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar.update()
+        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 
 
@@ -109,6 +161,9 @@ if __name__ == "__main__":
 
     # initialize the application
     app = SeaofBTCapp()
+
+    # add animate function with update 1000 ms
+    ani = animation.FuncAnimation(f, animate, interval=1000)
 
     # run the tkinter application
     app.mainloop()
