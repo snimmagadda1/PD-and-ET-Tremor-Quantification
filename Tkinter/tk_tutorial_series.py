@@ -14,22 +14,23 @@ import json
 import pandas as pd
 import numpy as np
 
+pd.options.mode.chained_assignment = None
+
 # define backend for graphics
 matplotlib.use("TkAgg")
-
 
 # define constants and styles
 LARGE_FONT = ("Verdana", 12)
 style.use("ggplot")
 
 # figure is global variable
-f = Figure(figsize=(5,5), dpi=100)
+f = Figure(figsize=(10,6), dpi=100)
 a = f.add_subplot(111)
 
 
-def animate(i):
+def animate_1(i):
     """
-    Function to make live matplotlib graphs
+    Function to make live matplotlib graphs + Tkinter code using its backend
     :param i:
     :return:
     """
@@ -46,6 +47,36 @@ def animate(i):
 
     a.clear()
     a.plot(xList,yList)
+
+
+def animate(i):
+    """
+    Proof of Concept - Pull Data from Bit Coin Trading in Real Time
+    :param i:
+    :return:
+    """
+    dataLink = 'https://btc-e.com/api/3/trades/btc_usd?limit=2000'
+    data = urllib.request.urlopen(dataLink)
+    data = data.read().decode("utf-8")
+    data = json.loads(data)
+
+    data = data["btc_usd"]
+    data = pd.DataFrame(data)
+
+    buys = data[(data['type'] == "bid")]
+    buys["datestamp"] = np.array(buys["timestamp"]).astype("datetime64[s]")
+    buyDates = (buys["datestamp"]).tolist()
+
+    sells = data[(data['type'] == "ask")]
+    sells["datestamp"] = np.array(sells["timestamp"]).astype("datetime64[s]")
+    sellDates = (sells["datestamp"]).tolist()
+
+    a.clear()
+
+    a.plot_date(buyDates, buys["price"])
+    a.plot_date(sellDates, sells["price"])
+
+
 
 
 # class for demo application
@@ -129,9 +160,6 @@ class PageOne(tk.Frame):
         button1 = tk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
-
-
-
 
 
 # graph page
