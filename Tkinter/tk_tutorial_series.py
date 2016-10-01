@@ -50,11 +50,6 @@ def animate_1(i):
 
 
 def animate(i):
-    """
-    Proof of Concept - Pull Data from Bit Coin Trading in Real Time
-    :param i:
-    :return:
-    """
     dataLink = 'https://btc-e.com/api/3/trades/btc_usd?limit=2000'
     data = urllib.request.urlopen(dataLink)
     data = data.read().decode("utf-8")
@@ -73,10 +68,14 @@ def animate(i):
 
     a.clear()
 
-    a.plot_date(buyDates, buys["price"])
-    a.plot_date(sellDates, sells["price"])
+    a.plot_date(buyDates, buys["price"], "#00A3E0", label="buys")
+    a.plot_date(sellDates, sells["price"], "#183A54", label="sells")
 
+    a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
+             ncol=2, borderaxespad=0)
 
+    title = "BTC-e BTCUSD Prices\nLast Price: " + str(data["price"][0])
+    a.set_title(title)
 
 
 # class for demo application
@@ -149,7 +148,6 @@ class StartPage(tk.Frame):
         button2.pack()
 
 
-
 class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -182,7 +180,6 @@ class BTCE_Page(tk.Frame):
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
 
 
 if __name__ == "__main__":
