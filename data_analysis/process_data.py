@@ -9,8 +9,6 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
     High_cutoff: float, frequency components above this frequency will not pass the filter (physical frequency in unit of Hz)
     F_sample: float, the sampling frequency of the signal (physical frequency in unit of Hz)
 
-    Notes
-    =====
     1. The input signal must be real, not imaginary nor complex
     2. The Filtered_signal will have only half of original amplitude. Use abs() to restore.
     3. In Numpy/Scipy, the frequencies goes from 0 to F_sample/2 and then from negative F_sample to 0.

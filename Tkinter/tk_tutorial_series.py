@@ -14,6 +14,8 @@ import json
 import pandas as pd
 import numpy as np
 
+import matplotlib.pyplot as plt
+
 pd.options.mode.chained_assignment = None
 
 # define backend for graphics
@@ -21,11 +23,62 @@ matplotlib.use("TkAgg")
 
 # define constants and styles
 LARGE_FONT = ("Verdana", 12)
+NORM_FONT = ("Verdana", 10)
+SMALL_FONT = ("Verdana", 8)
 style.use("ggplot")
 
 # figure is global variable
 f = Figure(figsize=(10,6), dpi=100)
 a = f.add_subplot(111)
+
+# starting dataset is global variable
+exchange = "BTC-e"
+DatCounter = 9000
+programName= "btce"
+
+
+def changeExchange(toWhat, pn):
+    """
+    Change the exchange type that is displayed
+    :param toWhat:
+    :param pn:
+    :return:
+    """
+    global exchange
+    global DatCounter
+    global programName
+
+    exchange = toWhat
+    programName =pn
+    # update ASAP
+    DatCounter = 9000
+
+
+
+
+
+
+def popupmsg(msg):
+    """
+    Create a simple message popup window
+    :param msg:
+    :return:
+    """
+    popup = tk.Tk()
+
+    def leavemini():
+        """
+        Exit a tk window instance
+        :return:
+        """
+        popup.destroy()
+
+    popup.wm_title("!")
+    label = tk.Label(popup, text=msg, font=NORM_FONT)
+    label.pack(side="top", fill="x", pady=10)
+    B1 = tk.Button(popup, text="Okay", command=leavemini)
+    B1.pack()
+    popup.mainloop()
 
 
 def animate_1(i):
@@ -50,6 +103,11 @@ def animate_1(i):
 
 
 def animate(i):
+    """
+    Create Visualizations of Data
+    :param i:
+    :return:
+    """
     dataLink = 'https://btc-e.com/api/3/trades/btc_usd?limit=2000'
     data = urllib.request.urlopen(dataLink)
     data = data.read().decode("utf-8")
@@ -90,12 +148,45 @@ class SeaofBTCapp(tk.Tk):
         # frame is parent window
         container = tk.Frame(self)
 
+        self.wm_title("Essential Tremometer\u2122 Alpha Skeleton")
+
         # pack shoves shit into the window without a lot of control
         container.pack(side="top", fill="both", expand=True)
 
         # set size of rows and cols
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+
+        # make top bar accessible
+        menubar = tk.Menu(container)
+        # make filemenu option add to menubar
+        filemenu = tk.Menu(menubar, tearoff=0)
+
+        # make function with placehold message (To Do)
+        filemenu.add_command(label="Save settings", command=lambda:popupmsg('Not supported just yet!'))
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+
+        # make exchangeChoice option(s), add to menubar
+        exchangeChoice = tk.Menu(menubar, tearoff=1)
+        exchangeChoice.add_command(label="BTC-e",
+                                   command=lambda:changeExchange("BTC-e", "btce"))
+        exchangeChoice.add_command(label="Bitfinix",
+                                   command=lambda: changeExchange("Bitfinix", "bitfinix"))
+        exchangeChoice.add_command(label="Bitstamp",
+                                   command=lambda: changeExchange("Bitstamp", "bitstamp"))
+        exchangeChoice.add_command(label="Huobi",
+                                   command=lambda: changeExchange("Huobi", "huobi"))
+
+        menubar.add_cascade(label="Exchange", menu=exchangeChoice)
+
+
+
+        # add to app
+        tk.Tk.config(self, menu=menubar)
+
+
 
         # self.frames is empty dictionary
         self.frames = {}
@@ -186,9 +277,10 @@ if __name__ == "__main__":
 
     # initialize the application
     app = SeaofBTCapp()
+    app.geometry("1280x720")
 
     # add animate function with update 1000 ms
-    ani = animation.FuncAnimation(f, animate, interval=1000)
+    ani = animation.FuncAnimation(f, animate, interval=5000)
 
     # run the tkinter application
     app.mainloop()
