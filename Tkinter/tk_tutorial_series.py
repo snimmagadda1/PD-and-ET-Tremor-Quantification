@@ -41,6 +41,134 @@ EMAs = []
 SMAs = []
 
 
+def addMiddleIndicator(what):
+    """
+    Add indicator to middle
+    :param what: what type of indicator
+    :return:
+    """
+    global middleIndicator
+    global DatCounter
+
+    if DataPace == "tick":
+        popupmsg("Indicators in Tick Data not available")
+    if what != "none":
+        if middleIndicator == "none":
+            if what == "sma":
+                midIQ = tk.Tk()
+                midIQ.wm_title("Periods?")
+                label = tk.Label(midIQ, text="Choose how many periods you want your SMA to be.")
+                label.pack(side="top", fill="x", pady=10)
+                e = tk.Entry(midIQ)
+                e.insert(0,10)
+                e.pack()
+                e.focus_set()
+
+                def callback():
+                    global middleIndicator
+                    global DatCounter
+
+                    middleIndicator = []
+                    periods = (e.get())
+                    group = []
+                    group.append("sma")
+                    group.append(int(periods))
+                    middleIndicator.append(group)
+                    DatCounter = 9000
+                    print("Middle indicator set to:", middleIndicator)
+                    midIQ.destroy()
+
+                b = tk.Button(midIQ, text="Submit", width=10, command=callback)
+                b.pack()
+                tk.mainloop()
+
+            if what == "ema":
+                midIQ = tk.Tk()
+                midIQ.wm_title("Periods?")
+                label = tk.Label(midIQ, text="Choose how many periods you want your EMA to be.")
+                label.pack(side="top", fill="x", pady=10)
+                e = tk.Entry(midIQ)
+                e.insert(0, 10)
+                e.pack()
+                e.focus_set()
+
+                def callback():
+                    global middleIndicator
+                    global DatCounter
+
+                    middleIndicator = []
+                    periods = (e.get())
+                    group = []
+                    group.append("ema")
+                    group.append(int(periods))
+                    middleIndicator.append(group)
+                    DatCounter = 9000
+                    print("Middle indicator set to:", middleIndicator)
+                    midIQ.destroy()
+
+                b = tk.Button(midIQ, text="Submit", width=10, command=callback)
+                b.pack()
+                tk.mainloop()
+        else:
+            if what == "sma":
+                    if what == "sma":
+                        midIQ = tk.Tk()
+                        midIQ.wm_title("Periods?")
+                        label = tk.Label(midIQ, text="Choose how many periods you want your SMA to be.")
+                        label.pack(side="top", fill="x", pady=10)
+                        e = tk.Entry(midIQ)
+                        e.insert(0, 10)
+                        e.pack()
+                        e.focus_set()
+
+                        def callback():
+                            global middleIndicator
+                            global DatCounter
+
+                            periods = (e.get())
+                            group = []
+                            group.append("sma")
+                            group.append(int(periods))
+                            middleIndicator.append(group)
+                            DatCounter = 9000
+                            print("Middle indicator set to:", middleIndicator)
+                            midIQ.destroy()
+
+                        b = tk.Button(midIQ, text="Submit", width=10, command=callback)
+                        b.pack()
+                        tk.mainloop()
+
+            if what == "ema":
+                    if what == "sma":
+                        midIQ = tk.Tk()
+                        midIQ.wm_title("Periods?")
+                        label = tk.Label(midIQ, text="Choose how many periods you want your EMA to be.")
+                        label.pack(side="top", fill="x", pady=10)
+                        e = tk.Entry(midIQ)
+                        e.insert(0, 10)
+                        e.pack()
+                        e.focus_set()
+
+                        def callback():
+                            global middleIndicator
+                            global DatCounter
+
+                            periods = (e.get())
+                            group = []
+                            group.append("ema")
+                            group.append(int(periods))
+                            middleIndicator.append(group)
+                            DatCounter = 9000
+                            print("Middle indicator set to:", middleIndicator)
+                            midIQ.destroy()
+
+                        b = tk.Button(midIQ, text="Submit", width=10, command=callback)
+                        b.pack()
+                        tk.mainloop()
+    else:
+        middleIndicator = "none"
+
+
 def addTopIndicator(what):
     """
     Add indicator to top
@@ -101,7 +229,7 @@ def addTopIndicator(what):
 
 def addBottomIndicator(what):
     """
-    Add indicator to top
+    Add indicator to bottom
     :param what: what type of indicator
     :return:
     """
@@ -415,6 +543,8 @@ class BTCe_Page(tk.Frame):
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+
+#################################### PROGRAM RUN #######################################################################
 
 app = SeaofBTCapp()
 app.geometry("1280x720")
