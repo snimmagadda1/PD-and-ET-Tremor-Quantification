@@ -7,7 +7,6 @@ import matplotlib.animation as animation
 from matplotlib import style
 
 import tkinter as tk
-from tkinter import ttk
 
 import urllib
 import json
@@ -28,16 +27,84 @@ style.use("ggplot")
 f = Figure()
 a = f.add_subplot(111)
 
+# global constants (default values)
 exchange = "BTC-e"
 DatCounter = 9000
 programName = "btce"
-
 resampleSize = "15Min"
 DataPace = "1d"
 candleWidth = 0.008
+topIndicator = "none"
+bottomIndicator = "none"
+middleIndicator = "none"
+EMAs = []
+SMAs = []
+
+
+def addTopIndicator(what):
+    """
+    Add indicator to top
+    :param what: what type of indicator
+    :return:
+    """
+    global topIndicator
+    global DatCounter
+
+    if DataPace == "tick":
+        popupmsg("Indicators in Tick Data not available")
+    elif what == "none":
+        topIndicator = what
+        DatCounter = 9000
+    elif what == "rsi":
+
+        # pop up question window
+        rsiQ = tk.Tk()
+        rsiQ.wm_title("Periods?")
+        label = tk.Label(rsiQ, text = "Choose how many periods you want each RSI calculation to consider.")
+        label.pack(side="top", fill="x", pady=10)
+
+        # make an entry widget
+        e = tk.Entry(rsiQ)
+        e.insert(0,14)
+        e.pack()
+        e.focus_set()
+
+        def callback():
+            """
+            Function that happens when rsi selected
+            :return:
+            """
+            global topIndicator
+            global DatCounter
+
+            # get what was put into the entry widget
+            periods = (e.get())
+            group = []
+            group.append("rsi")
+            group.append(periods)
+
+            topIndicator = group
+            DatCounter = 9000
+            print("Set top indicator to", group)
+            rsiQ.destroy()
+
+        b = tk.Button(rsiQ, text= "Submit", width=10, command=callback)
+        b.pack()
+        tk.mainloop()
+
+    elif what == "macd":
+        global topIndicator
+        global DatCounter
+        topIndicator = "macd"
+        DatCounter = 9000
 
 
 def changeTimeFrame(tf):
+    """
+    Change the time scale of data
+    :param tf: interval (time)
+    :return:
+    """
     global DataPace
     if tf == "7d" and resampleSize == "1Min":
         popupmsg("Too much data chosen, choose a smaller time frame or higher OHLC interval")
@@ -47,6 +114,12 @@ def changeTimeFrame(tf):
 
 
 def changeSampleSize(size, width):
+    """
+    Change the sample size of data
+    :param size: sample size of data
+    :param width: width of candlesticks for graph
+    :return:
+    """
     global resampleSize
     global candleWidth
     if DataPace == "7d" and resampleSize == "1Min":
@@ -62,6 +135,12 @@ def changeSampleSize(size, width):
 
 
 def changeExchange(toWhat, pn):
+    """
+    Change exchange type (data type)
+    :param toWhat: type of data to change to
+    :param pn: program name
+    :return:
+    """
     global exchange
     global DatCounter
     global programName
@@ -72,16 +151,26 @@ def changeExchange(toWhat, pn):
 
 
 def popupmsg(msg):
+    """
+    Make a popup window for a message
+    :param msg: input message to display
+    :return:
+    """
     popup = tk.Tk()
     popup.wm_title("!")
-    label = ttk.Label(popup, text=msg, font=NORM_FONT)
+    label = tk.Label(popup, text=msg, font=NORM_FONT)
     label.pack(side="top", fill="x", pady=10)
-    B1 = ttk.Button(popup, text="Okay", command=popup.destroy)
+    B1 = tk.Button(popup, text="Okay", command=popup.destroy)
     B1.pack()
     popup.mainloop()
 
 
 def animate(i):
+    """
+    Function to draw graphics
+    :param i:
+    :return:
+    """
     dataLink = 'https://btc-e.com/api/3/trades/btc_usd?limit=2000'
     data = urllib.request.urlopen(dataLink)
     data = data.read().decode("utf-8")
@@ -110,7 +199,9 @@ def animate(i):
     a.set_title(title)
 
 
+# Main app class
 class SeaofBTCapp(tk.Tk):
+
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
@@ -121,6 +212,8 @@ class SeaofBTCapp(tk.Tk):
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+
+#################################### MENU STUFF ########################################################################
 
         menubar = tk.Menu(container)
         filemenu = tk.Menu(menubar, tearoff=0)
@@ -167,17 +260,39 @@ class SeaofBTCapp(tk.Tk):
                           command=lambda: changeSampleSize('1H', 0.032))
         OHLCI.add_command(label="3 Hour",
                           command=lambda: changeSampleSize('3H', 0.096))
-
         menubar.add_cascade(label="OHLC Interval", menu=OHLCI)
 
-        
+        topIndi = tk.Menu(menubar, tearoff=1)
+        topIndi.add_command(label="None", command=lambda:addTopIndicator('none'))
+        topIndi.add_command(label="RSI", command=lambda: addTopIndicator('rsi'))
+        topIndi.add_command(label="MACD", command=lambda: addTopIndicator('macd'))
 
+        menubar.add_cascade(label="Top Indicator", menu=topIndi)
+
+
+
+        mainI = tk.Menu(menubar, tearoff=1)
+        mainI.add_command(label="None", command=lambda: addMiddleIndicator('none'))
+        mainI.add_command(label="SMA", command=lambda: addMiddleIndicator('sma'))
+        mainI.add_command(label="EMA", command=lambda: addMiddleIndicator('ema'))
+
+        menubar.add_cascade(label="Main/middle Indicator", menu=mainI)
+
+
+
+        bottomI = tk.Menu(menubar, tearoff=1)
+        bottomI.add_command(label="None", command=lambda: addBottomIndicator('none'))
+        bottomI.add_command(label="RSI", command=lambda: addBottomIndicator('rsi'))
+        bottomI.add_command(label="MACD", command=lambda: addBottomIndicator('macd'))
+
+        menubar.add_cascade(label="Bottom Indicator", menu=bottomI)
 
         tk.Tk.config(self, menu=menubar)
 
+ #################################### MENU STUFF ########################################################################
 
         self.frames = {}
-
+        # this is where new pages are added if needed
         for F in (StartPage, BTCe_Page):
             frame = F(container, self)
 
@@ -188,6 +303,11 @@ class SeaofBTCapp(tk.Tk):
         self.show_frame(StartPage)
 
     def show_frame(self, cont):
+        """
+        Function to show an ew window
+        :param cont: the frame to show
+        :return:
+        """
         frame = self.frames[cont]
         frame.tkraise()
 
@@ -200,11 +320,11 @@ class StartPage(tk.Frame):
         of warranty."""), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Agree",
+        button1 = tk.Button(self, text="Agree",
                              command=lambda: controller.show_frame(BTCe_Page))
         button1.pack()
 
-        button2 = ttk.Button(self, text="Disagree",
+        button2 = tk.Button(self, text="Disagree",
                              command=quit)
         button2.pack()
 
@@ -215,7 +335,7 @@ class PageOne(tk.Frame):
         label = tk.Label(self, text="Page One!!!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Back to Home",
+        button1 = tk.Button(self, text="Back to Home",
                              command=lambda: controller.show_frame(StartPage))
         button1.pack()
 
@@ -226,7 +346,7 @@ class BTCe_Page(tk.Frame):
         label = tk.Label(self, text="Graph Page!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Back to Home",
+        button1 = tk.Button(self, text="Back to Home",
                              command=lambda: controller.show_frame(StartPage))
         button1.pack()
 
