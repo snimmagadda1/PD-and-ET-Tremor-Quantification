@@ -99,6 +99,63 @@ def addTopIndicator(what):
         DatCounter = 9000
 
 
+def addBottomIndicator(what):
+    """
+    Add indicator to top
+    :param what: what type of indicator
+    :return:
+    """
+    global bottomIndicator
+    global DatCounter
+
+    if DataPace == "tick":
+        popupmsg("Indicators in Tick Data not available")
+    elif what == "none":
+        bottomIndicator = what
+        DatCounter = 9000
+    elif what == "rsi":
+
+        # pop up question window
+        rsiQ = tk.Tk()
+        rsiQ.wm_title("Periods?")
+        label = tk.Label(rsiQ, text = "Choose how many periods you want each RSI calculation to consider.")
+        label.pack(side="top", fill="x", pady=10)
+
+        # make an entry widget
+        e = tk.Entry(rsiQ)
+        e.insert(0,14)
+        e.pack()
+        e.focus_set()
+
+        def callback():
+            """
+            Function that happens when rsi selected
+            :return:
+            """
+            global bottomIndicator
+            global DatCounter
+
+            # get what was put into the entry widget
+            periods = (e.get())
+            group = []
+            group.append("rsi")
+            group.append(periods)
+
+            bottomIndicator = group
+            DatCounter = 9000
+            print("Set bottom indicator to", group)
+            rsiQ.destroy()
+
+        b = tk.Button(rsiQ, text= "Submit", width=10, command=callback)
+        b.pack()
+        tk.mainloop()
+
+    elif what == "macd":
+        global bottomIndicator
+        global DatCounter
+        bottomIndicator = "macd"
+        DatCounter = 9000
+
 def changeTimeFrame(tf):
     """
     Change the time scale of data
