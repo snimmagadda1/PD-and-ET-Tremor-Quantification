@@ -391,7 +391,7 @@ class SeaofBTCapp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         #tk.Tk.iconbitmap(self, default="clienticon.ico")
-        tk.Tk.wm_title(self, "Sea of BTC client")
+        tk.Tk.wm_title(self, "Park & Sons Co: Essen+ial Tremometer\u2122 Diagnostic Tool")
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -500,9 +500,8 @@ class SeaofBTCapp(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text=("""ALPHA Bitcoin trading application
-        use at your own risk. There is no promise
-        of warranty."""), font=LARGE_FONT)
+        label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
+        accelerometer based tremor classifcation platform."""), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
         button1 = tk.Button(self, text="Agree",
