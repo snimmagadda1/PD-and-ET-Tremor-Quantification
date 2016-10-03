@@ -1,9 +1,6 @@
 def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
     """Bandpass filtering on a real signal using inverse FFT
 
-    Inputs
-    =======
-
     X: 1-D numpy array of floats, the real time domain signal (time series) to be filtered
     Low_cutoff: float, frequency components below this frequency will not pass the filter (physical frequency in unit of Hz)
     High_cutoff: float, frequency components above this frequency will not pass the filter (physical frequency in unit of Hz)
@@ -31,6 +28,32 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
     Filtered_signal = scipy.ifft(Filtered_spectrum, n=M)  # Construct filtered signal
     return Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point
 
+
+def remove_nan(data):
+    """
+    Remove Nan and empty values from data stream
+    :param data: np array of data
+    :return:
+    """
+
+    pass
+
+
+def get_amplitude(data):
+    """
+    Get the amplitude of a peak
+    :param data: np array of data, containing a single peak
+    :return: amplitude of peak
+    """
+
+
+def is_tremor(frequency, amplitude):
+    """
+    Determine if data signal constitutes a tremor
+    :param frequency: frequency (float) of tremor (Hz)
+    :param amplitude: amplitude (float) of tremor
+    :return:
+    """
 
 if __name__ == "__main__":
     import numpy
