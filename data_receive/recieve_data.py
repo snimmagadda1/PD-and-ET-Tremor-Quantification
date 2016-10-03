@@ -1,6 +1,4 @@
-
-
-
+# will use Adafruit Bluetooth LE Library - Functions already provided
 
 
 
