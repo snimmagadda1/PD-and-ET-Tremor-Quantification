@@ -39,7 +39,7 @@ def remove_nan(data):
     pass
 
 
-def get_amplitude(data):
+def calc_amplitude(data):
     """
     Get the amplitude of a peak
     :param data: array of data (np.array) containing a single peak
@@ -57,7 +57,12 @@ def is_tremor(frequency, amplitude, data):
     """
 
 
-def
+def calc_PSF(data):
+    """
+
+    :param data:
+    :return:
+    """
 
 if __name__ == "__main__":
     import numpy
