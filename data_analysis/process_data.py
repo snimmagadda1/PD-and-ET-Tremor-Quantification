@@ -64,6 +64,14 @@ def calc_PSF(data):
     :return:
     """
 
+
+def calc_displacement(data):
+    """
+    Get the displacement of a tremor through double integration of accelerometer data
+    :param data: array of data (np.array) containg a single peak
+    :return: displacement (mm) of tremor
+    """
+
 if __name__ == "__main__":
     import numpy
 
