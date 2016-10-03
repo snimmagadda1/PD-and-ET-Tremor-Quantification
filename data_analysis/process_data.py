@@ -32,7 +32,7 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
 def remove_nan(data):
     """
     Remove Nan and empty values from data stream
-    :param data: np array of data
+    :param data: array of data (np.array)
     :return:
     """
 
@@ -42,18 +42,22 @@ def remove_nan(data):
 def get_amplitude(data):
     """
     Get the amplitude of a peak
-    :param data: np array of data, containing a single peak
+    :param data: array of data (np.array) containing a single peak
     :return: amplitude of peak
     """
 
 
-def is_tremor(frequency, amplitude):
+def is_tremor(frequency, amplitude, data):
     """
     Determine if data signal constitutes a tremor
     :param frequency: frequency (float) of tremor (Hz)
     :param amplitude: amplitude (float) of tremor
+    :param data: array of data (np.array) containing single peak
     :return:
     """
+
+
+def
 
 if __name__ == "__main__":
     import numpy
