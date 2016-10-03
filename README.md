@@ -1,6 +1,6 @@
 # Project Name
 
-This is the repo housing Park N' Sons Essential Tremometer Standalone Application and necessary peripherals.
+This is the repo housing Park N' Sons Essential Tremometer standalone application and necessary peripherals.
 
 ## Installation
 
