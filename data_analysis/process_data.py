@@ -57,9 +57,11 @@ def is_tremor(frequency, amplitude, data):
     """
 
 
-def calc_PSF(data):
+def psd_welch(data):
     """
-
+    Estimate power spectral density using Welch’s method.
+    Welch’s method [R145] computes an estimate of the power spectral density by dividing the data into overlapping
+    segments, computing a modified periodogram for each segment and averaging the periodograms.
     :param data:
     :return:
     """
