@@ -501,7 +501,7 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
-        accelerometer based tremor classifcation platform."""), font=LARGE_FONT)
+        accelerometer based tremor classification platform."""), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
         button1 = tk.Button(self, text="Agree",

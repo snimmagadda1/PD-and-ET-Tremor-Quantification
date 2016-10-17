@@ -30,8 +30,7 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
 
 
 def remove_nan(data):
-    """
-    Remove Nan and empty values from data stream
+    """Remove Nan and empty values from data stream
     :param data: array of data (np.array)
     :return:
     """
@@ -40,16 +39,14 @@ def remove_nan(data):
 
 
 def calc_amplitude(data):
-    """
-    Get the amplitude of a peak
+    """Get the amplitude of a peak
     :param data: array of data (np.array) containing a single peak
     :return: amplitude of peak
     """
 
 
 def is_tremor(frequency, amplitude, data):
-    """
-    Determine if data signal constitutes a tremor
+    """Determine if data signal constitutes a tremor
     :param frequency: frequency (float) of tremor (Hz)
     :param amplitude: amplitude (float) of tremor
     :param data: array of data (np.array) containing single peak
@@ -58,21 +55,35 @@ def is_tremor(frequency, amplitude, data):
 
 
 def psd_welch(data):
-    """
-    Estimate power spectral density using Welch’s method.
+    """Estimate power spectral density using Welch’s method.
     Welch’s method [R145] computes an estimate of the power spectral density by dividing the data into overlapping
     segments, computing a modified periodogram for each segment and averaging the periodograms.
     :param data:
     :return:
     """
+    import numpy as np
+    import scipy
 
 
 def calc_displacement(data):
-    """
-    Get the displacement of a tremor through double integration of accelerometer data
+    """Get the displacement of a tremor through double integration of accelerometer data
     :param data: array of data (np.array) containg a single peak
     :return: displacement (mm) of tremor
     """
+
+
+def gs_to_accel(data):
+    """ Convert to m/s^2
+
+    :param data:
+    :return: data in m/s^2
+    """
+
+
+    return data / 9.8
+
+
+
 
 if __name__ == "__main__":
     import numpy
@@ -95,5 +106,14 @@ if __name__ == "__main__":
     fig1 = plt.figure()
     plt.plot(x, Filtered_signal)
     plt.show()
+
+    a = numpy.array([3,4,5,6,7])
+
+    b = gs_to_accel(a)
+
+    print(b)
+
+
+
 
     pass
