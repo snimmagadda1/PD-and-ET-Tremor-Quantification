@@ -89,7 +89,7 @@ def gravity_compensate(q, acc):
 
     :param q: the quaternion representing the orientation of a 9DOM MARG sensor array
     :param acc: the readings coming from an accelerometer expressed in g
-    :return: 3d vector representing dinamic acceleration expressed in g
+    :return: 3d vector representing dynamic acceleration expressed in g
     """
     g = [0.0, 0.0, 0.0]
 
