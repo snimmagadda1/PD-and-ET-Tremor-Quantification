@@ -84,6 +84,22 @@ def gs_to_accel(data):
     return data / 9.8
 
 
+def gravity_compensate(q, acc):
+    """
+
+    :param q: the quaternion representing the orientation of a 9DOM MARG sensor array
+    :param acc: the readings coming from an accelerometer expressed in g
+    :return: 3d vector representing dinamic acceleration expressed in g
+    """
+    g = [0.0, 0.0, 0.0]
+
+    # get expected direction of gravity
+    g[0] = 2 * (q[1] * q[3] - q[0] * q[2])
+    g[1] = 2 * (q[0] * q[1] + q[2] * q[3])
+    g[2] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3]
+
+    # compensate accelerometer readings with the expected direction of gravity
+    return [acc[0] - g[0], acc[1] - g[1], acc[2] - g[2]]
 
 
 if __name__ == "__main__":
