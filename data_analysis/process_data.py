@@ -35,7 +35,8 @@ def remove_nan(data):
     :return:
     """
 
-    pass
+    cleaned_list = [x for x in data if str(x) != 'nan']
+    return cleaned_list
 
 
 def calc_amplitude(data):
