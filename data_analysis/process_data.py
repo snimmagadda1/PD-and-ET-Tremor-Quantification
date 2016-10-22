@@ -12,6 +12,8 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
 
     Inspiration from : http://forrestbao.blogspot.com/
 
+    Noise generally with square of sampling freq
+
     """
     import scipy, numpy
 
@@ -66,11 +68,35 @@ def psd_welch(data):
     import scipy
 
 
-def calc_displacement(data):
-    """Get the displacement of a tremor through double integration of accelerometer data
-    :param data: array of data (np.array) containg a single peak
-    :return: displacement (mm) of tremor
+def accel_to_velocity(t, a):
+    """Get the velocity of accelerometer data
+
+    :param acceleration: array of acceleration (m/s^2) data (np.array)
+    :param:
+    :return: velocity (m/s) of tremor
     """
+    import numpy as np
+
+    v = np.zeros(len(a) + 1)
+    t.append(0)
+
+    for i in range(0, len(a)-1):
+        v[i + 1] = a[i]*(t[i + 1] - t[i]) + v[i]
+
+    return t[0:len(t)-1], v[0:len(t)-1]
+
+
+def velocity_to_displacement(t, v):
+    import numpy as np
+
+    d = np.zeros(len(v) + 1)
+    t.append(0)
+
+    for i in range(0, len(v)-1):
+        d[i + 1] = v[i]*(t[i+1] - t[i]) + d[i]
+
+    return t[0:len(t)-1], d[0:len(t)-1]
+
 
 
 def gs_to_accel(data):
@@ -85,7 +111,7 @@ def gs_to_accel(data):
 
 
 def gravity_compensate(q, acc):
-    """
+    """ Quaternion approach to reoving gravity
 
     :param q: the quaternion representing the orientation of a 9DOM MARG sensor array
     :param acc: the readings coming from an accelerometer expressed in g
@@ -103,32 +129,50 @@ def gravity_compensate(q, acc):
 
 
 if __name__ == "__main__":
-    import numpy
+    import numpy as np
 
-    N = 400  # signal length of number
-    x = numpy.arange(0, N, 1)  # generate the time ticks
-    Sines = [numpy.sin(x * n) * (1 - n) for n in [.9, .75, .5, .25, .12, .03, 0.025]]  # different frequency components
-    y = numpy.sum(Sines, axis=0)  # add them by column, low frequencies have higher amplitudes
+    # N = 400  # signal length of number
+    # x = numpy.arange(0, N, 1)  # generate the time ticks
+    # Sines = [numpy.sin(x * n) * (1 - n) for n in [.9, .75, .5, .25, .12, .03, 0.025]]  # different frequency components
+    # y = numpy.sum(Sines, axis=0)  # add them by column, low frequencies have higher amplitudes
+    #
+    # import matplotlib.pyplot as plt
+    #
+    # Low_cutoff, High_cutoff, F_sample = 5, 30, 500
+    # Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(y, Low_cutoff, High_cutoff, F_sample)
+    #
+    # # plot raw data
+    # fig0 = plt.figure()
+    # plt.plot(x, y)
+    #
+    # # plot high filtered data
+    # fig1 = plt.figure()
+    # plt.plot(x, Filtered_signal)
+    # plt.show()
+    #
+    # a = numpy.array([3,4,5,6,7])
+    #
+    # b = gs_to_accel(a)
+    #
+    # print(b)
+
+    x = np.linspace(0, 99, 100).tolist()
+    y = x
 
     import matplotlib.pyplot as plt
 
-    Low_cutoff, High_cutoff, F_sample = 5, 30, 500
-    Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(y, Low_cutoff, High_cutoff, F_sample)
+    time, velocity = accel_to_velocity(x, y)
+    print(len(time))
+    print(len(velocity))
+    time1, disp = velocity_to_displacement(time, velocity)
+    plt.plot(time1, disp, color = 'g')
+    plt.plot(time1, velocity, color = 'r')
 
-    # plot raw data
-    fig0 = plt.figure()
-    plt.plot(x, y)
-
-    # plot high filtered data
-    fig1 = plt.figure()
-    plt.plot(x, Filtered_signal)
     plt.show()
 
-    a = numpy.array([3,4,5,6,7])
 
-    b = gs_to_accel(a)
 
-    print(b)
+
 
 
 
