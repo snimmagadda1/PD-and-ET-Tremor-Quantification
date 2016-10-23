@@ -508,8 +508,7 @@ class StartPage(tk.Frame):
                              command=lambda: controller.show_frame(BTCe_Page))
         button1.pack()
 
-        button2 = tk.Button(self, text="Disagree",
-                             command=quit)
+        button2 = tk.Button(self, text="Disagree",command=quit)
         button2.pack()
 
 
@@ -541,6 +540,7 @@ class BTCe_Page(tk.Frame):
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
 
 
 #################################### PROGRAM RUN #######################################################################

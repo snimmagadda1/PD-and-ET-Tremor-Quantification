@@ -98,7 +98,6 @@ def velocity_to_displacement(t, v):
     return t[0:len(t)-1], d[0:len(t)-1]
 
 
-
 def gs_to_accel(data):
     """ Convert to m/s^2
 
