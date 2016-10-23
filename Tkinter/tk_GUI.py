@@ -28,24 +28,12 @@ f = Figure()
 a = f.add_subplot(111)
 
 # global constants (default values)
-exchange = "BTC-e"
-DatCounter = 9000
-programName = "btce"
-resampleSize = "15Min"
-DataPace = "1d"
-candleWidth = 0.008
-topIndicator = "none"
-bottomIndicator = "none"
-middleIndicator = "none"
-EMAs = []
-SMAs = []
-
 
 
 def popupmsg(msg):
     """
     Make a popup window for a message
-    :param msg: input message to display
+    :param msg: input message to display (string)
     :return:
     """
     popup = tk.Tk()
