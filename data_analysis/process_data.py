@@ -143,6 +143,30 @@ def remove_gravity_ENMO(accel_x, accel_y, accel_z):
     return np.linalg.norm(vector) - 1
 
 
+def remove_gravity_HFEN(accel_x, accel_y, accel_z):
+    """ Remove gravity from signal using HPF on each raw signal
+    then calculate the euclidean norm
+
+    :param accel_x: acceleration x vector (m/s^2)
+    :param accel_y: acceleration y vector (m/s^2)
+    :param accel_z: acceleration z vector (m/s^2)
+    :return: magnitude of acceleration w/o DC component (gravity)
+    """
+
+
+def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
+    """ Remove gravity from signal using HPF on each raw signals
+    then 4th order Butterworth LPF wc = 0.2 Hz on raw signals,
+    then calculate eudlidean norm -1 
+
+    :param accel_x: acceleration x vector (m/s^2)
+    :param accel_y: acceleration y vector (m/s^2)
+    :param accel_z: acceleration z vector (m/s^2)
+    :return: magnitude of acceleration w/o DC component (gravity)
+    """
+
+
+
 # change to high pass wc = 0.2 Hz
 def butter_bandpass(lowcut, highcut, fs, order=5):
     """ Get coefficients for Butterworth bandpass filter.
