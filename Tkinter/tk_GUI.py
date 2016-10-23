@@ -80,17 +80,20 @@ def animate(i):
 
 
 # Main app class
-class SeaofBTCapp(tk.Tk):
+class TremorApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
         tk.Tk.wm_title(self, "Park & Sons Co: Essen+ial Tremometer\u2122 Diagnostic Tool")
 
+
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+
+
 
 # ******************************************** MENU STUFF ************************************************************ #
 
@@ -126,14 +129,14 @@ class SeaofBTCapp(tk.Tk):
 
         self.frames = {}
         # this is where new pages are added if needed
-        for F in (StartPage, BTCe_Page):
+        for F in (start_page, graph_page,  updrs_page):
             frame = F(container, self)
 
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(StartPage)
+        self.show_frame(start_page)
 
     def show_frame(self, cont):
         """
@@ -145,41 +148,34 @@ class SeaofBTCapp(tk.Tk):
         frame.tkraise()
 
 
-class StartPage(tk.Frame):
+class start_page(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
         accelerometer based tremor classification platform."""), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+        # button to show graph page
         button1 = tk.Button(self, text="Agree",
-                             command=lambda: controller.show_frame(BTCe_Page))
+                             command=lambda: controller.show_frame(graph_page))
         button1.pack()
 
-        button2 = tk.Button(self, text="Disagree",command=quit)
+        # button to quit
+        button2 = tk.Button(self, text="Disagree", command=quit)
         button2.pack()
 
 
-class PageOne(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page One!!!", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-
-        button1 = tk.Button(self, text="Back to Home",
-                             command=lambda: controller.show_frame(StartPage))
-        button1.pack()
-
-
-class BTCe_Page(tk.Frame):
+class graph_page(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Graph Page!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = tk.Button(self, text="Back to Home",
-                             command=lambda: controller.show_frame(StartPage))
+        button1 = tk.Button(self, text="Back to Home", command=lambda: controller.show_frame(start_page))
         button1.pack()
+
+        button2 = tk.Button(self, text="To UPDRS Patient Page", command=lambda: controller.show_frame(updrs_page))
+        button2.pack()
 
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
@@ -190,10 +186,22 @@ class BTCe_Page(tk.Frame):
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 
+class updrs_page(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="UPDRS Patient Page", font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+
+        button1 = tk.Button(self, text="Back to Home", command=lambda: controller.show_frame(start_page))
+        button1.pack()
+
+        button2 = tk.Button(self, text="Back to Graph Page", command=lambda: controller.show_frame(graph_page))
+        button2.pack()
+
 
 #################################### PROGRAM RUN #######################################################################
 
-app = SeaofBTCapp()
+app = TremorApp()
 app.geometry("1280x720")
 ani = animation.FuncAnimation(f, animate, interval=5000)
 app.mainloop()
