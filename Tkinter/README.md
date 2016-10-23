@@ -1,2 +1,2 @@
 GUI code. 
-Developed in Python using Tkinter library
+Developed in Python using Tkinter
