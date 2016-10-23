@@ -145,7 +145,16 @@ def remove_gravity_ENMO(accel_x, accel_y, accel_z):
 
 # change to high pass wc = 0.2 Hz
 def butter_bandpass(lowcut, highcut, fs, order=5):
-    from scipy.signal import butter, lfilter
+    """ Get coefficients for Butterworth bandpass filter.
+    Use with butter_bandpass_filter
+
+    :param lowcut: lower cutoff frequency (Hz)
+    :param highcut: upper cutoff frequency (Hz)
+    :param fs: sampling frequency (Hz)
+    :param order: filter order
+    :return: Butterworth bandpass filter coefficients
+    """
+    from scipy.signal import butter
     nyq = 0.5 * fs
     low = lowcut / nyq
     high = highcut / nyq
@@ -154,7 +163,16 @@ def butter_bandpass(lowcut, highcut, fs, order=5):
 
 
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
-    from scipy.signal import butter, lfilter
+    """ Filter data using parameters
+
+    :param data: data to apply filter to
+    :param lowcut: lower cutoff frequency (Hz)
+    :param highcut: uppper cutoff frequency (Hz)
+    :param fs: sampling frequency (Hz)
+    :param order: filter order
+    :return:
+    """
+    from scipy.signal import lfilter
     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
     y = lfilter(b, a, data)
     return y
