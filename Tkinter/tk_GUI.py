@@ -17,7 +17,7 @@ import numpy as np
 pd.options.mode.chained_assignment = None
 
 from matplotlib import pyplot as plt
-
+TITLE_FONT = ("Verdana", 24)
 LARGE_FONT = ("Verdana", 12)
 NORM_FONT = ("Verdana", 10)
 SMALL_FONT = ("Verdana", 8)
@@ -87,13 +87,10 @@ class TremorApp(tk.Tk):
 
         tk.Tk.wm_title(self, "Park & Sons Co: Essen+ial Tremometer\u2122 Diagnostic Tool")
 
-
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
-
 
 # ******************************************** MENU STUFF ************************************************************ #
 
@@ -105,11 +102,10 @@ class TremorApp(tk.Tk):
         menubar.add_cascade(label="File", menu=filemenu)
 
         setting1 = tk.Menu(menubar, tearoff=1)
-        setting1.add_command(label="A", command=lambda: popupmsg("Not supported just yet!"))
-        setting1.add_command(label="B", command=lambda: popupmsg("Not supported just yet!"))
-        setting1.add_command(label="C", command=lambda: popupmsg("Not supported just yet!"))
-        setting1.add_command(label="D", command=lambda: popupmsg("Not supported just yet!"))
-        menubar.add_cascade(label="Patient", menu=setting1)
+        setting1.add_command(label="Start Page", command=lambda: self.show_frame(start_page))
+        setting1.add_command(label="Graph Page", command=lambda: self.show_frame(graph_page))
+        setting1.add_command(label="Patient Page", command=lambda: self.show_frame(updrs_page))
+        menubar.add_cascade(label="Navigation", menu=setting1)
 
         setting2 = tk.Menu(menubar, tearoff=1)
         setting2.add_command(label="A", command=lambda: popupmsg("Not supported just yet!"))
@@ -171,12 +167,6 @@ class graph_page(tk.Frame):
         label = tk.Label(self, text="Graph Page!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button1 = tk.Button(self, text="Back to Home", command=lambda: controller.show_frame(start_page))
-        button1.pack()
-
-        button2 = tk.Button(self, text="To UPDRS Patient Page", command=lambda: controller.show_frame(updrs_page))
-        button2.pack()
-
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
@@ -189,14 +179,28 @@ class graph_page(tk.Frame):
 class updrs_page(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="UPDRS Patient Page", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
+        title = tk.Label(self, text="Unified Parkinsons Disease Rating Scale", font=TITLE_FONT)
+        title.place(relx=0.5, anchor='center')
 
-        button1 = tk.Button(self, text="Back to Home", command=lambda: controller.show_frame(start_page))
-        button1.pack()
+        # self.grid_columnconfigure(0, weight=1)
+        #
+        name_label = tk.Label(self, text="Enter Patient Name", bg='gainsboro')
+        #
+        #
+        # enter_name = tk.Entry(self, justify='center')
+        # enter_name.insert(0, "...")
+        # enter_name.grid(row=3, column=0)
 
-        button2 = tk.Button(self, text="Back to Graph Page", command=lambda: controller.show_frame(graph_page))
-        button2.pack()
+
+
+
+        # listbox = tk.Listbox(self)
+        # listbox.pack(side='left')
+        #
+        # listbox.insert('end', "a list entry")
+        #
+        # for item in ["one", "two", "three", "four"]:
+        #     listbox.insert('end', item)
 
 
 #################################### PROGRAM RUN #######################################################################
