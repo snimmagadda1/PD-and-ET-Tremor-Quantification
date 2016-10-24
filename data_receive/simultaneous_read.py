@@ -43,7 +43,6 @@ if __name__ == "__main__":
     import time
 
 
-
     p1 = Process(target=write_csv())
     p1.start()
     #time.sleep(10)
