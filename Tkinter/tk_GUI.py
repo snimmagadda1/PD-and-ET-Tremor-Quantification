@@ -160,6 +160,12 @@ class start_page(tk.Frame):
         button2 = tk.Button(self, text="Disagree", command=quit)
         button2.pack()
 
+        # background image
+        background_pic = tk.PhotoImage(file="background_image.gif")
+        panel = tk.Label(self, image=background_pic)
+        panel.pack(side='top', fill='both', expand='yes')
+        panel.image = background_pic
+
 
 class graph_page(tk.Frame):
     def __init__(self, parent, controller):
@@ -176,31 +182,33 @@ class graph_page(tk.Frame):
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 
+
 class updrs_page(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         title = tk.Label(self, text="Unified Parkinsons Disease Rating Scale", font=TITLE_FONT)
-        title.place(relx=0.5, anchor='center')
+        #title.place(relx=0.5, rely=0.5, anchor='center')
+        title.pack(side = 'top')
 
         # self.grid_columnconfigure(0, weight=1)
-        #
+
         name_label = tk.Label(self, text="Enter Patient Name", bg='gainsboro')
-        #
-        #
-        # enter_name = tk.Entry(self, justify='center')
-        # enter_name.insert(0, "...")
-        # enter_name.grid(row=3, column=0)
+        name_label.pack(side='top')
 
+        enter_name = tk.Entry(self, justify='center')
+        enter_name.insert(0, "...")
+        enter_name.pack(side='top')
 
+        list_label = tk.Label(self, text="1. Intellectual Impairment", bg='red')
+        list_label.pack(side='top')
 
+        listbox = tk.Listbox(self)
+        listbox.config(width=0)
+        listbox.pack(side='top')
 
-        # listbox = tk.Listbox(self)
-        # listbox.pack(side='left')
-        #
-        # listbox.insert('end', "a list entry")
-        #
-        # for item in ["one", "two", "three", "four"]:
-        #     listbox.insert('end', item)
+        for item in ["0 = None.", "1 = Mild.", "2 = Moderate memory loss", "3 = Severe memory loss",
+                     "4 = Severe Memory Loss. Unable to make judgements"]:
+             listbox.insert('end', item)
 
 
 #################################### PROGRAM RUN #######################################################################
