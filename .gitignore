@@ -1,3 +1,5 @@
+*.csv
+*.txt
 *.png
 *.pdf
 *.pyc
