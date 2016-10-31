@@ -71,9 +71,9 @@ def psd_welch(data):
 def accel_to_velocity(t, a):
     """Get the velocity of accelerometer data
 
-    :param acceleration: array of acceleration (m/s^2) data (np.array)
-    :param:
-    :return: velocity (m/s) of tremor
+    :param a: array of acceleration (m/s^2) data (np.array)
+    :param t: time array
+    :return: velocity (m/s) of data and time array
     """
     import numpy as np
 
@@ -87,6 +87,12 @@ def accel_to_velocity(t, a):
 
 
 def velocity_to_displacement(t, v):
+    """Get the displacement from velocity data
+
+    :param a: array of acceleration (m/s^2) data (np.array)
+    :param t: time array
+    :return: displacement (m) of data and time array
+    """
     import numpy as np
 
     d = np.zeros(len(v) + 1)
