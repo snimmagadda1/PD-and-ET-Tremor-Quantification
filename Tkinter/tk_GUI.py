@@ -212,7 +212,6 @@ class updrs_page(tk.Frame):
 
 
 #################################### PROGRAM RUN #######################################################################
-
 app = TremorApp()
 app.geometry("1280x720")
 ani = animation.FuncAnimation(f, animate, interval=5000)

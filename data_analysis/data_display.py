@@ -15,6 +15,7 @@ def extrapolate_accel_data(filename):
             z.append(float(components[2]))
     return x, y, z
 
+
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import numpy as np
@@ -30,19 +31,7 @@ if __name__ == "__main__":
         time.append(item/fs)
 
 
-    x_velocity_time, x_velocity = accel_to_velocity(time, x)
-    print(time)
-    print(x_velocity_time)
 
-    # df = pd.DataFrame({'x': x,
-    #                    'y': y,
-    #                    'z': z,
-    #                     'position':})
-
-
-    fig1, axes = plt.subplots(nrows=1, ncols=3)
-    fig1.set_figheight(15)
-    fig1.set_figwidth(50)
 
 
 
