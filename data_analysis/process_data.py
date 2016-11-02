@@ -58,9 +58,7 @@ def is_tremor(frequency, amplitude, data):
 
 
 def psd_welch(data):
-    """Estimate power spectral density using Welch’s method.
-    Welch’s method [R145] computes an estimate of the power spectral density by dividing the data into overlapping
-    segments, computing a modified periodogram for each segment and averaging the periodograms.
+    """Estimate welch
     :param data:
     :return:
     """
@@ -110,6 +108,7 @@ def gravity_compensate(q, acc):
     # compensate accelerometer readings with the expected direction of gravity
     return [acc[0] - g[0], acc[1] - g[1], acc[2] - g[2]]
 
+# CHANGE FOR PYTHON 2.7
 
 def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
     """ Calculate magnitude of accelration
@@ -129,6 +128,7 @@ def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
 
     return ans
 
+# CHANGE FOR PYTHON 2.7
 
 def remove_gravity_ENMO(accel_x, accel_y, accel_z):
     """ Remove gravity from signal using the euclidean norm - 1
@@ -187,7 +187,7 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     nyq = 0.5 * fs
     low = lowcut / nyq
     high = highcut / nyq
-    b, a = butter(order, [low, high], btype='band')
+    b, a = butter(order, [low, high], btype='bandpass')
     return b, a
 
 
@@ -289,5 +289,6 @@ def demonstrate_functions():
 
 
 if __name__ == "__main__":
+    demonstrate_functions()
 
     pass
