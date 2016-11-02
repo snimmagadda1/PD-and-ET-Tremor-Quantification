@@ -207,7 +207,7 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     return y
 
 
-if __name__ == "__main__":
+def demonstrate_functions():
     import numpy as np
     from scipy.signal import freqz
     import matplotlib.pyplot as plt
@@ -218,9 +218,10 @@ if __name__ == "__main__":
     y = np.sum(Sines, axis=0)  # add them by column, low frequencies have higher amplitudes
 
     Low_cutoff, High_cutoff, F_sample = 5, 30, 500
-    Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(y, Low_cutoff, High_cutoff, F_sample)
+    Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(y, Low_cutoff, High_cutoff,
+                                                                                        F_sample)
 
-# **** test filtering raw data ****
+    # **** test filtering raw data ****
     # plot raw data
     fig0 = plt.figure()
     plt.plot(x, y)
@@ -232,16 +233,16 @@ if __name__ == "__main__":
     plt.title("Filtered Data")
     plt.show()
 
-# ****  test converting gs to m/s^2 ****
+    # ****  test converting gs to m/s^2 ****
     a = np.array([9.8, 1, 5, 6, 7])
     removed_gravity = gs_to_accel(a)
     print(removed_gravity)
 
-# ***** test removing gravity with euclidean norm ****
-    mag = remove_gravity_ENMO(1,1,1)
+    # ***** test removing gravity with euclidean norm ****
+    mag = remove_gravity_ENMO(1, 1, 1)
     print(mag)
 
-# **** test method of filter to remove gravity ****
+    # **** test method of filter to remove gravity ****
     # Sample rate and desired cutoff frequencies (in Hz).
     fs = 5000.0
     lowcut = 500.0
@@ -286,5 +287,7 @@ if __name__ == "__main__":
 
     plt.show()
 
+
+if __name__ == "__main__":
 
     pass
