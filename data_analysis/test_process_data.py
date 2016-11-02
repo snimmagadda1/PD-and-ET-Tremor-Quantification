@@ -33,6 +33,10 @@ def test_gs_to_accel():
     pass
 
 
+def test_calculate_magnitude_acceleration():
+
+    pass
+
 def test_remove_gravity_ENMO():
 
     pass

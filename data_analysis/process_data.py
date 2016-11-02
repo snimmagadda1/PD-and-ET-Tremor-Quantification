@@ -71,13 +71,11 @@ def psd_welch(data):
 def integrate_time_series(data, fs):
     """Integrate time series data with given frequency
 
-    :param data:
-    :param fs:
-    :return:
+    :param data: x values (m/s^2 or m/s)
+    :param fs: sampling frequency (Hz)
+    :return: x_int, y_int, z_int
     """
     from scipy import integrate
-
-    x = np.array(range(0, len(data)))
 
     y = integrate.cumtrapz(data, x=None, dx=1/fs, axis=-1, initial=0)
 
@@ -113,6 +111,25 @@ def gravity_compensate(q, acc):
     return [acc[0] - g[0], acc[1] - g[1], acc[2] - g[2]]
 
 
+def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
+    """ Calculate magnitude of accelration
+
+       :param accel_x: acceleration x vector (m/s^2)
+       :param accel_y: acceleration y vector (m/s^2)
+       :param accel_z: acceleration z vector (m/s^2)
+       :return: magnitude of acceleration w/o DC component (gravity)
+       """
+    import numpy as np
+
+    ans = []
+    for x, y, z in zip(accel_x, accel_y, accel_z):
+
+        normedA_0 = np.linalg.norm([x, y, z])
+        ans.append(normedA_0)
+
+    return ans
+
+
 def remove_gravity_ENMO(accel_x, accel_y, accel_z):
     """ Remove gravity from signal using the euclidean norm - 1
     See Hees et. al
@@ -124,11 +141,12 @@ def remove_gravity_ENMO(accel_x, accel_y, accel_z):
     """
     import numpy as np
 
-    vector = np.array([accel_x, accel_y, accel_z])
+    ans = []
+    for x, y, z in zip(accel_x, accel_y, accel_z):
+        normedA_0 = np.linalg.norm([x, y, z]) -1
+        ans.append(normedA_0)
 
-    normedA_0 = np.array([(np.linalg.norm(v) - 1) for v in vector])
-
-    return np.linalg.norm(vector) - 1
+    return ans
 
 
 def remove_gravity_HFEN(accel_x, accel_y, accel_z):
