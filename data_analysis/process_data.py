@@ -280,7 +280,7 @@ if __name__ == "__main__":
     plt.plot(t, y, label='Filtered signal (%g Hz)' % f0)
     plt.xlabel('time (seconds)')
     plt.hlines([-a, a], 0, T, linestyles='--')
-    plt.grid(True)t
+    plt.grid(True)
     plt.axis('tight')
     plt.legend(loc='upper left')
 
