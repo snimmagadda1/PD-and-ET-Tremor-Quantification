@@ -17,7 +17,6 @@ def extrapolate_accel_data(filename):
     return np.array(x), np.array(y), np.array(z)
 
 
-
 if __name__ == "__main__":
     from process_data import integrate_time_series, remove_gravity_ENMO, \
         calculate_magnitude_acceleration, butter_bandpass_filter

@@ -211,80 +211,80 @@ if __name__ == "__main__":
     import numpy as np
     from scipy.signal import freqz
     import matplotlib.pyplot as plt
-#
-#     N = 400  # signal length of number
-#     x = np.arange(0, N, 1)  # generate the time ticks
-#     Sines = [np.sin(x * n) * (1 - n) for n in [.9, .75, .5, .25, .12, .03, 0.025]]  # different frequency components
-#     y = np.sum(Sines, axis=0)  # add them by column, low frequencies have higher amplitudes
-#
-#     Low_cutoff, High_cutoff, F_sample = 5, 30, 500
-#     Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(y, Low_cutoff, High_cutoff, F_sample)
-#
-# # **** test filtering raw data ****
-#     # plot raw data
-#     fig0 = plt.figure()
-#     plt.plot(x, y)
-#     plt.title("Raw Data")
-#
-#     # plot high filtered data
-#     fig1 = plt.figure()
-#     plt.plot(x, Filtered_signal)
-#     plt.title("Filtered Data")
-#     plt.show()
-#
-# # ****  test converting gs to m/s^2 ****
-#     a = np.array([9.8, 1, 5, 6, 7])
-#     removed_gravity = gs_to_accel(a)
-#     print(removed_gravity)
-#
-# # ***** test removing gravity with euclidean norm ****
-#     mag = remove_gravity_ENMO(1,1,1)
-#     print(mag)
-#
-# # **** test method of filter to remove gravity ****
-#     # Sample rate and desired cutoff frequencies (in Hz).
-#     fs = 5000.0
-#     lowcut = 500.0
-#     highcut = 1250.0
-#
-#     # Plot the frequency response for a few different orders.
-#     plt.figure(1)
-#     plt.clf()
-#     for order in [3, 6, 9]:
-#         b, a = butter_bandpass(lowcut, highcut, fs, order=order)
-#         w, h = freqz(b, a, worN=2000)
-#         plt.plot((fs * 0.5 / np.pi) * w, abs(h), label="order = %d" % order)
-#
-#     plt.plot([0, 0.5 * fs], [np.sqrt(0.5), np.sqrt(0.5)],
-#              '--', label='sqrt(0.5)')
-#     plt.xlabel('Frequency (Hz)')
-#     plt.ylabel('Gain')
-#     plt.grid(True)
-#     plt.legend(loc='best')
-#
-#     # Filter a noisy signal.
-#     T = 0.05
-#     nsamples = T * fs
-#     t = np.linspace(0, T, nsamples, endpoint=False)
-#     a = 0.02
-#     f0 = 600.0
-#     x = 0.1 * np.sin(2 * np.pi * 1.2 * np.sqrt(t))
-#     x += 0.01 * np.cos(2 * np.pi * 312 * t + 0.1)
-#     x += a * np.cos(2 * np.pi * f0 * t + .11)
-#     x += 0.03 * np.cos(2 * np.pi * 2000 * t)
-#     plt.figure(2)
-#     plt.clf()
-#     plt.plot(t, x, label='Noisy signal')
-#
-#     y = butter_bandpass_filter(x, lowcut, highcut, fs, order=6)
-#     plt.plot(t, y, label='Filtered signal (%g Hz)' % f0)
-#     plt.xlabel('time (seconds)')
-#     plt.hlines([-a, a], 0, T, linestyles='--')
-#     plt.grid(True)
-#     plt.axis('tight')
-#     plt.legend(loc='upper left')
-#
-#     plt.show()
+
+    N = 400  # signal length of number
+    x = np.arange(0, N, 1)  # generate the time ticks
+    Sines = [np.sin(x * n) * (1 - n) for n in [.9, .75, .5, .25, .12, .03, 0.025]]  # different frequency components
+    y = np.sum(Sines, axis=0)  # add them by column, low frequencies have higher amplitudes
+
+    Low_cutoff, High_cutoff, F_sample = 5, 30, 500
+    Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(y, Low_cutoff, High_cutoff, F_sample)
+
+# **** test filtering raw data ****
+    # plot raw data
+    fig0 = plt.figure()
+    plt.plot(x, y)
+    plt.title("Raw Data")
+
+    # plot high filtered data
+    fig1 = plt.figure()
+    plt.plot(x, Filtered_signal)
+    plt.title("Filtered Data")
+    plt.show()
+
+# ****  test converting gs to m/s^2 ****
+    a = np.array([9.8, 1, 5, 6, 7])
+    removed_gravity = gs_to_accel(a)
+    print(removed_gravity)
+
+# ***** test removing gravity with euclidean norm ****
+    mag = remove_gravity_ENMO(1,1,1)
+    print(mag)
+
+# **** test method of filter to remove gravity ****
+    # Sample rate and desired cutoff frequencies (in Hz).
+    fs = 5000.0
+    lowcut = 500.0
+    highcut = 1250.0
+
+    # Plot the frequency response for a few different orders.
+    plt.figure(1)
+    plt.clf()
+    for order in [3, 6, 9]:
+        b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+        w, h = freqz(b, a, worN=2000)
+        plt.plot((fs * 0.5 / np.pi) * w, abs(h), label="order = %d" % order)
+
+    plt.plot([0, 0.5 * fs], [np.sqrt(0.5), np.sqrt(0.5)],
+             '--', label='sqrt(0.5)')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Gain')
+    plt.grid(True)
+    plt.legend(loc='best')
+
+    # Filter a noisy signal.
+    T = 0.05
+    nsamples = T * fs
+    t = np.linspace(0, T, nsamples, endpoint=False)
+    a = 0.02
+    f0 = 600.0
+    x = 0.1 * np.sin(2 * np.pi * 1.2 * np.sqrt(t))
+    x += 0.01 * np.cos(2 * np.pi * 312 * t + 0.1)
+    x += a * np.cos(2 * np.pi * f0 * t + .11)
+    x += 0.03 * np.cos(2 * np.pi * 2000 * t)
+    plt.figure(2)
+    plt.clf()
+    plt.plot(t, x, label='Noisy signal')
+
+    y = butter_bandpass_filter(x, lowcut, highcut, fs, order=6)
+    plt.plot(t, y, label='Filtered signal (%g Hz)' % f0)
+    plt.xlabel('time (seconds)')
+    plt.hlines([-a, a], 0, T, linestyles='--')
+    plt.grid(True)t
+    plt.axis('tight')
+    plt.legend(loc='upper left')
+
+    plt.show()
 
 
     pass
