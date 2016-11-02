@@ -201,9 +201,9 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     :param order: filter order
     :return:
     """
-    from scipy.signal import lfilter
+    from scipy.signal import filtfilt
     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
-    y = lfilter(b, a, data)
+    y = filtfilt(b, a, data)
     return y
 
 
