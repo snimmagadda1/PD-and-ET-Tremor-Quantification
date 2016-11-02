@@ -17,13 +17,12 @@ def extrapolate_accel_data(filename):
     return np.array(x), np.array(y), np.array(z)
 
 
-if __name__ == "__main__":
-    from process_data import integrate_time_series, remove_gravity_ENMO, \
+def test_initial_data():
+    from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration, butter_bandpass_filter
     import numpy as np
     import matplotlib.pyplot as plt
     import math
-
 
     fs = 44
     x, y, z = extrapolate_accel_data('rawacceldata.txt')
@@ -42,7 +41,8 @@ if __name__ == "__main__":
     acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
     acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
 
-    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16,8), sharey=True)
+    # Plot data
+    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 8), sharey=True)
     axes[0, 0].set_ylabel('Acceleration (m/s^2')
     axes[0, 0].set_xlabel('Time s')
     axes[0, 1].set_xlabel('Time s')
@@ -55,11 +55,8 @@ if __name__ == "__main__":
     axes[1, 0].set_title('Raw acceleration w/out grav')
     axes[1, 1].set_title('Filtered acceleration w/out grav')
 
-
-
     axes[0, 0].plot(time, acceleration_raw, color='r')
     axes[0, 1].plot(time, acceleration_filtered, color='g')
-
 
     axes[1, 0].plot(time, acceleration_raw_no_grav, color='r')
     axes[1, 1].plot(time, acceleration_filtered_no_grav, color='g')
@@ -68,4 +65,7 @@ if __name__ == "__main__":
     plt.show()
 
 
-    pass
+
+if __name__ == "__main__":
+    test_initial_data()
+
