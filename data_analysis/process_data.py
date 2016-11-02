@@ -126,6 +126,8 @@ def remove_gravity_ENMO(accel_x, accel_y, accel_z):
 
     vector = np.array([accel_x, accel_y, accel_z])
 
+    normedA_0 = np.array([(np.linalg.norm(v) - 1) for v in vector])
+
     return np.linalg.norm(vector) - 1
 
 
