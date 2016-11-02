@@ -173,7 +173,7 @@ def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
 
 
 # change to high pass wc = 0.2 Hz
-def butter_bandpass(lowcut, highcut, fs, order=5):
+def butter_bandpass(lowcut, highcut, fs, order=4):
     """ Get coefficients for Butterworth bandpass filter.
     Use with butter_bandpass_filter
 
