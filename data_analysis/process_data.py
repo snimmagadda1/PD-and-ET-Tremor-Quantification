@@ -169,9 +169,8 @@ def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
     """
 
 
-# change to high pass wc = 0.2 Hz
-def butter_bandpass(lowcut, highcut, fs, order=4):
-    """ Get coefficients for Butterworth bandpass filter.
+def butter_lowpass(highcut, fs, order=4):
+    """ Get coefficients for Butterworth lowpass filter.
     Use with butter_bandpass_filter
 
     :param lowcut: lower cutoff frequency (Hz)
@@ -182,13 +181,12 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     """
     from scipy.signal import butter
     nyq = 0.5 * fs
-    low = lowcut / nyq
     high = highcut / nyq
-    b, a = butter(order, [low, high], btype='bandpass')
+    b, a = butter(order, [high], btype='lowpass')
     return b, a
 
 
-def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+def butter_lowpass_filter(data, highcut, fs, order=5):
     """ Filter data using parameters
 
     :param data: data to apply filter to
@@ -199,8 +197,8 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     :return:
     """
     from scipy.signal import filtfilt
-    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
-    y = filtfilt(b, a, data)
+    b, a = butter_lowpass(highcut, fs, order=order)
+    y = filtfilt(b, a, data, padlen=100, padtype='odd')
     return y
 
 

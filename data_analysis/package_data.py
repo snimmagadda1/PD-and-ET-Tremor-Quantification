@@ -19,7 +19,7 @@ def extrapolate_accel_data(filename):
 
 def test_initial_data():
     from process_data import remove_gravity_ENMO, \
-        calculate_magnitude_acceleration, butter_bandpass_filter
+        calculate_magnitude_acceleration, butter_lowpass_filter
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -27,9 +27,9 @@ def test_initial_data():
     x, y, z = extrapolate_accel_data('rawacceldata.txt')
 
     # remove high frequencies
-    x_filt = butter_bandpass_filter(x, 0, 12, 44)
-    y_filt = butter_bandpass_filter(y, 0, 12, 44)
-    z_filt = butter_bandpass_filter(z, 0, 12, 44)
+    x_filt = butter_lowpass_filter(x,  12, 44)
+    y_filt = butter_lowpass_filter(y,  12, 44)
+    z_filt = butter_lowpass_filter(z,  12, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
