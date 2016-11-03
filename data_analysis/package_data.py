@@ -26,7 +26,6 @@ def extrapolate_accel_data(filename):
     return np.array(x), np.array(y), np.array(z)
 
 
-
 if __name__ == "__main__":
 
     pass
