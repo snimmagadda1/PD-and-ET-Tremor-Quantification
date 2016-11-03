@@ -9,9 +9,11 @@ def test_integrate_time_series():
 
 
 def test_bandpass_ifft():
-
-    pass
-
+    from process_data import bandpass_ifft
+    from test_signal1 import test_signal
+    signal = test_signal()
+    Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(signal,0.25,50,16)
+    print(Filtered_signal)
 
 def test_calc_amplitude():
 
@@ -46,7 +48,8 @@ def test_remove_gravity_HFEN():
 
     pass
 
-
+if __name__ == "__main__":
+    test_bandpass_ifft()
 
 
 
