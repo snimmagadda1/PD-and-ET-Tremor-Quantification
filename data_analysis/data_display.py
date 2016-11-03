@@ -1,4 +1,9 @@
 def test_initial_data():
+    """ Plotting initial data using lowpass filter and ENMO to remove gravity.
+    ** not a unit test **
+
+    :return: visual plots
+    """
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration, butter_lowpass_filter
     from package_data import extrapolate_accel_data
@@ -47,7 +52,6 @@ def test_initial_data():
 
 
 if __name__ == "__main__":
-
     test_initial_data()
 
 
