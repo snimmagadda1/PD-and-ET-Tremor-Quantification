@@ -1,5 +1,5 @@
 def extrapolate_accel_data(filename):
-    """Extrapoloate data from a txt file
+    """Extrapolate data from a txt file
     data will have format:
     x1,y1,z1;
     x2,y2,z2;
