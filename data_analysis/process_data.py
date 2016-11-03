@@ -108,7 +108,6 @@ def gravity_compensate(q, acc):
     # compensate accelerometer readings with the expected direction of gravity
     return [acc[0] - g[0], acc[1] - g[1], acc[2] - g[2]]
 
-# CHANGE FOR PYTHON 2.7
 
 def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
     """ Calculate magnitude of accelration
@@ -121,14 +120,12 @@ def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
     import numpy as np
 
     ans = []
-    for x, y, z in zip(accel_x, accel_y, accel_z):
-
-        normedA_0 = np.linalg.norm([x, y, z])
+    for i in range(len(accel_x)):
+        normedA_0 = np.linalg.norm([accel_x[i], accel_y[i], accel_z[i]])
         ans.append(normedA_0)
 
     return ans
 
-# CHANGE FOR PYTHON 2.7
 
 def remove_gravity_ENMO(accel_x, accel_y, accel_z):
     """ Remove gravity from signal using the euclidean norm - 1
@@ -142,8 +139,8 @@ def remove_gravity_ENMO(accel_x, accel_y, accel_z):
     import numpy as np
 
     ans = []
-    for x, y, z in zip(accel_x, accel_y, accel_z):
-        normedA_0 = np.linalg.norm([x, y, z]) -1
+    for i in range(len(accel_x)):
+        normedA_0 = np.linalg.norm([accel_x[i], accel_y[i], accel_z[i]]) -1
         ans.append(normedA_0)
 
     return ans
@@ -163,7 +160,7 @@ def remove_gravity_HFEN(accel_x, accel_y, accel_z):
 def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
     """ Remove gravity from signal using HPF on each raw signals
     then 4th order Butterworth LPF wc = 0.2 Hz on raw signals,
-    then calculate eudlidean norm -1
+    then calculate euclidean norm -1
 
     :param accel_x: acceleration x vector (m/s^2)
     :param accel_y: acceleration y vector (m/s^2)
@@ -237,10 +234,6 @@ def demonstrate_functions():
     a = np.array([9.8, 1, 5, 6, 7])
     removed_gravity = gs_to_accel(a)
     print(removed_gravity)
-
-    # ***** test removing gravity with euclidean norm ****
-    mag = remove_gravity_ENMO(1, 1, 1)
-    print(mag)
 
     # **** test method of filter to remove gravity ****
     # Sample rate and desired cutoff frequencies (in Hz).
