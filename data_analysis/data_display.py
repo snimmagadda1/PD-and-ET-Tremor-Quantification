@@ -5,14 +5,14 @@ def test_initial_data():
     :return: visual plots
     """
     from process_data import remove_gravity_ENMO, \
-        calculate_magnitude_acceleration, butter_lowpass_filter
+        calculate_magnitude_acceleration, butter_lowpass_filter, integrate_time_series
     from package_data import extrapolate_accel_data
 
     import numpy as np
     import matplotlib.pyplot as plt
 
-    fs = 37.51
-    x, y, z = extrapolate_accel_data('sinusoid_14hz_3751_fs.txt')
+    fs = 115
+    x, y, z = extrapolate_accel_data('sinusoid_2hz_fs_143.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_filter(x,  16, 44)
@@ -28,27 +28,21 @@ def test_initial_data():
     acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
     acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
 
-    # Plot data
-    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 8), sharey=True)
-    axes[0, 0].set_ylabel('Acceleration (m/s^2)')
-    axes[0, 0].set_xlabel('Time s')
-    axes[0, 1].set_xlabel('Time s')
-    axes[1, 0].set_ylabel('Acceleration (m/s^2)')
-    axes[1, 0].set_xlabel('Time s')
-    axes[1, 1].set_xlabel('Time s')
+    velocity_filtered = integrate_time_series(acceleration_filtered, fs)
+    displacement_filtered = integrate_time_series(velocity_filtered, fs)
 
-    axes[0, 0].set_title('Raw acceleration')
-    axes[0, 1].set_title('Filtered acceleration')
-    axes[1, 0].set_title('Raw acceleration w/out grav')
-    axes[1, 1].set_title('Filtered acceleration w/out grav')
-    axes[0, 0].plot(time, acceleration_raw, color='r')
-    axes[0, 1].plot(time, acceleration_filtered, color='g')
+    # plot raw acceleration without gravity
+    f1 = plt.figure()
+    ax1 = f1.add_subplot(111)
+    ax1.plot(time[0:400], acceleration_raw_no_grav[0:400], color='r')
 
-    axes[1, 0].plot(time[0:200], acceleration_raw_no_grav[0:200], color='r')
-    axes[1, 1].plot(time[0:200], acceleration_filtered_no_grav[0:200], color='g')
-    plt.tight_layout()
+    # plot filtered acceleration without gravity
+    f1 = plt.figure()
+    ax1 = f1.add_subplot(111)
+    ax1.plot(time[0:400], acceleration_filtered_no_grav[0:400], color='g')
 
     plt.show()
+
 
 
 if __name__ == "__main__":
