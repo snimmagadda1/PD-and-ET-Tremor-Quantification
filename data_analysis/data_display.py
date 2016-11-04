@@ -12,12 +12,12 @@ def test_initial_data():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x, y, z = extrapolate_accel_data('sinusoid_2hz_fs_143.txt')
+    x, y, z = extrapolate_accel_data('sinusoid_14hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x,  16, 44)
-    y_filt = butter_lowpass_filter(y,  16, 44)
-    z_filt = butter_lowpass_filter(z,  16, 44)
+    x_filt = butter_lowpass_filter(x,  15, 44)
+    y_filt = butter_lowpass_filter(y,  15, 44)
+    z_filt = butter_lowpass_filter(z,  15, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
