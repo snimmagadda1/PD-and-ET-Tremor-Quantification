@@ -1,3 +1,10 @@
+"""This is a testing file for displaying plots for
+troubleshooting / analysis
+"""
+
+
+
+
 def test_14hz_sampling():
     """ Plotting initial data using lowpass filter and ENMO to remove gravity.
     ** not a unit test **
@@ -200,7 +207,6 @@ def test_0hz_sampling():
     plt.title('Raw Sinusoid @ 0 Hz -- fs = 115 Hz')
     f1.savefig('0hz_sinusoid_raw.png')
 
-
     # plot filtered acceleration without gravity
     f2 = plt.figure()
     ax1 = f2.add_subplot(111)
@@ -250,17 +256,46 @@ def display_integrations():
     f1 = plt.figure()
     ax1 = f1.add_subplot(111)
     ax1.plot(time[0:400], velocity_filtered[0:400], color='r')
+    ax1.plot(time[0:400], acceleration_filtered[0:400], color='g')
     plt.xlabel('time (s)')
-    plt.ylabel('acceleration (m/s^2)')
-    plt.title('Raw Sinusoid @ 2 Hz -- fs = 115 Hz')
+    plt.ylabel('Velocity (m/s^2)')
+    plt.title('Velocity of 8 Hz Test Sinusoid')
 
     plt.show()
 
 
+def troubleshoot_integrations():
+    """Make sure integration is outputting as expected
+
+    :return: visual plots
+    """
+    import numpy as np
+    from process_data import integrate_time_series
+    import matplotlib.pyplot as plt
+
+    t = np.arange(0.0, 1.0, 0.01)
+    y = np.sin(2*np.pi*t)
+
+    y_int = integrate_time_series(t, y, 0)
+
+    fig = plt.figure(1)
+
+    ax1 = fig.add_subplot(111)
+    ax1.plot(t, y)
+    ax1.plot(t, y_int, color='r')
+    ax1.grid(True)
+    ax1.set_ylim((-2, 2))
+    ax1.set_ylabel('1 Hz')
+    ax1.set_title('A sine wave or two')
+
+    plt.show()
 
 
 if __name__ == "__main__":
-    test_0hz_sampling()
+    display_integrations()
+
+    pass
+
 
 
 
