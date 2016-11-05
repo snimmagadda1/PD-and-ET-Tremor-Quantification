@@ -1,7 +1,11 @@
+import numpy as np
+from process_data import *
+
 def test_remove_nan():
-
-    pass
-
+    test_data = np.array([1,2,3,float('Nan'),9,15.0,'i',float('Nan')])
+    nan_removed = remove_nan(test_data)
+    should_be = np.array([1,2,3,9,15.0,'i'])
+    assert np.array_equal(nan_removed,should_be)
 
 def test_integrate_time_series():
 
@@ -9,11 +13,8 @@ def test_integrate_time_series():
 
 
 def test_bandpass_ifft():
-    from process_data import bandpass_ifft
-    from test_signal1 import test_signal
-    signal = test_signal()
-    Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point = bandpass_ifft(signal,0.25,50,16)
-    print(Filtered_signal)
+
+    pass
 
 def test_calc_amplitude():
 
@@ -49,7 +50,7 @@ def test_remove_gravity_HFEN():
     pass
 
 if __name__ == "__main__":
-    test_bandpass_ifft()
+    test_remove_nan()
 
 
 
