@@ -19,8 +19,7 @@ def test_14hz_sampling():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x_g, y_g, z_g = extrapolate_accel_data_testing('sinusoid_14hz_fs_115.txt')
-    x_accel, y_accel, z_accel = gs_to_accel(x_g, y_g, z_g)
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_14hz_fs_115.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_filter(x_accel,  15, 44)
@@ -73,8 +72,7 @@ def test_8hz_sampling():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x_g, y_g, z_g = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
-    x_accel, y_accel, z_accel = gs_to_accel(x_g, y_g, z_g)
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_filter(x_accel,  15, 44)
@@ -127,8 +125,7 @@ def test_2hz_sampling():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x_g, y_g, z_g = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
-    x_accel, y_accel, z_accel = gs_to_accel(x_g, y_g, z_g)
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_filter(x_accel,  15, 44)
@@ -232,8 +229,7 @@ def display_integrations():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x_g, y_g, z_g = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
-    x_accel, y_accel, z_accel = gs_to_accel(x_g, y_g, z_g)
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_filter(x_accel, 15, 44)
@@ -290,8 +286,19 @@ def troubleshoot_integrations():
     plt.show()
 
 
+def test_welch():
+    """Test welch method of PSD estimation visually
+
+    :return:
+    """
+
+
+
 if __name__ == "__main__":
-    display_integrations()
+    test_0hz_sampling()
+    test_2hz_sampling()
+    test_8hz_sampling()
+    test_14hz_sampling()
 
     pass
 

@@ -72,13 +72,17 @@ def is_tremor(frequency, amplitude, data):
     """
 
 
-def psd_welch(data):
+def psd_welch(data, fs):
     """Estimate welch
     :param data:
     :return:
     """
     import numpy as np
-    import scipy
+    from scipy import signal
+
+    f, Pxx_den = signal.welch(data, fs)
+
+    return f, Pxx_den
 
 
 def integrate_time_series(time, data, fs):
@@ -95,18 +99,14 @@ def integrate_time_series(time, data, fs):
     return y
 
 
-def gs_to_accel(datax, datay, dataz):
+def gs_to_accel(data):
     """ Convert to m/s^2
 
     :param data:
     :return: data in m/s^2
     """
 
-    x = datax * 9.8
-    y = datay * 9.8
-    z = dataz * 9.8
-
-    return x, y, z
+    return data*9.8
 
 
 def gravity_compensate(q, acc):
