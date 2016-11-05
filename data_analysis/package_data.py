@@ -10,6 +10,7 @@ def extrapolate_accel_data(filename):
     :return: datax, datay, dataz vectors (np.array)
     """
     import numpy as np
+    import re
     x = []
     y = []
     z = []
