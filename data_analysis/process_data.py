@@ -90,7 +90,7 @@ def integrate_time_series(time, data, fs):
     """
     from scipy import integrate
 
-    y = integrate.trapz(data, time, initial=0)
+    y = integrate.cumtrapz(data, time, initial=data[0])
 
     return y
 
@@ -189,7 +189,7 @@ def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
 
 def butter_lowpass(highcut, fs, order=4):
     """ Get coefficients for Butterworth lowpass filter.
-    Use with butter_bandpass_filter
+    Use with butter_lowpass_filter
 
     :param lowcut: lower cutoff frequency (Hz)
     :param highcut: upper cutoff frequency (Hz)
@@ -204,11 +204,26 @@ def butter_lowpass(highcut, fs, order=4):
     return b, a
 
 
+def butter_lowpass_IIR(highcut, fs, order=4):
+    """ Get coefficients for Butterworth lowpass filter.
+    Use with butter_lowpass_IIR_filter
+
+    :param highcut: upper cutoff frequency (Hz)
+    :param fs: sampling frequency (Hz)
+    :param order: filter order
+    :return: Butterworth bandpass filter coefficients
+    """
+    from scipy.signal import iirfilter
+    nyq = 0.5 * fs
+    high = highcut / nyq
+    b, a = iirfilter(order, [high], btype='lowpass', ftype='butter')
+    return b, a
+
+
 def butter_lowpass_filter(data, highcut, fs, order=5):
     """ Filter data using parameters
 
     :param data: data to apply filter to
-    :param lowcut: lower cutoff frequency (Hz)
     :param highcut: uppper cutoff frequency (Hz)
     :param fs: sampling frequency (Hz)
     :param order: filter order
@@ -216,6 +231,21 @@ def butter_lowpass_filter(data, highcut, fs, order=5):
     """
     from scipy.signal import filtfilt
     b, a = butter_lowpass(highcut, fs, order=order)
+    y = filtfilt(b, a, data, padlen=100, padtype='odd')
+    return y
+
+
+def butter_lowpass_IIR_filter(data, highcut, fs, order=5):
+    """ Filter data using parameters. IIR filter
+
+    :param data: data to apply filter to
+    :param highcut: uppper cutoff frequency (Hz)
+    :param fs: sampling frequency (Hz)
+    :param order: filter order
+    :return:
+    """
+    from scipy.signal import filtfilt
+    b, a = butter_lowpass_IIR(highcut, fs, order=order)
     y = filtfilt(b, a, data, padlen=100, padtype='odd')
     return y
 
