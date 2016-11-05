@@ -3,7 +3,6 @@ troubleshooting / analysis
 """
 
 
-
 def test_14hz_sampling():
     """ Plotting initial data using lowpass filter and ENMO to remove gravity.
     ** not a unit test **
@@ -12,7 +11,7 @@ def test_14hz_sampling():
     """
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration,\
-        butter_lowpass_filter, integrate_time_series, gs_to_accel
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -22,18 +21,24 @@ def test_14hz_sampling():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_14hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel,  15, 44)
-    y_filt = butter_lowpass_filter(y_accel,  15, 44)
-    z_filt = butter_lowpass_filter(z_accel,  15, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel,  15, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel,  15, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel,  15, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
-    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
-    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     # plot raw acceleration without gravity
     f1 = plt.figure()
@@ -65,7 +70,7 @@ def test_8hz_sampling():
     """
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration,\
-        butter_lowpass_filter, integrate_time_series, gs_to_accel
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -75,18 +80,24 @@ def test_8hz_sampling():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel,  14, 44)
-    y_filt = butter_lowpass_filter(y_accel,  14, 44)
-    z_filt = butter_lowpass_filter(z_accel,  14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel,  14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel,  14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel,  14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
-    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
-    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     # plot raw acceleration without gravity
     f1 = plt.figure()
@@ -118,7 +129,7 @@ def test_2hz_sampling():
     """
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration,\
-        butter_lowpass_filter, integrate_time_series, gs_to_accel
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -128,18 +139,24 @@ def test_2hz_sampling():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel,  14, 44)
-    y_filt = butter_lowpass_filter(y_accel,  14, 44)
-    z_filt = butter_lowpass_filter(z_accel,  14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel,  14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel,  14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel,  14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
-    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
-    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     # plot raw acceleration without gravity
     f1 = plt.figure()
@@ -171,7 +188,7 @@ def test_0hz_sampling():
     """
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration,\
-        butter_lowpass_filter, integrate_time_series, gs_to_accel
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -181,18 +198,24 @@ def test_0hz_sampling():
     x_g, y_g, z_g = extrapolate_accel_data_testing('sinusoid_0hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_g,  14, 44)
-    y_filt = butter_lowpass_filter(y_g,  14, 44)
-    z_filt = butter_lowpass_filter(z_g,  14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_g,  14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_g,  14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_g,  14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_raw = calculate_magnitude_acceleration(x_g, y_g, z_g)
-    acceleration_raw_no_grav = remove_gravity_ENMO(x_g, y_g, z_g)
+    acceleration_rawg = calculate_magnitude_acceleration(x_g, y_g, z_g)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_g, y_g, z_g)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
-    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     # plot raw acceleration without gravity
     f1 = plt.figure()
@@ -222,7 +245,7 @@ def display_integrations():
         """
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration, \
-        butter_lowpass_filter, integrate_time_series, gs_to_accel
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -232,18 +255,24 @@ def display_integrations():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel, 14, 44)
-    y_filt = butter_lowpass_filter(y_accel, 14, 44)
-    z_filt = butter_lowpass_filter(z_accel, 14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
-    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
-    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     velocity_filtered = integrate_time_series(acceleration_filtered, time, fs)
 
@@ -286,7 +315,7 @@ def troubleshoot_integrations():
     plt.show()
 
 
-def test_welch():
+def test_welch_8hz():
     """Test welch method of PSD estimation visually
 
     :return:
@@ -294,7 +323,7 @@ def test_welch():
 
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration, \
-        butter_lowpass_filter, integrate_time_series, gs_to_accel
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel, psd_welch
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -304,27 +333,89 @@ def test_welch():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel, 14, 44)
-    y_filt = butter_lowpass_filter(y_accel, 14, 44)
-    z_filt = butter_lowpass_filter(z_accel, 14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
-    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
 
     # calculate magnitude of acceleration with and without grav (filtered)
-    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
-    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
+
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs)
+
+    f1 = plt.figure()
+    ax1 = f1.add_subplot(111)
+    ax1.semilogy(f, pxx, color='r')
+    plt.xlabel('Frequency (HZ)')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('PSD of 8 Hz Sinusoid ADXL345 Data')
+    f1.savefig('8hz_PSD.png')
+    plt.show()
 
 
+def test_welch_2hz():
+    """Test welch method of PSD estimation visually
+
+    :return:
+    """
+
+    from process_data import remove_gravity_ENMO, \
+        calculate_magnitude_acceleration, \
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel, psd_welch
+    from package_data import extrapolate_accel_data_testing
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    fs = 115
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
+
+    # remove high frequencies
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
+
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs)
+
+    f1 = plt.figure()
+    ax1 = f1.add_subplot(111)
+    ax1.semilogy(f, pxx, color='r')
+    plt.xlabel('Frequency (HZ)')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('PSD of 2 Hz Sinusoid ADXL345 Data')
+    f1.savefig('2hz_PSD.png')
+    plt.show()
 
 
 if __name__ == "__main__":
-    test_0hz_sampling()
-    test_2hz_sampling()
-    test_8hz_sampling()
-    test_14hz_sampling()
+    test_welch_8hz()
+
 
     pass
 

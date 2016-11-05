@@ -105,8 +105,9 @@ def gs_to_accel(data):
     :param data:
     :return: data in m/s^2
     """
+    import numpy as np
 
-    return data*9.8
+    return np.array(data) * 9.8
 
 
 def gravity_compensate(q, acc):
