@@ -31,6 +31,21 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
     return Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point
 
 
+def meters_to_mm(data):
+    """Convert meters to mm
+    This is convention for accelerometer data
+
+    :param data: data in mm
+    :return:
+    """
+    import numpy as np
+    np_data = np.array(data)
+
+    converted = np_data * 1000
+
+    return converted.tolist()
+
+
 def remove_nan(data):
     """Remove Nan and empty values from data stream
     :param data: array of data (np.array)
@@ -66,7 +81,7 @@ def psd_welch(data):
     import scipy
 
 
-def integrate_time_series(data, fs):
+def integrate_time_series(time, data, fs):
     """Integrate time series data with given frequency
 
     :param data: x values (m/s^2 or m/s)
@@ -75,7 +90,7 @@ def integrate_time_series(data, fs):
     """
     from scipy import integrate
 
-    y = integrate.cumtrapz(data, x=None, dx=1/fs, axis=-1, initial=0)
+    y = integrate.trapz(data, time, initial=0)
 
     return y
 
