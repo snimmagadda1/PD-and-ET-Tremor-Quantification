@@ -292,7 +292,7 @@ def troubleshoot_integrations():
 
 
 if __name__ == "__main__":
-    display_integrations()
+    troubleshoot_integrations()
 
     pass
 
