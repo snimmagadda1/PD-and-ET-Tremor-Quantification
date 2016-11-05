@@ -9,20 +9,23 @@ def extrapolate_accel_data(filename):
     :param filename: file to read from
     :return: datax, datay, dataz vectors (np.array)
     """
+    import numpy as np
     x = []
     y = []
     z = []
-    import numpy as np
+    chunk_size = 200
+    conv_factor = 0.0039
     with open(filename, 'r') as f:
-        alllines = f.readlines()
-        for line in alllines:
-            components = line.split(',')
-            sep = ';'
-            cleaned_z = components[2].split(sep,1)[0]
-            components[2] = cleaned_z
-            x.append(float(components[0]))
-            y.append(float(components[1]))
-            z.append(float(components[2]))
+        filechunk = f.read(chunk_size)
+        while len(filechunk) > 0:
+            datapoints = re.findall('[\+|-].{13};', filechunk)
+            for data in datapoints:
+                components = data[:-1].split(',')
+                x.append(float(components[0])*conv_factor)
+                y.append(float(components[1])*conv_factor)
+                z.append(float(components[2])*conv_factor)
+            filechunk = f.read(chunk_size)
+         
     return np.array(x), np.array(y), np.array(z)
 
 
