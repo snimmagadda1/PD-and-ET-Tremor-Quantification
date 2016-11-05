@@ -75,9 +75,9 @@ def test_8hz_sampling():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel,  15, 44)
-    y_filt = butter_lowpass_filter(y_accel,  15, 44)
-    z_filt = butter_lowpass_filter(z_accel,  15, 44)
+    x_filt = butter_lowpass_filter(x_accel,  14, 44)
+    y_filt = butter_lowpass_filter(y_accel,  14, 44)
+    z_filt = butter_lowpass_filter(z_accel,  14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
@@ -128,9 +128,9 @@ def test_2hz_sampling():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel,  15, 44)
-    y_filt = butter_lowpass_filter(y_accel,  15, 44)
-    z_filt = butter_lowpass_filter(z_accel,  15, 44)
+    x_filt = butter_lowpass_filter(x_accel,  14, 44)
+    y_filt = butter_lowpass_filter(y_accel,  14, 44)
+    z_filt = butter_lowpass_filter(z_accel,  14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
@@ -181,9 +181,9 @@ def test_0hz_sampling():
     x_g, y_g, z_g = extrapolate_accel_data_testing('sinusoid_0hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_g,  15, 44)
-    y_filt = butter_lowpass_filter(y_g,  15, 44)
-    z_filt = butter_lowpass_filter(z_g,  15, 44)
+    x_filt = butter_lowpass_filter(x_g,  14, 44)
+    y_filt = butter_lowpass_filter(y_g,  14, 44)
+    z_filt = butter_lowpass_filter(z_g,  14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
@@ -232,9 +232,9 @@ def display_integrations():
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_filter(x_accel, 15, 44)
-    y_filt = butter_lowpass_filter(y_accel, 15, 44)
-    z_filt = butter_lowpass_filter(z_accel, 15, 44)
+    x_filt = butter_lowpass_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_filter(z_accel, 14, 44)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
@@ -291,6 +291,32 @@ def test_welch():
 
     :return:
     """
+
+    from process_data import remove_gravity_ENMO, \
+        calculate_magnitude_acceleration, \
+        butter_lowpass_filter, integrate_time_series, gs_to_accel
+    from package_data import extrapolate_accel_data_testing
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    fs = 115
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
+
+    # remove high frequencies
+    x_filt = butter_lowpass_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_filter(z_accel, 14, 44)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
 
 
 
