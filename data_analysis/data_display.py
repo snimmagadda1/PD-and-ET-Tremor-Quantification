@@ -4,7 +4,6 @@ troubleshooting / analysis
 
 
 
-
 def test_14hz_sampling():
     """ Plotting initial data using lowpass filter and ENMO to remove gravity.
     ** not a unit test **
@@ -291,8 +290,50 @@ def troubleshoot_integrations():
     plt.show()
 
 
+def test_remove_artifacts():
+    from process_data import remove_gravity_ENMO, \
+        calculate_magnitude_acceleration, \
+        butter_lowpass_filter, integrate_time_series, gs_to_accel
+    from package_data import extrapolate_accel_data
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    fs = 14
+    x_g, y_g, z_g = extrapolate_accel_data('rawacceldata.txt')
+    x_accel, y_accel, z_accel = gs_to_accel(x_g, y_g, z_g)
+
+    # remove high frequencies
+    x_filt = butter_lowpass_filter(x_accel, 15, 44)
+    y_filt = butter_lowpass_filter(y_accel, 15, 44)
+    z_filt = butter_lowpass_filter(z_accel, 15, 44)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_raw = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_grav = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filtered = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_grav = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    f1 = plt.figure()
+    ax1 = f1.add_subplot(111)
+    ax1.plot(time, x_g, color='r')
+
+    f2 = plt.figure()
+    ax2 = f2.add_subplot(111)
+    ax2.plot(time, y_g, color='g')
+
+    f3 = plt.figure()
+    ax3 = f3.add_subplot(111)
+    ax3.plot(time, z_filt, color='g')
+
+    plt.show()
+
+
 if __name__ == "__main__":
-    troubleshoot_integrations()
+    test_remove_artifacts()
 
     pass
 
