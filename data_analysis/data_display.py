@@ -583,7 +583,7 @@ def test_welch_wrist_data():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('test_accelerometer_data.txt')
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('wrist_data.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
