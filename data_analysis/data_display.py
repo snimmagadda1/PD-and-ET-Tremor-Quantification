@@ -323,7 +323,8 @@ def test_welch_8hz():
 
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration, \
-        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel, psd_welch
+        butter_lowpass_IIR_filter, integrate_time_series, \
+        gs_to_accel, psd_welch, is_tremor
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -354,6 +355,10 @@ def test_welch_8hz():
 
     f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 256)
 
+    # test if tremor present in segment
+    alert = is_tremor(f, pxx)
+    print(alert)
+
     f1 = plt.figure()
     ax1 = f1.add_subplot(111)
     ax1.semilogy(f, pxx, color='r')
@@ -373,7 +378,7 @@ def test_welch_2hz():
     from process_data import remove_gravity_ENMO, \
         calculate_magnitude_acceleration, \
         butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel, \
-        psd_welch
+        psd_welch, is_tremor
     from package_data import extrapolate_accel_data_testing
 
     import numpy as np
@@ -403,6 +408,10 @@ def test_welch_2hz():
     acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 256)
+
+    # test if tremor present in segment
+    alert = is_tremor(f, pxx)
+    print(alert)
 
     f1 = plt.figure()
     ax1 = f1.add_subplot(111)
@@ -558,8 +567,9 @@ def iteratively_test_welch_methods():
     plt.show()
 
 
+
 if __name__ == "__main__":
-    iteratively_test_welch_methods()
+    test_welch_8hz()
 
 
     pass

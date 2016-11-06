@@ -263,7 +263,18 @@ def is_tremor(f, Pxx_den):
     :return: boolean classifying whether a tremor occurred and
     the frequency of the tremor **TO DO: amplitude of tremor**
     """
-    
+    isTremor = False
+
+    DF, maginutide = get_DF(f, Pxx_den)
+
+    if DF >= 2.95 and DF <= 12:
+        isTremor = True
+
+    return isTremor
+
+
+
+
 
 
 def demonstrate_functions():
