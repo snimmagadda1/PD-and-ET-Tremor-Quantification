@@ -1,5 +1,4 @@
 import matplotlib
-
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
@@ -209,7 +208,13 @@ class graph_page(tk.Frame):
 
 
 class updrs_page(tk.Frame):
+
+
     def __init__(self, parent, controller):
+
+        def do_bluetooth():
+            print("hi")
+
         tk.Frame.__init__(self, parent)
         title = tk.Label(self, text="Unified Parkinsons Disease Rating Scale", font=TITLE_FONT)
         #title.place(relx=0.5, rely=0.5, anchor='center')
@@ -234,6 +239,9 @@ class updrs_page(tk.Frame):
         for item in ["0 = None.", "1 = Mild.", "2 = Moderate memory loss", "3 = Severe memory loss",
                      "4 = Severe Memory Loss. Unable to make judgements"]:
             listbox.insert('end', item)
+
+        bluetooth_butt = tk.Button(self, text="Bluetooth", command=do_bluetooth)
+        bluetooth_butt.pack()
 
 
 #################################### PROGRAM RUN #######################################################################
