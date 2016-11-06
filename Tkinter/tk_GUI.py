@@ -145,26 +145,52 @@ class TremorApp(tk.Tk):
 
 
 class start_page(tk.Frame):
+
+    def _login_button_clicked(self, controller):
+        """Check credentials against login
+
+        :return: NA
+        """
+        username = self.enter_name.get()
+        password = self.enter_pwd.get()
+
+        if username == "essential" and password == "tremor":
+            print("YAY")
+            controller.show_frame(graph_page)
+
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
         accelerometer based tremor classification platform."""), font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        # button to show graph page
-        button1 = tk.Button(self, text="Agree",
-                             command=lambda: controller.show_frame(graph_page))
-        button1.pack()
+        # User name and login
+        name_label = tk.Label(self, text="Username")
+        name_label.pack(side='top')
 
-        # button to quit
-        button2 = tk.Button(self, text="Disagree", command=quit)
-        button2.pack()
+        self.enter_name = tk.Entry(self, justify='center')
+        self.enter_name.insert(0, "...")
+        self.enter_name.pack(side='top')
+        username = self.enter_name.get()
+
+        pwd_label = tk.Label(self, text="Password")
+        pwd_label.pack(side='top')
+
+        self.enter_pwd = tk.Entry(self, justify='center')
+        self.enter_pwd.insert(0, "...")
+        self.enter_pwd.pack(side='top')
+        password = self.enter_pwd.get()
+
+        login_button = tk.Button(self, text="Login", command=lambda: self._login_button_clicked(controller))
+        login_button.pack()
 
         # background image
         background_pic = tk.PhotoImage(file="background_image.gif")
         panel = tk.Label(self, image=background_pic)
         panel.pack(side='top', fill='both', expand='yes')
         panel.image = background_pic
+
 
 
 class graph_page(tk.Frame):
@@ -208,7 +234,7 @@ class updrs_page(tk.Frame):
 
         for item in ["0 = None.", "1 = Mild.", "2 = Moderate memory loss", "3 = Severe memory loss",
                      "4 = Severe Memory Loss. Unable to make judgements"]:
-             listbox.insert('end', item)
+            listbox.insert('end', item)
 
 
 #################################### PROGRAM RUN #######################################################################
