@@ -158,7 +158,6 @@ class start_page(tk.Frame):
             print("YAY")
             controller.show_frame(graph_page)
 
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
