@@ -192,8 +192,6 @@ def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
     """
 
 
-
-
 def butter_lowpass(highcut, fs, order=4):
     """ Get coefficients for Butterworth lowpass filter.
     Use with butter_lowpass_filter
