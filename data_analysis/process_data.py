@@ -255,13 +255,15 @@ def butter_lowpass_IIR_filter(data, highcut, fs, order=5):
     return y
 
 
-def is_tremor(frequency, amplitude, data):
-    """Determine if data signal constitutes a tremor
-    :param frequency: frequency (float) of tremor (Hz)
-    :param amplitude: amplitude (float) of tremor
-    :param data: array of data (np.array) containing single peak
-    :return:
+def is_tremor(f, Pxx_den):
+    """Identify a tremor based on the PSD
+
+    :param f: frequency (output from psd_welch)
+    :param Pxx_den: Power spectal density (output from psd_welch)
+    :return: boolean classifying whether a tremor occurred and
+    the frequency of the tremor **TO DO: amplitude of tremor**
     """
+    
 
 
 def demonstrate_functions():
