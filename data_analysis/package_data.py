@@ -58,21 +58,45 @@ def extrapolate_accel_data_testing(filename):
 
 if __name__ == "__main__":
     import numpy as np
+    import scipy
     import matplotlib.pyplot as plt
-    x = []
-    y = []
-    z = []
-    with open('data_rate_test.txt', 'r') as f:
-        datachunk = get_datachunk(f)
-        while (datachunk != -1):
-            x.extend(datachunk['x'])
-            y.extend(datachunk['y'])
-            z.extend(datachunk['z'])
-            datachunk = get_datachunk(f)
-        
-    plt.plot(x)
-    plt.plot(y)
-    plt.plot(z)
+    from process_data import *
+    # x = []
+    # y = []
+    # z = []
+    # with open('data_rate_test.txt', 'r') as f:
+    #     datachunk = get_datachunk(f)
+    #     while (datachunk != -1):
+    #         x.extend(datachunk['x'])
+    #         y.extend(datachunk['y'])
+    #         z.extend(datachunk['z'])
+    #         datachunk = get_datachunk(f)
+
+    x,y,z = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
+    filtcutoff = 14
+    fs = 115
+    filtx = butter_lowpass_IIR_filter(x, filtcutoff, 115)
+    filty = butter_lowpass_IIR_filter(y, filtcutoff, 115)
+    filtz = butter_lowpass_IIR_filter(z, filtcutoff, 115)
+
+    enmofilt = remove_gravity_ENMO(filtx,filty,filtz)
+    displacement = 1000*9.8*scipy.integrate.cumtrapz(enmofilt, x=[i/fs for i in range(len(enmofilt))],initial=0)
+
+    # int_window = 5
+    #
+    # enmofilt = [e*9.8 for e in enmofilt] # conver to m/s^2
+    #
+    # velocity = [0 for i in range(0,len(enmofilt)-int_window)]
+    # for i in range(int_window, len(enmofilt)):
+    #     velocity[i-int_window] = np.trapz(enmofilt[i-int_window:i], x=None, dx=1/fs)
+    #
+    # displacement = [0 for i in range(0, len(velocity) - int_window)]
+    # for i in range(int_window, len(velocity)):
+    #     displacement[i - int_window] = np.trapz(velocity[i - int_window:i], x=None, dx=1 / fs)
+    #
+    # displacement = [d*1000 for d in displacement] # convert to mm
+
+    plt.plot(displacement)
     plt.show()
         
 
