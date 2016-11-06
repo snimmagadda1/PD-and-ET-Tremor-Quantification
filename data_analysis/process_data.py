@@ -63,15 +63,6 @@ def calc_amplitude(data):
     """
 
 
-def is_tremor(frequency, amplitude, data):
-    """Determine if data signal constitutes a tremor
-    :param frequency: frequency (float) of tremor (Hz)
-    :param amplitude: amplitude (float) of tremor
-    :param data: array of data (np.array) containing single peak
-    :return:
-    """
-
-
 def psd_welch(data, fs, nperseg1=256):
     """Estimate PSD using welch method
     :param data:
@@ -264,6 +255,16 @@ def butter_lowpass_IIR_filter(data, highcut, fs, order=5):
     b, a = butter_lowpass_IIR(highcut, fs, order=order)
     y = filtfilt(b, a, data, padlen=100, padtype='odd')
     return y
+
+
+def is_tremor(frequency, amplitude, data):
+    """Determine if data signal constitutes a tremor
+    :param frequency: frequency (float) of tremor (Hz)
+    :param amplitude: amplitude (float) of tremor
+    :param data: array of data (np.array) containing single peak
+    :return:
+    """
+
 
 
 def demonstrate_functions():
