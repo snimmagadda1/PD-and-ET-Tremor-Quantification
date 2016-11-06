@@ -439,7 +439,7 @@ def iteratively_test_welch_methods():
 
     fs = 115
     fc =14
-    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_IIR_filter(x_accel, fc, fs)
@@ -471,7 +471,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x,y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('40')
 
     plt.subplot(332)
@@ -482,7 +482,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('80')
 
     plt.subplot(333)
@@ -493,7 +493,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('120')
 
     plt.subplot(334)
@@ -504,7 +504,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('160')
 
     plt.subplot(335)
@@ -515,7 +515,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('200')
 
     plt.subplot(336)
@@ -526,7 +526,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('240')
 
     plt.subplot(337)
@@ -537,7 +537,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('280')
 
     plt.subplot(338)
@@ -548,7 +548,7 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('320')
 
     plt.subplot(339)
@@ -559,10 +559,10 @@ def iteratively_test_welch_methods():
     plt.scatter(x, y)
     plt.axvline(x=x)
     plt.xlabel('HZ')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
     plt.title('360')
     plt.tight_layout()
-    plt.savefig('welch_windows_2hz.png')
+    plt.savefig('welch_windows_8hz.png')
 
     plt.show()
 
@@ -582,7 +582,7 @@ def test_welch_wrist_data():
     import numpy as np
     import matplotlib.pyplot as plt
 
-    fs = 115
+    fs = 123
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('wrist_data.txt')
 
     # remove high frequencies
@@ -605,24 +605,33 @@ def test_welch_wrist_data():
     acceleration_filtered = gs_to_accel(acceleration_filteredg)
     acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
-    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 256)
-
-    # # test if tremor present in segment
-    # alert = is_tremor(f, pxx)
-    # print(alert)
-
+    # plot filtered acceleration without gravity
     f1 = plt.figure()
-    ax1 = f1.add_subplot(111)
-    ax1.semilogy(f, pxx, color='r')
+    ax1 = f1.add_subplot(211)
+    ax1.plot(time[500:750], acceleration_filtered_no_grav[500:750], color='g')
+    plt.xlabel('time (s)')
+    plt.ylabel('acceleration (m/s^2)')
+    plt.title('Filtered Wrist Data')
+    plt.savefig('filtered_wrist_data.png')
+
+    f, pxx = psd_welch(acceleration_filtered_no_grav[500:750], fs)
+
+    # test if tremor present in segment
+    alert = is_tremor(f, pxx)
+
+    ax2 = f1.add_subplot(212)
+    ax2.semilogy(f, pxx, color='r')
     plt.xlabel('Frequency (HZ)')
-    plt.ylabel('PSD [V**2/Hz]')
-    plt.title('PSD of 2 Hz Sinusoid ADXL345 Data')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
+    plt.title('PSD of Wrist Data Segment Tremor : %r' %(alert))
     f1.savefig('2hz_PSD.png')
+    plt.tight_layout()
+    plt.savefig('wrist_data_with_tremor.png')
     plt.show()
 
 
 if __name__ == "__main__":
-    test_welch_wrist_data()
+    iteratively_test_welch_methods()
 
 
     pass

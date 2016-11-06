@@ -265,9 +265,9 @@ def is_tremor(f, Pxx_den):
     """
     isTremor = False
 
-    DF, maginutide = get_DF(f, Pxx_den)
+    DF, mag = get_DF(f, Pxx_den)
 
-    if DF >= 2.95 and DF <= 12:
+    if DF >= 2.95 and DF <= 12 and mag > 0.001:
         isTremor = True
 
     return isTremor
