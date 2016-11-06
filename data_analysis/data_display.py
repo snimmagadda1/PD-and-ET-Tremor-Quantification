@@ -567,9 +567,62 @@ def iteratively_test_welch_methods():
     plt.show()
 
 
+def test_welch_wrist_data():
+    """Test welch method of PSD estimation visually on data when wearing device
+
+    :return: Plots
+    """
+
+    from process_data import remove_gravity_ENMO, \
+        calculate_magnitude_acceleration, \
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel, \
+        psd_welch, is_tremor
+    from package_data import extrapolate_accel_data_testing
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    fs = 115
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('test_accelerometer_data.txt')
+
+    # remove high frequencies
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
+
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 256)
+
+    # # test if tremor present in segment
+    # alert = is_tremor(f, pxx)
+    # print(alert)
+
+    f1 = plt.figure()
+    ax1 = f1.add_subplot(111)
+    ax1.semilogy(f, pxx, color='r')
+    plt.xlabel('Frequency (HZ)')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('PSD of 2 Hz Sinusoid ADXL345 Data')
+    f1.savefig('2hz_PSD.png')
+    plt.show()
+
 
 if __name__ == "__main__":
-    test_welch_8hz()
+    test_welch_wrist_data()
 
 
     pass
