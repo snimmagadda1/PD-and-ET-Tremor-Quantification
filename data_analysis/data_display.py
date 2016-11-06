@@ -429,12 +429,13 @@ def iteratively_test_welch_methods():
     import matplotlib.pyplot as plt
 
     fs = 115
-    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
+    fc =14
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_2hz_fs_115.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
-    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
-    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel, fc, fs)
+    y_filt = butter_lowpass_IIR_filter(y_accel, fc, fs)
+    z_filt = butter_lowpass_IIR_filter(z_accel, fc, fs)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
@@ -552,7 +553,7 @@ def iteratively_test_welch_methods():
     plt.ylabel('PSD [V**2/Hz]')
     plt.title('360')
     plt.tight_layout()
-    plt.savefig('welch_windows.png')
+    plt.savefig('welch_windows_2hz.png')
 
     plt.show()
 

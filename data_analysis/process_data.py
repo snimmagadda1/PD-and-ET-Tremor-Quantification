@@ -70,7 +70,7 @@ def psd_welch(data, fs, nperseg1=256):
     """
     from scipy import signal
 
-    f, Pxx_den = signal.welch(data, fs, nperseg=nperseg1)
+    f, Pxx_den = signal.welch(data, fs, nperseg=nperseg1, return_onesided=True)
 
     return f, Pxx_den
 
@@ -262,7 +262,6 @@ def is_tremor(frequency, amplitude, data):
     :param data: array of data (np.array) containing single peak
     :return:
     """
-
 
 
 def demonstrate_functions():
