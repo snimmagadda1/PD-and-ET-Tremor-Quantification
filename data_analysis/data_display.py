@@ -631,8 +631,7 @@ def test_welch_wrist_data():
 
 
 if __name__ == "__main__":
-    iteratively_test_welch_methods()
-
+    test_welch_wrist_data()
 
     pass
 
