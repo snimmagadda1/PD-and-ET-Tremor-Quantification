@@ -72,17 +72,25 @@ def is_tremor(frequency, amplitude, data):
     """
 
 
-def psd_welch(data, fs):
-    """Estimate welch
+def psd_welch(data, fs, nperseg1=256):
+    """Estimate PSD using welch method
     :param data:
     :return:
     """
-    import numpy as np
     from scipy import signal
 
-    f, Pxx_den = signal.welch(data, fs)
+    f, Pxx_den = signal.welch(data, fs, nperseg=nperseg1)
 
     return f, Pxx_den
+
+
+def get_DF(f, Pxx_den):
+    """Get the dominant frequency (DF) of signal
+
+    :param f: freuqencies (output of psd_welch)
+    :param Pxx_den: PSD (output of psd_welch)
+    :return: dominant frequency and amplitude
+    """
 
 
 def integrate_time_series(time, data, fs):
@@ -186,6 +194,8 @@ def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
     :param accel_z: acceleration z vector (m/s^2)
     :return: magnitude of acceleration w/o DC component (gravity)
     """
+
+
 
 
 def butter_lowpass(highcut, fs, order=4):

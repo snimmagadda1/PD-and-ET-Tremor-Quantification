@@ -352,7 +352,7 @@ def test_welch_8hz():
     acceleration_filtered = gs_to_accel(acceleration_filteredg)
     acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
-    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 256)
 
     f1 = plt.figure()
     ax1 = f1.add_subplot(111)
@@ -401,7 +401,7 @@ def test_welch_2hz():
     acceleration_filtered = gs_to_accel(acceleration_filteredg)
     acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
-    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 256)
 
     f1 = plt.figure()
     ax1 = f1.add_subplot(111)
@@ -413,8 +413,112 @@ def test_welch_2hz():
     plt.show()
 
 
+def iteratively_test_welch_methods():
+    """Test welch method window length on a 14 Hz sinusoid
+
+        :return:
+        """
+    from process_data import remove_gravity_ENMO, \
+        calculate_magnitude_acceleration, \
+        butter_lowpass_IIR_filter, integrate_time_series, gs_to_accel, psd_welch
+    from package_data import extrapolate_accel_data_testing
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    fs = 115
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('sinusoid_14hz_fs_115.txt')
+
+    # remove high frequencies
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
+
+    # plot different window lengths
+    plt.figure(num=None, figsize=(16, 12), dpi=80, facecolor='w', edgecolor='k')
+    plt.subplot(331)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 40)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('40')
+
+    plt.subplot(332)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 80)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('80')
+
+    plt.subplot(333)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 120)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('120')
+
+    plt.subplot(334)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 160)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('160')
+
+    plt.subplot(335)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 200)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('200')
+
+    plt.subplot(336)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 240)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('240')
+
+    plt.subplot(337)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 280)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('280')
+
+    plt.subplot(338)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 320)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('320')
+
+    plt.subplot(339)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:450], fs, 360)
+    plt.semilogy(f, pxx)
+    plt.xlabel('HZ')
+    plt.ylabel('PSD [V**2/Hz]')
+    plt.title('360')
+    plt.tight_layout()
+
+    plt.show()
+
 if __name__ == "__main__":
-    test_welch_8hz()
+    iteratively_test_welch_methods()
 
 
     pass
