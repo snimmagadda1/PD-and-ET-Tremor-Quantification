@@ -91,6 +91,11 @@ def get_DF(f, Pxx_den):
     :param Pxx_den: PSD (output of psd_welch)
     :return: dominant frequency and amplitude
     """
+    import numpy as np
+    max_y = max(Pxx_den)
+    DF = f[np.where(Pxx_den == max_y)]  # Find the x value corresponding to the maximum y value
+
+    return DF, max_y
 
 
 def integrate_time_series(time, data, fs):
