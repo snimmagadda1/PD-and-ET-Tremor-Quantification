@@ -6,7 +6,7 @@ import matplotlib.animation as animation
 import matplotlib.pyplot
 from matplotlib import style
 
-import tkinter as tk
+import Tkinter as tk
 
 import urllib
 import json
@@ -51,32 +51,7 @@ def animate(i):
     :param i:
     :return:
     """
-    dataLink = 'https://btc-e.com/api/3/trades/btc_usd?limit=2000'
-    data = urllib.request.urlopen(dataLink)
-    data = data.read().decode("utf-8")
-    data = json.loads(data)
 
-    data = data["btc_usd"]
-    data = pd.DataFrame(data)
-
-    buys = data[(data['type'] == "bid")]
-    buys["datestamp"] = np.array(buys["timestamp"]).astype("datetime64[s]")
-    buyDates = (buys["datestamp"]).tolist()
-
-    sells = data[(data['type'] == "ask")]
-    sells["datestamp"] = np.array(sells["timestamp"]).astype("datetime64[s]")
-    sellDates = (sells["datestamp"]).tolist()
-
-    a.clear()
-
-    a.plot_date(buyDates, buys["price"], "#00A3E0", label="buys")
-    a.plot_date(sellDates, sells["price"], "#183A54", label="sells")
-
-    a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
-             ncol=2, borderaxespad=0)
-
-    title = "BTC-e BTCUSD Prices\nLast Price: " + str(data["price"][1999])
-    a.set_title(title)
 
 
 # Main app class

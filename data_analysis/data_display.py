@@ -608,13 +608,13 @@ def test_welch_wrist_data():
     # plot filtered acceleration without gravity
     f1 = plt.figure()
     ax1 = f1.add_subplot(211)
-    ax1.plot(time[500:750], acceleration_filtered_no_grav[500:750], color='g')
+    ax1.plot(time[0:1000], acceleration_filtered_no_grav[0:1000], color='g')
     plt.xlabel('time (s)')
     plt.ylabel('acceleration (m/s^2)')
     plt.title('Filtered Wrist Data')
     plt.savefig('filtered_wrist_data.png')
 
-    f, pxx = psd_welch(acceleration_filtered_no_grav[500:750], fs)
+    f, pxx = psd_welch(acceleration_filtered_no_grav[500:1000], fs)
 
     # test if tremor present in segment
     alert = is_tremor(f, pxx)
