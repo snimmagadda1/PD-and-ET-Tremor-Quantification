@@ -47,9 +47,14 @@ def test_calculate_magnitude_acceleration():
 
     pass
 
-def test_remove_gravity_ENMO():
 
-    pass
+def test_remove_gravity_ENMO():
+    input_x = [0.0,0.0,0.0]
+    input_y = [0.0,0.0,0.0]
+    input_z = [1,1,1]
+    output = remove_gravity_ENMO(input_x,input_y,input_z)
+    should_be = np.array([0,0,0])
+    assert np.array_equal(output,should_be)
 
 
 def test_remove_gravity_HFEN():
@@ -59,6 +64,7 @@ def test_remove_gravity_HFEN():
 if __name__ == "__main__":
     test_remove_nan()
     test_meters_to_mm()
+    test_remove_gravity_ENMO()
 
 
 
