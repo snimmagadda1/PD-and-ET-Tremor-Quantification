@@ -274,9 +274,6 @@ def is_tremor(f, Pxx_den):
 
 
 
-
-
-
 def demonstrate_functions():
     import numpy as np
     from scipy.signal import freqz

@@ -607,31 +607,100 @@ def test_welch_wrist_data():
 
     # plot filtered acceleration without gravity
     f1 = plt.figure()
-    ax1 = f1.add_subplot(211)
+    ax1 = f1.add_subplot(311)
     ax1.plot(time[0:1000], acceleration_filtered_no_grav[0:1000], color='g')
     plt.xlabel('time (s)')
     plt.ylabel('acceleration (m/s^2)')
     plt.title('Filtered Wrist Data')
     plt.savefig('filtered_wrist_data.png')
 
+    f, pxx = psd_welch(acceleration_filtered_no_grav[0:500], fs)
+
+    # test if tremor present in segment
+    alert = is_tremor(f, pxx)
+
+    ax2 = f1.add_subplot(312)
+    ax2.semilogy(f, pxx, color='r')
+    plt.xlabel('Frequency (HZ)')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
+    plt.title('First Half of PSD of Wrist Data Segment Tremor : %r' % (alert))
+
+
     f, pxx = psd_welch(acceleration_filtered_no_grav[500:1000], fs)
 
     # test if tremor present in segment
     alert = is_tremor(f, pxx)
 
-    ax2 = f1.add_subplot(212)
-    ax2.semilogy(f, pxx, color='r')
+    ax3 = f1.add_subplot(313)
+    ax3.semilogy(f, pxx, color='r')
     plt.xlabel('Frequency (HZ)')
     plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
-    plt.title('PSD of Wrist Data Segment Tremor : %r' %(alert))
+    plt.title('Second Half of PSD of Wrist Data Segment Tremor : %r' %(alert))
     f1.savefig('2hz_PSD.png')
     plt.tight_layout()
     plt.savefig('wrist_data_with_tremor.png')
     plt.show()
 
 
+def normalise(x,MAX_INT16=32767):
+    """Normalize data
+
+    :param x: data to normalize
+    :return: normalized data
+    """
+    import numpy as np
+    import math
+
+    maxamp = max(x)
+    amp = math.floor(MAX_INT16/maxamp)
+    norm = np.zeros(len(x))
+    for i in range(len(x)):
+        norm[i] = amp*x[i]
+    return norm
+
+
+def genNoise(dur):
+    """Make noise for sinusoid
+
+    :param dur:
+    :return:
+    """
+    import numpy as np
+    noise = np.random.normal(0,1,dur)
+    noise = normalise(noise)
+    return noise
+
+
+def generate_noisy_sinusoid(f0, fs, dur):
+    """Generate sinusoid to test accuracy of Welch method
+
+    :param f0: Frequency of sinusoid (Hz)
+    :param fs: Sampling frequency (Hz)
+    :param dur: Time of sinusoid (secs)
+    :return:
+    """
+    import numpy as np
+    t = np.arange(dur)
+    sinusoid = np.sin(2 * np.pi * t * (f0 / fs))
+    sinusoid = normalise(sinusoid)
+    noise = genNoise(dur)
+    return sinusoid + noise
+
+
+
+
+
 if __name__ == "__main__":
-    test_welch_wrist_data()
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    test_sinusoid = generate_noisy_sinusoid(8, 115, 100)
+    x = range(0, len(test_sinusoid),1)
+    plt.plot(x, test_sinusoid)
+    plt.show()
+
+
+
 
     pass
 

@@ -6,7 +6,7 @@ import matplotlib.animation as animation
 import matplotlib.pyplot
 from matplotlib import style
 
-import Tkinter as tk
+import tkinter as tk
 
 import urllib
 import json
@@ -51,7 +51,6 @@ def animate(i):
     :param i:
     :return:
     """
-
 
 
 # Main app class
@@ -184,7 +183,6 @@ class graph_page(tk.Frame):
 
 
 class updrs_page(tk.Frame):
-
 
     def __init__(self, parent, controller):
 
