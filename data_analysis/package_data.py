@@ -29,6 +29,34 @@ def get_datachunk(f):
     else:
         return -1
 
+def get_data(filename):
+    """Extrapolate data from a txt file
+        data will have format:
+        x1,y1,z1;
+        x2,y2,z2;
+        ..
+        xn,yn,zn;
+
+        :param filename: file to read from
+        :return: datax, datay, dataz vectors (np.array)
+        """
+    import re
+    x = []
+    y = []
+    z = []
+    chunk_size = 480  # @ 120 Sa/s, returns about 4 seconds of data
+    conv_factor = 0.0039  # ADC scale factor
+    with open(filename, 'r') as f:
+        filedata = f.readline()
+        datapoints = re.findall('[\+|-].{13};', filedata)
+        for data in datapoints:
+            components = data[:-1].split(',')
+            x.append(float(components[0]) * conv_factor)
+            y.append(float(components[1]) * conv_factor)
+            z.append(float(components[2]) * conv_factor)
+
+    return x, y, z
+
 def extrapolate_accel_data_testing(filename):
     """Extrapolate data from a txt file
     data will have format:
