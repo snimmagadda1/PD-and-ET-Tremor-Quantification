@@ -642,65 +642,7 @@ def test_welch_wrist_data():
     plt.show()
 
 
-def normalise(x,MAX_INT16=32767):
-    """Normalize data
-
-    :param x: data to normalize
-    :return: normalized data
-    """
-    import numpy as np
-    import math
-
-    maxamp = max(x)
-    amp = math.floor(MAX_INT16/maxamp)
-    norm = np.zeros(len(x))
-    for i in range(len(x)):
-        norm[i] = amp*x[i]
-    return norm
-
-
-def genNoise(dur):
-    """Make noise for sinusoid
-
-    :param dur:
-    :return:
-    """
-    import numpy as np
-    noise = np.random.normal(0,1,dur)
-    noise = normalise(noise)
-    return noise
-
-
-def generate_noisy_sinusoid(f0, fs, dur):
-    """Generate sinusoid to test accuracy of Welch method
-
-    :param f0: Frequency of sinusoid (Hz)
-    :param fs: Sampling frequency (Hz)
-    :param dur: Time of sinusoid (secs)
-    :return:
-    """
-    import numpy as np
-    t = np.arange(dur)
-    sinusoid = np.sin(2 * np.pi * t * (f0 / fs))
-    sinusoid = normalise(sinusoid)
-    noise = genNoise(dur)
-    return sinusoid + noise
-
-
-
-
-
 if __name__ == "__main__":
-    import numpy as np
-    import matplotlib.pyplot as plt
-
-    test_sinusoid = generate_noisy_sinusoid(8, 115, 100)
-    x = range(0, len(test_sinusoid),1)
-    plt.plot(x, test_sinusoid)
-    plt.show()
-
-
-
 
     pass
 
