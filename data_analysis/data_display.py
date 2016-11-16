@@ -674,8 +674,8 @@ def display_acceleration(x_accel, y_accel, z_accel, f, a):
     # plot filtered acceleration without gravity
     a.plot(time, acceleration_filtered_no_grav, color='g')
     a.set_xlabel('time (s)')
-    a.set_ylabel('Acceleration (m/s^2)')
-    a.set_title('Gravity Compensated |Acceleration|')
+    a.set_ylabel('Acceleration (m/s$^2$)')
+    a.set_title(r'Gravity Compensated |Acceleration|')
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
