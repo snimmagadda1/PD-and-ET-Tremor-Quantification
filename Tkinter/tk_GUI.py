@@ -205,7 +205,7 @@ class graph_page(tk.Frame):
                 parent.after(100, lambda: periodiccall(thread))
         #######################
 
-        display_acceleration(1,1,1,f,a)
+        display_acceleration(self, 1,1,1,f,a)
 
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()

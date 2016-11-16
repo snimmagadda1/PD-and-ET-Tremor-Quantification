@@ -642,7 +642,7 @@ def test_welch_wrist_data():
     plt.show()
 
 
-def display_acceleration(x_accel, y_accel, z_accel, f, a):
+def display_acceleration(self, x_accel, y_accel, z_accel, f, a):
     """Display the mangitude of acceleration inside embedded tkinter graph
 
     :param x_accel: x component of acceleration
@@ -650,7 +650,7 @@ def display_acceleration(x_accel, y_accel, z_accel, f, a):
     :param z_accel: z component of acceleration
     :param f: figure (plt.Figure())
     :param a: axis (plt.axis)
-    :return: 
+    :return:
     """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
     from data_analysis.package_data import extrapolate_accel_data_testing
@@ -680,7 +680,7 @@ def display_acceleration(x_accel, y_accel, z_accel, f, a):
     acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
     # plot filtered acceleration without gravity
-    a.plot(time, acceleration_filtered_no_grav, color='g')
+    self.line = a.plot(time, acceleration_filtered_no_grav, color='g')
     a.set_xlabel('time (s)')
     a.set_ylabel('Acceleration (m/s$^2$)')
     a.set_title(r'Gravity Compensated |Acceleration|')
