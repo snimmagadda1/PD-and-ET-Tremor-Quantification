@@ -7,11 +7,13 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 import tkinter as tk
 import sys
-from data_analysis.process_data import *
 import threading
 import time
 import queue
 import multiprocessing
+
+# import statements for user written functions
+from data_analysis.data_display import display_acceleration
 
 # add other folders to path for imports
 sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464'
@@ -32,7 +34,7 @@ SMALL_FONT = ("Verdana", 8)
 style.use("ggplot")
 
 # declare main plot and geometry here
-f = Figure()
+f = plt.Figure()
 a = f.add_subplot(111)
 
 
@@ -58,6 +60,15 @@ def animate(i):
     :return:
     """
 
+
+class ThreadedClient(threading.Thread):
+    def __init__(self, queue, fcn):
+        threading.Thread.__init__(self)
+        self.queue = queue
+        self.fcn = fcn
+    def run(self):
+        time.sleep(1)
+        self.queue.put(self.fcn())
 
 # Main app class
 class TremorApp(tk.Tk):
@@ -170,17 +181,6 @@ class start_page(tk.Frame):
         panel.pack(side='top', fill='both', expand='yes')
         panel.image = background_pic
 
-class ThreadedClient(threading.Thread):
-    def __init__(self, queue, fcn):
-        threading.Thread.__init__(self)
-        self.queue = queue
-        self.fcn = fcn
-    def run(self):
-        time.sleep(1)
-        self.queue.put(self.fcn())
-
-
-
 
 class graph_page(tk.Frame):
     def __init__(self, parent, controller):
@@ -205,6 +205,8 @@ class graph_page(tk.Frame):
                 parent.after(100, lambda: periodiccall(thread))
         #######################
 
+        display_acceleration(1,1,1,f,a)
+
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
@@ -212,7 +214,6 @@ class graph_page(tk.Frame):
 
         start_button = tk.Button(self, text="Start Measurement", command=lambda: spawnthread(bluetooth_acquire))
         start_button.pack()
-
 
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()

@@ -642,11 +642,49 @@ def test_welch_wrist_data():
     plt.show()
 
 
-def display_acceleration():
-    
+def display_acceleration(x_accel, y_accel, z_accel, f, a):
+    from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
+    from data_analysis.package_data import extrapolate_accel_data_testing
+    import numpy as np
+    import matplotlib.pyplot as plt
 
+    fs = 100
+    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('wrist_data.txt')
+
+    # remove high frequencies
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg = calculate_magnitude_acceleration(x_accel, y_accel, z_accel)
+    acceleration_raw_no_gravg = remove_gravity_ENMO(x_accel, y_accel, z_accel)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg = calculate_magnitude_acceleration(x_filt, y_filt, z_filt)
+    acceleration_filtered_no_gravg = remove_gravity_ENMO(x_filt, y_filt, z_filt)
+
+    # remove gravity
+    acceleration_raw = gs_to_accel(acceleration_rawg)
+    acceleration_raw_no_grav = gs_to_accel(acceleration_raw_no_gravg)
+    acceleration_filtered = gs_to_accel(acceleration_filteredg)
+    acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
+
+    # plot filtered acceleration without gravity
+    a.plot(time, acceleration_filtered_no_grav, color='g')
+    a.set_xlabel('time (s)')
+    a.set_ylabel('Acceleration (m/s^2)')
+    a.set_title('Gravity Compensated |Acceleration|')
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    # declare main plot and geometry here
+    f = plt.Figure()
+    a = f.add_subplot(111)
+
+    display_acceleration(1,1,1,f,a)
 
     pass
 
