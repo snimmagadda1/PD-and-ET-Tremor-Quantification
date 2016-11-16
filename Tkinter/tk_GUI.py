@@ -205,15 +205,15 @@ class graph_page(tk.Frame):
                 parent.after(100, lambda: periodiccall(thread))
         #######################
 
-        display_acceleration(self, 1,1,1,f,a)
-
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-
         start_button = tk.Button(self, text="Start Measurement", command=lambda: spawnthread(bluetooth_acquire))
         start_button.pack()
+
+        plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, 1,1,1,f,a))
+        plot_button.pack()
 
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
