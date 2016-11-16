@@ -643,10 +643,18 @@ def test_welch_wrist_data():
 
 
 def display_acceleration(x_accel, y_accel, z_accel, f, a):
+    """Display the mangitude of acceleration inside embedded tkinter graph
+
+    :param x_accel: x component of acceleration
+    :param y_accel: y component of acceleration
+    :param z_accel: z component of acceleration
+    :param f: figure (plt.Figure())
+    :param a: axis (plt.axis)
+    :return: 
+    """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
     from data_analysis.package_data import extrapolate_accel_data_testing
     import numpy as np
-    import matplotlib.pyplot as plt
 
     fs = 100
     x_accel, y_accel, z_accel = extrapolate_accel_data_testing('wrist_data.txt')
