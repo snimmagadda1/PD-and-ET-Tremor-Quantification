@@ -3,20 +3,24 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
-import matplotlib.pyplot
+import matplotlib.pyplot as plt
 from matplotlib import style
-
 import tkinter as tk
+import sys
+from data_analysis.process_data import *
+import subprocess as sub
 
-import urllib
-import json
+# add other folders to path for imports
+sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464'
+                   '/BME_464/Project/tremor_quant/data_receive')
+sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464/'
+                   'BME_464/Project/tremor_quant/data_analysis')
 
 import pandas as pd
 import numpy as np
 
 pd.options.mode.chained_assignment = None
 
-from matplotlib import pyplot as plt
 TITLE_FONT = ("Verdana", 24)
 LARGE_FONT = ("Verdana", 12)
 NORM_FONT = ("Verdana", 10)
@@ -26,8 +30,6 @@ style.use("ggplot")
 
 f = Figure()
 a = f.add_subplot(111)
-
-# global constants (default values)
 
 
 def popupmsg(msg):
@@ -175,6 +177,9 @@ class graph_page(tk.Frame):
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+
+        blue_button = tk.Button(self, text="Start Measurement", command=lambda: sub.call('./blubutt.sh', shell=True))
+        blue_button.pack()
 
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
