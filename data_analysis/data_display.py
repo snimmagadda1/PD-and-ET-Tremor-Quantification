@@ -653,11 +653,11 @@ def display_acceleration(self, x_accel, y_accel, z_accel, f, a):
     :return:
     """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
-    from data_analysis.package_data import extrapolate_accel_data_testing
+    from data_analysis.package_data import get_data
     import numpy as np
 
     fs = 100
-    x_accel, y_accel, z_accel = extrapolate_accel_data_testing('wrist_data.txt')
+    x_accel, y_accel, z_accel = get_data('data_rate_test.txt')
 
     # remove high frequencies
     x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
@@ -682,8 +682,8 @@ def display_acceleration(self, x_accel, y_accel, z_accel, f, a):
     # plot filtered acceleration without gravity
     self.line = a.plot(time, acceleration_filtered_no_grav, color='g')
     a.set_xlabel('time (s)')
-    a.set_ylabel('Acceleration (m/s$^2$)')
-    a.set_title(r'Gravity Compensated |Acceleration|')
+    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)')
+    a.set_title(r'Magnitude of Acceleration')
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
