@@ -9,6 +9,9 @@ import tkinter as tk
 import sys
 from data_analysis.process_data import *
 import subprocess as sub
+import threading
+import time
+import queue
 
 # add other folders to path for imports
 sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464'
@@ -166,6 +169,16 @@ class start_page(tk.Frame):
         panel.pack(side='top', fill='both', expand='yes')
         panel.image = background_pic
 
+class ThreadedClient(threading.Thread):
+    def __init__(self, queue, fcn):
+        threading.Thread.__init__(self)
+        self.queue = queue
+        self.fcn = fcn
+    def run(self):
+        time.sleep(1)
+        self.queue.put(self.fcn())
+
+
 
 
 class graph_page(tk.Frame):
@@ -174,11 +187,24 @@ class graph_page(tk.Frame):
         label = tk.Label(self, text="Graph Page!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+        def bluetooth_acquire():
+            import subprocess as sub
+            sub.call('./blubutt.sh', shell=True)
+
+        def spawnthread(fcn):
+            thread = ThreadedClient(queue, fcn)
+            thread.start()
+            periodiccall(thread)
+
+        def periodiccall(thread):
+            if (thread.is_alive()):
+                parent.after(100, lambda: periodiccall(thread))
+
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-        blue_button = tk.Button(self, text="Start Measurement", command=lambda: sub.call('./blubutt.sh', shell=True))
+        blue_button = tk.Button(self, text="Start Measurement", command=lambda: spawnthread(bluetooth_acquire))
         blue_button.pack()
 
         toolbar = NavigationToolbar2TkAgg(canvas, self)
@@ -223,6 +249,7 @@ class updrs_page(tk.Frame):
 
 
 #################################### PROGRAM RUN #######################################################################
+queue = queue.Queue()
 app = TremorApp()
 app.geometry("1280x720")
 ani = animation.FuncAnimation(f, animate, interval=5000)
