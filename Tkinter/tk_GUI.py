@@ -8,7 +8,6 @@ from matplotlib import style
 import tkinter as tk
 import sys
 from data_analysis.process_data import *
-import subprocess as sub
 import threading
 import time
 import queue
@@ -31,6 +30,7 @@ SMALL_FONT = ("Verdana", 8)
 
 style.use("ggplot")
 
+# declare main plot and geometry here
 f = Figure()
 a = f.add_subplot(111)
 

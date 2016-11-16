@@ -642,6 +642,10 @@ def test_welch_wrist_data():
     plt.show()
 
 
+def display_acceleration():
+    
+
+
 if __name__ == "__main__":
 
     pass
