@@ -186,7 +186,6 @@ class graph_page(tk.Frame):
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 
-
 class updrs_page(tk.Frame):
 
     def __init__(self, parent, controller):
