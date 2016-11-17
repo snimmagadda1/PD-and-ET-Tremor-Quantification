@@ -1,8 +1,6 @@
 """This is a testing file for displaying plots for
 troubleshooting / analysis
 """
-
-
 def test_14hz_sampling():
     """ Plotting initial data using lowpass filter and ENMO to remove gravity.
     ** not a unit test **
