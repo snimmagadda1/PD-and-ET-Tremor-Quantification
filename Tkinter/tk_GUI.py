@@ -35,7 +35,11 @@ style.use("ggplot")
 
 # declare main plot and geometry here
 f = plt.Figure()
+f2= plt.Figure()
 a = f.add_subplot(111)
+a1 = f2.add_subplot(211)
+a2 = f2.add_subplot(212)
+
 
 
 
@@ -118,7 +122,7 @@ class TremorApp(tk.Tk):
 
         self.frames = {}
         # this is where new pages are added if needed
-        for F in (start_page, graph_page,  updrs_page):
+        for F in (start_page, graph_page,  updrs_page, psd_graph_page):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -221,8 +225,65 @@ class graph_page(tk.Frame):
                                       command=lambda: display_displacement(self, f, a))
         plot_displacement_button.pack(side=tk.LEFT)
 
+        change_plot_page_button = tk.Button(topframe, text="Calculate Power Spectral Densities",
+                                             command=lambda: controller.show_frame(psd_graph_page))
+        change_plot_page_button.pack(side=tk.LEFT)
+
         # pack plot canvas
         canvas = FigureCanvasTkAgg(f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+
+        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar.update()
+        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+
+class psd_graph_page(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="PSD Page!", font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+
+        ######################
+        #  Threading definitions
+        thread_queue = queue.Queue()
+        def bluetooth_acquire():
+            import subprocess as sub
+            sub.call('./blubutt.sh', shell=True)
+
+        def spawnthread(fcn):
+            thread = ThreadedClient(thread_queue, fcn)
+            thread.start()
+            #periodiccall(thread)
+
+        def periodiccall(thread):
+            if (thread.is_alive()):
+                parent.after(100, lambda: periodiccall(thread))
+
+        # make button frame
+        topframe = tk.Frame(self)
+        topframe.pack(side=tk.TOP)
+
+        start_button = tk.Button(topframe, text="Start Measurement",
+                                         command=lambda: spawnthread(bluetooth_acquire))
+        start_button.pack(side=tk.LEFT)
+
+        plot_accel_button = tk.Button(topframe, text="Display Acceleration",
+                                              command=lambda: display_acceleration(self, f, a))
+        plot_accel_button.pack(side=tk.LEFT)
+
+        plot_displacement_button = tk.Button(topframe, text="Display Acceleration",
+                                                     command=lambda: display_displacement(self, f, a))
+        plot_displacement_button.pack(side=tk.LEFT)
+
+        change_plot_page_button = tk.Button(topframe, text="Calculate Power Spectral Densities",
+                                                    command=lambda: controller.show_frame(psd_graph_page))
+        change_plot_page_button.pack(side=tk.LEFT)
+
+
+        # pack plot canvas
+        canvas = FigureCanvasTkAgg(f2, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
