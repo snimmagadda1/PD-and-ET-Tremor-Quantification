@@ -28,6 +28,29 @@ def get_data(filename):
 
     return np.array(x), np.array(y), np.array(z)
 
+def get_windows(filename, window_size):
+    """
+
+    :param filename: file to read from
+    :param window_size: the size of the window in seconds
+    :return:
+    """
+    max_windows = 4
+    fs = 100
+
+    x,y,z = get_data(filename)
+
+    x_windows = []
+    y_windows = []
+    z_windows = []
+
+    for i in range(max_windows)-1:
+        x_windows.append(x[i * fs * window_size:(i + 1) * fs * window_size])
+        y_windows.append(y[i * fs * window_size:(i + 1) * fs * window_size])
+        z_windows.append(z[i * fs * window_size:(i + 1) * fs * window_size])
+
+    return x_windows, y_windows, z_windows
+
 def extrapolate_accel_data_testing(filename):
     """Extrapolate data from a txt file
     data will have format:
