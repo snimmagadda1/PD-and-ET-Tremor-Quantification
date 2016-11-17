@@ -214,9 +214,6 @@ class graph_page(tk.Frame):
         plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, f, a))
         plot_button.pack()
 
-        reset_button = tk.Button(self, text="Reset Figure", command=lambda: f.clf)
-        reset_button.pack()
-
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -332,7 +329,7 @@ class updrs_page(tk.Frame):
 def main():
     app = TremorApp()
     app.geometry("1280x720")
-    ani = animation.FuncAnimation(f, animate, interval=5000)
+    gani = animation.FuncAnimation(f, animate, interval=5000)
     app.mainloop()
 
 if __name__ == '__main__':
