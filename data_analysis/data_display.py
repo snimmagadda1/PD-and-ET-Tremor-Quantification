@@ -640,7 +640,7 @@ def test_welch_wrist_data():
     plt.show()
 
 
-def display_acceleration(self, f, a):
+def display_acceleration(frame, f, a):
     """Display the magnitude of acceleration inside embedded tkinter graph
 
     :param f: figure (plt.Figure())
@@ -650,6 +650,9 @@ def display_acceleration(self, f, a):
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
     from data_analysis.package_data import get_data
     import numpy as np
+
+    f.canvas.draw()
+    a.clear()
 
     fs = 100
     x_accel, y_accel, z_accel = get_data('data_rate_test.txt')
@@ -676,7 +679,7 @@ def display_acceleration(self, f, a):
 
 
     # plot filtered acceleration without gravity
-    self.line = a.plot(time, acceleration_filtered_no_grav, color='g')
+    frame.line = a.plot(time, acceleration_filtered_no_grav, color='g')
     a.set_xlabel('time (s)')
     a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)')
     a.set_title(r'Magnitude of Acceleration')
@@ -696,6 +699,9 @@ def display_displacement(frame, f, a):
         remove_gravity_ENMO, gs_to_accel
     from data_analysis.package_data import get_data
     import numpy as np
+
+    f.canvas.draw()
+    a.clear()
 
     highcut = 14
     lowcut = 1
@@ -729,7 +735,7 @@ if __name__ == "__main__":
     f = plt.Figure()
     a = f.add_subplot(111)
 
-    display_acceleration(f,a)
+    display_acceleration(f, a)
 
     pass
 

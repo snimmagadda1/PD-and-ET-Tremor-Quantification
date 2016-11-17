@@ -200,6 +200,10 @@ class graph_page(tk.Frame):
         def periodiccall(thread):
             if (thread.is_alive()):
                 parent.after(100, lambda: periodiccall(thread))
+
+        def clear_canvas(canvas):
+            canvas.get_tk_widget().delete("all")
+
         #######################
 
         canvas = FigureCanvasTkAgg(f, self)
@@ -211,6 +215,12 @@ class graph_page(tk.Frame):
 
         plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, f, a))
         plot_button.pack()
+
+        plot_button = tk.Button(self, text="Display Displacement", command=lambda: display_displacement(self, f, a))
+        plot_button.pack()
+
+        clear_button = tk.Button(self, text="DClear", command=lambda: clear_canvas(canvas))
+        clear_button.pack()
 
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
