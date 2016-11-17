@@ -36,6 +36,8 @@ f = plt.Figure()
 a = f.add_subplot(111)
 
 
+
+
 def popupmsg(msg):
     """
     Make a popup window for a message
@@ -201,34 +203,31 @@ class graph_page(tk.Frame):
             if (thread.is_alive()):
                 parent.after(100, lambda: periodiccall(thread))
 
-        def clear_canvas(canvas):
-            canvas.get_tk_widget().delete("all")
+        # make button frame
+        topframe = tk.Frame(self)
+        topframe.pack(side=tk.TOP)
 
-        #######################
+        start_button = tk.Button(topframe, text="Start Measurement",
+                                 command=lambda: spawnthread(bluetooth_acquire))
+        start_button.pack(side=tk.LEFT)
 
+        plot_accel_button = tk.Button(topframe, text="Display Acceleration",
+                                command=lambda: display_acceleration(self, f, a))
+        plot_accel_button.pack(side=tk.LEFT)
+
+        plot_displacement_button = tk.Button(topframe, text="Display Acceleration",
+                                      command=lambda: display_displacement(self, f, a))
+        plot_displacement_button.pack(side=tk.LEFT)
+
+        # pack plot canvas
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-        start_button = tk.Button(self, text="Start Measurement", command=lambda: spawnthread(bluetooth_acquire))
-        start_button.pack()
-
-        plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, f, a))
-        plot_button.pack()
-        
-
-        plot_button = tk.Button(self, text="Display Displacement", command=lambda: display_displacement(self, f, a))
-        plot_button.pack()
-
-        plot_button = tk.Button(self, text="Display Displacement", command=lambda: display_displacement(self, f, a))
-        plot_button.pack()
-
-        clear_button = tk.Button(self, text="DClear", command=lambda: clear_canvas(canvas))
-        clear_button.pack()
-
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
 
 
 class updrs_page(tk.Frame):
@@ -334,7 +333,6 @@ class updrs_page(tk.Frame):
                 menu.grid(row=rownum+1, column=c, sticky="W")
 
             rownum += 2
-
 
 
 #################################### PROGRAM RUN #######################################################################
