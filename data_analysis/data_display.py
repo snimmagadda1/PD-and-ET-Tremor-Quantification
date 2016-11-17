@@ -879,8 +879,14 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
 
 
 
+def generate_noisy_sin(freq):
+    time_len = 16
+    fs = 100
 
+    time = np.linspace(0, 16, fs*16)
+    y = 0.1*np.sin(2*np.pi*freq*time)
 
+    return time, y
 
 
 
