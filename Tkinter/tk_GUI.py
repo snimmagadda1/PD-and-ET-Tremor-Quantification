@@ -188,12 +188,9 @@ class start_page(tk.Frame):
 
 
 class graph_page(tk.Frame):
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Graph Page!", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-
-        ######################
         #  Threading definitions
         thread_queue = queue.Queue()
         def bluetooth_acquire():
@@ -209,7 +206,25 @@ class graph_page(tk.Frame):
             if (thread.is_alive()):
                 parent.after(100, lambda: periodiccall(thread))
 
+        def title_frame(parent):
+                self.title_f = tk.Frame(parent, width=1280, height=50, bg=MAIN_COLOR)
+
+                title = tk.Label(self.title_f, text="Graphs: Overall Signal", font=TITLE_FONT,
+                                 bg=MAIN_COLOR, fg="white")
+                title.place(relx=0.5, rely=0.5, anchor='center')
+                self.title_f.pack()
+                return self
+
+        def border_frame(parent):
+                self.border_f = tk.Frame(parent, width=1280, height=5, bg="black")
+                self.border_f.pack()
+                return self
+
+
         # make button frame
+        title_frame_widget = title_frame(self)
+        border_frame_widget = border_frame(self)
+
         topframe = tk.Frame(self)
         topframe.pack(side=tk.TOP)
 
@@ -225,9 +240,9 @@ class graph_page(tk.Frame):
                                       command=lambda: display_displacement(self, f, a))
         plot_displacement_button.pack(side=tk.LEFT)
 
-        change_plot_page_button = tk.Button(topframe, text="Calculate Power Spectral Densities",
+        change_plot_page_button = tk.Button(topframe, text="To Individual Measurement Page",
                                              command=lambda: controller.show_frame(psd_graph_page))
-        change_plot_page_button.pack(side=tk.LEFT)
+        change_plot_page_button.pack(side=tk.BOTTOM)
 
         # pack plot canvas
         canvas = FigureCanvasTkAgg(f, self)
@@ -240,12 +255,9 @@ class graph_page(tk.Frame):
 
 
 class psd_graph_page(tk.Frame):
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="PSD Page!", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-
-        ######################
         #  Threading definitions
         thread_queue = queue.Queue()
         def bluetooth_acquire():
@@ -261,26 +273,32 @@ class psd_graph_page(tk.Frame):
             if (thread.is_alive()):
                 parent.after(100, lambda: periodiccall(thread))
 
+        def title_frame(parent):
+                self.title_f = tk.Frame(parent, width=1280, height=50, bg=MAIN_COLOR)
+
+                title = tk.Label(self.title_f, text="Graphs: Individual Signals", font=TITLE_FONT,
+                                 bg=MAIN_COLOR, fg="white")
+                title.place(relx=0.5, rely=0.5, anchor='center')
+                self.title_f.pack()
+                return self
+
+        def border_frame(parent):
+                self.border_f = tk.Frame(parent, width=1280, height=5, bg="black")
+                self.border_f.pack()
+                return self
+
+
         # make button frame
+        title_frame_widget = title_frame(self)
+        border_frame_widget = border_frame(self)
+
+
         topframe = tk.Frame(self)
         topframe.pack(side=tk.TOP)
 
-        start_button = tk.Button(topframe, text="Start Measurement",
-                                         command=lambda: spawnthread(bluetooth_acquire))
-        start_button.pack(side=tk.LEFT)
-
-        plot_accel_button = tk.Button(topframe, text="Display Acceleration",
-                                              command=lambda: display_acceleration(self, f, a))
-        plot_accel_button.pack(side=tk.LEFT)
-
-        plot_displacement_button = tk.Button(topframe, text="Display Acceleration",
-                                                     command=lambda: display_displacement(self, f, a))
-        plot_displacement_button.pack(side=tk.LEFT)
-
-        change_plot_page_button = tk.Button(topframe, text="Calculate Power Spectral Densities",
-                                                    command=lambda: controller.show_frame(psd_graph_page))
-        change_plot_page_button.pack(side=tk.LEFT)
-
+        change_plot_page_button = tk.Button(topframe, text="To Overall Measurement Page",
+                                             command=lambda: controller.show_frame(graph_page))
+        change_plot_page_button.pack(side=tk.BOTTOM)
 
         # pack plot canvas
         canvas = FigureCanvasTkAgg(f2, self)
