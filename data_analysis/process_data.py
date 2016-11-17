@@ -86,7 +86,7 @@ def get_disp_amplitude(enmofilt, lowcut, fs):
 
     mean_disp = np.mean(envelope)
 
-    return mean_disp
+    return mean_disp, disp, envelope
 
 
 

@@ -85,70 +85,7 @@ def extrapolate_accel_data_testing(filename):
     return np.array(x), np.array(y), np.array(z)
 
 if __name__ == "__main__":
-    import numpy as np
-    import scipy
-    import matplotlib
-    matplotlib.use("TkAgg")
-    import matplotlib.pyplot as plt
-    from process_data import *
-
-
-    x,y,z = get_data('data_rate_test.txt')
-
-    filtcutoff = 14
-    fs = 100
-    filtx = butter_lowpass_IIR_filter(x, filtcutoff, fs)
-    filty = butter_lowpass_IIR_filter(y, filtcutoff, fs)
-    filtz = butter_lowpass_IIR_filter(z, filtcutoff, fs)
-
-    accel = remove_gravity_ENMO(filtx,filty,filtz)
-
-    print(get_disp_amplitude(np.array(accel), 1, 100))
-
-    # convert to m^2 / s
-    enmo = np.array(accel) * 9.8
-    # recenter about 0
-    enmo = enmo - np.mean(enmo)
-
-    enmo_lowpassed = butter_highpass_IIR_filter(enmo, 2, 100)
-
-    vel = scipy.integrate.cumtrapz(enmo_lowpassed, dx = 1/fs, initial=0)
-
-
-    # recenter about 0
-
-    vel = vel - np.mean(vel)
-
-    vel_lowpassed = butter_highpass_IIR_filter(vel, 2, 100)
-
-    disp = scipy.integrate.cumtrapz(vel_lowpassed, dx = 1/fs, initial=0)
-
-    # recenter about 0
-
-    disp = disp - np.mean(disp)
-
-    # convert to mm
-
-    disp = disp * 1000
-
-    envelope_high = np.abs(scipy.signal.hilbert(disp))
-    envelope_low = -1*np.abs(scipy.signal.hilbert(-1*disp))
-
-    plt.subplot(411)
-    plt.plot(accel)
-    plt.title('raw acceleration')
-    plt.subplot(412)
-    plt.plot(enmo)
-    plt.title('filtered acceleration recentered')
-    plt.subplot(413)
-    plt.plot(vel)
-    plt.title('velocity recentered')
-    plt.subplot(414)
-    plt.plot(disp)
-    plt.plot(envelope_high)
-    plt.plot(envelope_low)
-    plt.title('Displacement (mm)')
-    plt.show()
+    pass
 
         
 

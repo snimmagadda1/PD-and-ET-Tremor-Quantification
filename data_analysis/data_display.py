@@ -643,7 +643,7 @@ def test_welch_wrist_data():
 
 
 def display_acceleration(self, f, a):
-    """Display the mangitude of acceleration inside embedded tkinter graph
+    """Display the magnitude of acceleration inside embedded tkinter graph
 
     :param x_accel: x component of acceleration
     :param y_accel: y component of acceleration
@@ -679,13 +679,52 @@ def display_acceleration(self, f, a):
     acceleration_filtered = gs_to_accel(acceleration_filteredg)
     acceleration_filtered_no_grav = gs_to_accel(acceleration_filtered_no_gravg)
 
+
     # plot filtered acceleration without gravity
     self.line = a.plot(time, acceleration_filtered_no_grav, color='g')
     a.set_xlabel('time (s)')
     a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)')
     a.set_title(r'Magnitude of Acceleration')
 
+def display_displacement(frame, f, a):
+    """Displays displacement vector of given tremor
 
+    :param frame: Parent GUI frame window where the graph is displayed
+    :param f: Parent GUI figure
+    :param a: Parent GUI axes
+    :return:
+    """
+
+    from data_analysis.process_data import get_disp_amplitude, butter_lowpass_IIR_filter, remove_gravity_ENMO
+
+    from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, \
+        remove_gravity_ENMO, gs_to_accel
+    from data_analysis.package_data import get_data
+    import numpy as np
+
+    highcut = 14
+    lowcut = 1
+    fs = 100
+    x_accel, y_accel, z_accel = get_data('data_rate_test.txt')
+
+    # remove high frequencies
+    x_filt = butter_lowpass_IIR_filter(x_accel, highcut, fs)
+    y_filt = butter_lowpass_IIR_filter(y_accel, highcut, fs)
+    z_filt = butter_lowpass_IIR_filter(z_accel, highcut, fs)
+    time = np.arange(0, len(x_filt), 1) / float(fs)
+
+    # calculate enmo
+    enmo = np.array(remove_gravity_ENMO(x_filt, y_filt, z_filt))
+
+    # get displacement and envelope
+    mean_disp, disp, envelope = get_disp_amplitude(enmo, lowcut, fs)
+
+    # plot on GUI
+    frame.line = a.plot(time, disp, color='g')
+    a.plot(time, envelope, color='r')
+    a.set_xlabel('time (s)')
+    a.set_ylabel('Displacement (mm)')
+    a.set_title('Displacement vs time with envelope')
 
 
 if __name__ == "__main__":

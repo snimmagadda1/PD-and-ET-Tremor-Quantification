@@ -12,7 +12,7 @@ import queue
 import multiprocessing
 
 # import statements for user written functions
-from data_analysis.data_display import display_acceleration
+from data_analysis.data_display import display_acceleration, display_displacement
 
 # add other folders to path for imports
 sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464'
@@ -213,6 +213,9 @@ class graph_page(tk.Frame):
 
         plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, f, a))
         plot_button.pack()
+
+        plot_disp = tk.Button(self, text="Display Displacement", command=lambda: display_displacement(self, f, a))
+        plot_disp.pack()
 
         reset_button = tk.Button(self, text="Reset Figure", command=lambda: f.clf)
         reset_button.pack()
