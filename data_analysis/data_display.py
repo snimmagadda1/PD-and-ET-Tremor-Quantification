@@ -725,7 +725,165 @@ def display_displacement(frame, f, a):
     a.plot(time, envelope, color='r')
     a.set_xlabel('time (s)')
     a.set_ylabel('Displacement (mm)')
-    a.set_title('Displacement vs time with envelope')
+    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp))
+
+
+def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
+    from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, \
+        remove_gravity_ENMO, gs_to_accel, psd_welch, is_tremor
+    from data_analysis.package_data import get_windows
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    f.canvas.draw()
+    a1.clear()
+    a2.clear()
+    a3.clear()
+    a4.clear()
+    a5.clear()
+    a6.clear()
+    a7.clear()
+    a8.clear()
+
+    highcut = 14
+    fs = 100
+
+    x_wins, y_wins, z_wins = get_windows('data_rate_test.txt', 4)
+
+# WINDOW 1
+    # remove high frequencies
+    x_filt_w1 = butter_lowpass_IIR_filter(x_wins[0], highcut, fs)
+    y_filt_w1 = butter_lowpass_IIR_filter(y_wins[0], highcut, fs)
+    z_filt_w1 = butter_lowpass_IIR_filter(z_wins[0], highcut, fs)
+    time = np.arange(0, len(x_filt_w1), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_1 = calculate_magnitude_acceleration(x_filt_w1, y_filt_w1, z_filt_w1)
+    acceleration_raw_no_gravg_1 = remove_gravity_ENMO(x_filt_w1, y_filt_w1, z_filt_w1)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_1 = calculate_magnitude_acceleration(x_filt_w1, y_filt_w1, z_filt_w1)
+    acceleration_filtered_no_gravg_1 = remove_gravity_ENMO(x_filt_w1, y_filt_w1, z_filt_w1)
+
+    # remove gravity
+    acceleration_filtered_no_grav_1 = gs_to_accel(acceleration_filtered_no_gravg_1)
+
+    # plot filtered acceleration without gravity
+    a1.plot(time, acceleration_filtered_no_grav_1, color='g')
+    a1.set_xlabel('time (s)')
+    a1.set_ylabel('acceleration (m/s^2)')
+
+    # calculate psd of window
+    f_1, pxx_1 = psd_welch(acceleration_filtered_no_grav_1, fs)
+
+    alert, DF = is_tremor(f_1, pxx_1)
+
+    a5.semilogy(f_1, pxx_1, color='r')
+    a5.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+
+# WINDOW 2
+    # remove high frequencies
+    x_filt_w2 = butter_lowpass_IIR_filter(x_wins[1], highcut, fs)
+    y_filt_w2 = butter_lowpass_IIR_filter(y_wins[1], highcut, fs)
+    z_filt_w2 = butter_lowpass_IIR_filter(z_wins[1], highcut, fs)
+    time = np.arange(0, len(x_filt_w2), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_2 = calculate_magnitude_acceleration(x_filt_w2, y_filt_w2, z_filt_w2)
+    acceleration_raw_no_gravg_2 = remove_gravity_ENMO(x_filt_w2, y_filt_w2, z_filt_w2)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_2 = calculate_magnitude_acceleration(x_filt_w2, y_filt_w2, z_filt_w2)
+    acceleration_filtered_no_gravg_2 = remove_gravity_ENMO(x_filt_w2, y_filt_w2, z_filt_w2)
+
+    # remove gravity
+    acceleration_filtered_no_grav_2 = gs_to_accel(acceleration_filtered_no_gravg_2)
+
+    # plot filtered acceleration without gravity
+    a2.plot(time, acceleration_filtered_no_grav_2, color='g')
+    a2.set_xlabel('time (s)')
+    a2.set_ylabel('acceleration (m/s^2)')
+
+    # calculate psd of window
+    f_2, pxx_2 = psd_welch(acceleration_filtered_no_grav_2, fs)
+
+    alert, DF = is_tremor(f_2, pxx_2)
+
+    a6.semilogy(f_2, pxx_2, color='r')
+    a6.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+
+
+# WINDOW 3
+    # remove high frequencies
+    x_filt_w3 = butter_lowpass_IIR_filter(x_wins[2], highcut, fs)
+    y_filt_w3 = butter_lowpass_IIR_filter(y_wins[2], highcut, fs)
+    z_filt_w3 = butter_lowpass_IIR_filter(z_wins[2], highcut, fs)
+    time = np.arange(0, len(x_filt_w3), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_3 = calculate_magnitude_acceleration(x_filt_w3, y_filt_w3, z_filt_w3)
+    acceleration_raw_no_gravg_3 = remove_gravity_ENMO(x_filt_w3, y_filt_w3, z_filt_w3)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_3 = calculate_magnitude_acceleration(x_filt_w3, y_filt_w3, z_filt_w3)
+    acceleration_filtered_no_gravg_3 = remove_gravity_ENMO(x_filt_w3, y_filt_w3, z_filt_w3)
+
+    # remove gravity
+    acceleration_filtered_no_grav_3 = gs_to_accel(acceleration_filtered_no_gravg_3)
+
+    # plot filtered acceleration without gravity
+    a3.plot(time, acceleration_filtered_no_grav_3, color='g')
+    a3.set_xlabel('time (s)')
+    a3.set_ylabel('acceleration (m/s^2)')
+
+    # calculate psd of window
+    f_3, pxx_3 = psd_welch(acceleration_filtered_no_gravg_3, fs)
+    alert, DF = is_tremor(f_3, pxx_3)
+
+    a7.semilogy(f_3, pxx_3, color='r')
+    a7.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+
+
+# WINDOW 4
+    # WINDOW 3
+    # remove high frequencies
+    x_filt_w4 = butter_lowpass_IIR_filter(x_wins[3], highcut, fs)
+    y_filt_w4 = butter_lowpass_IIR_filter(y_wins[3], highcut, fs)
+    z_filt_w4 = butter_lowpass_IIR_filter(z_wins[3], highcut, fs)
+    time = np.arange(0, len(x_filt_w4), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_4 = calculate_magnitude_acceleration(x_filt_w4, y_filt_w4, z_filt_w4)
+    acceleration_raw_no_gravg_4 = remove_gravity_ENMO(x_filt_w4, y_filt_w4, z_filt_w4)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_4 = calculate_magnitude_acceleration(x_filt_w4, y_filt_w4, z_filt_w4)
+    acceleration_filtered_no_gravg_4 = remove_gravity_ENMO(x_filt_w4, y_filt_w4, z_filt_w4)
+
+    # remove gravity
+    acceleration_filtered_no_grav_4 = gs_to_accel(acceleration_filtered_no_gravg_4)
+
+    # plot filtered acceleration without gravity
+    a4.plot(time, acceleration_filtered_no_grav_4, color='g')
+    a4.set_xlabel('time (s)')
+    a4.set_ylabel('acceleration (m/s^2)')
+
+    # calculate psd of window
+    f_4, pxx_4 = psd_welch(acceleration_filtered_no_gravg_4, fs)
+    alert, DF = is_tremor(f_4, pxx_4)
+
+    a8.semilogy(f_4, pxx_4, color='r')
+    a8.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+    f.tight_layout()
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ import pandas as pd
 
 
 # import statements for user written functions
-from data_analysis.data_display import display_acceleration, display_displacement
+from data_analysis.data_display import display_acceleration, display_displacement, display_psd
 
 # add other folders to path for imports
 sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464'
@@ -45,8 +45,6 @@ a5 = f2.add_subplot(245)
 a6 = f2.add_subplot(246)
 a7 = f2.add_subplot(247)
 a8 = f2.add_subplot(248)
-
-
 
 
 
@@ -242,7 +240,7 @@ class graph_page(tk.Frame):
                                 command=lambda: display_acceleration(self, f, a))
         plot_accel_button.pack(side=tk.LEFT)
 
-        plot_displacement_button = tk.Button(topframe, text="Display Acceleration",
+        plot_displacement_button = tk.Button(topframe, text="Display Displacement",
                                       command=lambda: display_displacement(self, f, a))
         plot_displacement_button.pack(side=tk.LEFT)
 
@@ -305,6 +303,10 @@ class psd_graph_page(tk.Frame):
         start_button = tk.Button(topframe, text="Start Measurement",
                                  command=lambda: spawnthread(bluetooth_acquire))
         start_button.pack(side=tk.LEFT)
+
+        plot_psd_button = tk.Button(topframe, text="Calculate PSD",
+                                 command=lambda:display_psd(self, f2, a1, a2, a3, a4, a5, a6, a7, a8))
+        plot_psd_button.pack(side=tk.LEFT)
 
         change_plot_page_button = tk.Button(topframe, text="To Overall Measurement Page",
                                              command=lambda: controller.show_frame(graph_page))

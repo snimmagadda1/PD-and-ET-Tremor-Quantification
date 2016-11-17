@@ -44,7 +44,7 @@ def get_windows(filename, window_size):
     y_windows = []
     z_windows = []
 
-    for i in range(max_windows)-1:
+    for i in range(max_windows):
         x_windows.append(x[i * fs * window_size:(i + 1) * fs * window_size])
         y_windows.append(y[i * fs * window_size:(i + 1) * fs * window_size])
         z_windows.append(z[i * fs * window_size:(i + 1) * fs * window_size])

@@ -312,7 +312,7 @@ def is_tremor(f, Pxx_den):
     if DF >= 2.95 and DF <= 12 and mag > 0.001:
         isTremor = True
 
-    return isTremor
+    return isTremor, DF
 
 
 def demonstrate_functions():
