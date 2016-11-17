@@ -642,7 +642,7 @@ def test_welch_wrist_data():
     plt.show()
 
 
-def display_acceleration(self, x_accel, y_accel, z_accel, f, a):
+def display_acceleration(self, f, a):
     """Display the mangitude of acceleration inside embedded tkinter graph
 
     :param x_accel: x component of acceleration
@@ -660,9 +660,9 @@ def display_acceleration(self, x_accel, y_accel, z_accel, f, a):
     x_accel, y_accel, z_accel = get_data('data_rate_test.txt')
 
     # remove high frequencies
-    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 44)
-    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 44)
-    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 44)
+    x_filt = butter_lowpass_IIR_filter(x_accel, 14, 100)
+    y_filt = butter_lowpass_IIR_filter(y_accel, 14, 100)
+    z_filt = butter_lowpass_IIR_filter(z_accel, 14, 100)
     time = np.arange(0, len(x_filt), 1) / float(fs)
 
     # calculate magnitude of acceleration with and without grav (filtered)
@@ -684,6 +684,9 @@ def display_acceleration(self, x_accel, y_accel, z_accel, f, a):
     a.set_xlabel('time (s)')
     a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)')
     a.set_title(r'Magnitude of Acceleration')
+
+
+
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt

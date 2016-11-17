@@ -211,8 +211,11 @@ class graph_page(tk.Frame):
         start_button = tk.Button(self, text="Start Measurement", command=lambda: spawnthread(bluetooth_acquire))
         start_button.pack()
 
-        plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, 1,1,1,f,a))
+        plot_button = tk.Button(self, text="Display Acceleration", command=lambda: display_acceleration(self, f, a))
         plot_button.pack()
+
+        reset_button = tk.Button(self, text="Reset Figure", command=lambda: f.clf)
+        reset_button.pack()
 
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
