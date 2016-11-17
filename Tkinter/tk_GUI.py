@@ -37,8 +37,10 @@ style.use("ggplot")
 f = plt.Figure()
 f2= plt.Figure()
 a = f.add_subplot(111)
-a1 = f2.add_subplot(211)
-a2 = f2.add_subplot(212)
+a1 = f2.add_subplot(221)
+a2 = f2.add_subplot(222)
+a3 = f2.add_subplot(223)
+a4 = f2.add_subplot(224)
 
 
 
@@ -295,6 +297,10 @@ class psd_graph_page(tk.Frame):
 
         topframe = tk.Frame(self)
         topframe.pack(side=tk.TOP)
+
+        start_button = tk.Button(topframe, text="Start Measurement",
+                                 command=lambda: spawnthread(bluetooth_acquire))
+        start_button.pack(side=tk.LEFT)
 
         change_plot_page_button = tk.Button(topframe, text="To Overall Measurement Page",
                                              command=lambda: controller.show_frame(graph_page))
