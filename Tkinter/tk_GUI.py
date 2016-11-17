@@ -9,7 +9,8 @@ import sys
 import threading
 import time
 import queue
-import multiprocessing
+import pandas as pd
+
 
 # import statements for user written functions
 from data_analysis.data_display import display_acceleration, display_displacement
@@ -20,8 +21,6 @@ sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464'
 sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464/'
                    'BME_464/Project/tremor_quant/data_analysis')
 
-import pandas as pd
-import numpy as np
 
 pd.options.mode.chained_assignment = None
 
@@ -145,7 +144,6 @@ class start_page(tk.Frame):
         password = self.enter_pwd.get()
 
         if username == "essential" and password == "tremor":
-            print("YAY")
             controller.show_frame(graph_page)
 
     def __init__(self, parent, controller):
