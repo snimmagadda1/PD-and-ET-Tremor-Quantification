@@ -37,10 +37,14 @@ style.use("ggplot")
 f = plt.Figure()
 f2= plt.Figure()
 a = f.add_subplot(111)
-a1 = f2.add_subplot(221)
-a2 = f2.add_subplot(222)
-a3 = f2.add_subplot(223)
-a4 = f2.add_subplot(224)
+a1 = f2.add_subplot(241)
+a2 = f2.add_subplot(242)
+a3 = f2.add_subplot(243)
+a4 = f2.add_subplot(244)
+a5 = f2.add_subplot(245)
+a6 = f2.add_subplot(246)
+a7 = f2.add_subplot(247)
+a8 = f2.add_subplot(248)
 
 
 
