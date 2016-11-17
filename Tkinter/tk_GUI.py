@@ -312,9 +312,11 @@ class updrs_page(tk.Frame):
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
-        self.pack()
+        self.grid()
 
-        self.title_frame(self).pack()
+        self.title_frame(self).grid(row=0, column=0)
+        self.border_frame(self).grid(row=1, column=0)
+        self.subtitle_frame(self).grid(row=2, column=0)
 
         # self.misc_options_frame(parent)
         # self.tremor_rest_frame(parent)
@@ -351,13 +353,25 @@ class updrs_page(tk.Frame):
         #     rownum += 2
 
     def title_frame(self, parent):
-        self.title_f = tk.Frame(parent, width = 1280, height = 100, bg=MAIN_COLOR)
+        self.title_f = tk.Frame(parent, width = 1280, height = 75, bg=MAIN_COLOR)
 
-        title = tk.Label(self.title_f, text="Unified Parkinsons Disease Rating Scale", font=TITLE_FONT, bg=MAIN_COLOR)
+        title = tk.Label(self.title_f, text="Unified Parkinson\'s Disease Rating Scale", font=TITLE_FONT, bg=MAIN_COLOR, fg="white")
         title.place(relx=0.5, rely=0.5, anchor='center')
         self.title_f.grid()
         return self
 
+    def border_frame(self, parent):
+        self.border_f = tk.Frame(parent, width=1280, height=5, bg="black")
+        self.border_f.grid()
+        return self
+
+    def subtitle_frame(self, parent):
+        self.subtitle_f = tk.Frame(parent, width=1280, height=75)
+
+        subtitle = tk.Label(self.subtitle_f, text="Motor Exam", font=TITLE_FONT)
+        subtitle.place(relx=0.5, rely=0.5, anchor='center')
+        self.subtitle_f.grid()
+        return self
 
 
 #################################### PROGRAM RUN #######################################################################
