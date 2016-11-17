@@ -11,7 +11,7 @@ def get_data(filename):
         """
     import re
     import numpy as np
-    
+
     x = []
     y = []
     z = []
