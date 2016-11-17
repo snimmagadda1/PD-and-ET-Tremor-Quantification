@@ -295,6 +295,12 @@ class psd_graph_page(tk.Frame):
 
 class updrs_page(tk.Frame):
 
+    tremor_rest_options = ["0 = Absent.",
+                           "1 = Slight and infrequent.",
+                           "2 = Mild and present most of time.",
+                           "3 = Moderate and present most of time.",
+                           "4 = Marked and present most of time."]
+
     speech_options = ["0 = Normal.",
                       "1 = Slight loss of expression, diction and/or volume.",
                       "2 = Monotone, slurred but understandable; moderately impaired.",
@@ -377,7 +383,7 @@ class updrs_page(tk.Frame):
 
         self.title_frame(self).grid(row=0, column=0)
         self.border_frame(self).grid(row=1, column=0)
-        self.subtitle_frame(self).grid(row=2, column=0)
+        self.tremor_rest_frame(self).grid(row=2, column=0)
 
         # self.misc_options_frame(parent)
         # self.tremor_rest_frame(parent)
@@ -416,7 +422,7 @@ class updrs_page(tk.Frame):
     def title_frame(self, parent):
         self.title_f = tk.Frame(parent, width = 1280, height = 50, bg=MAIN_COLOR)
 
-        title = tk.Label(self.title_f, text="Unified Parkinson\'s Disease Rating Scale", font=TITLE_FONT, bg=MAIN_COLOR, fg="white")
+        title = tk.Label(self.title_f, text="Unified Parkinson\'s Disease Rating Scale - Motor Exam", font=TITLE_FONT, bg=MAIN_COLOR, fg="white")
         title.place(relx=0.5, rely=0.5, anchor='center')
         self.title_f.grid()
         return self
@@ -426,13 +432,33 @@ class updrs_page(tk.Frame):
         self.border_f.grid()
         return self
 
-    def subtitle_frame(self, parent):
-        self.subtitle_f = tk.Frame(parent, width=1280, height=50)
+    def tremor_rest_frame(self, parent):
+        self.tremor_rest_f = tk.Frame(parent, width=1280, height=200)
+        self.tremor_rest_f.grid()
 
-        subtitle = tk.Label(self.subtitle_f, text="Motor Exam", font=TITLE_FONT)
-        subtitle.place(relx=0.5, rely=0.5, anchor='center')
-        self.subtitle_f.grid()
+        # Subtitle
+        tremor_rest_label = tk.Label(self.tremor_rest_f, text="Tremor at Rest")
+        tremor_rest_label.grid(row=0, column=0, columnspan=3)
+
+        # Labels
+        face_label = tk.Label(self.tremor_rest_f, text="Face")
+        face_label.grid(row=1,column=0)
+
+        rue_label = tk.Label(self.tremor_rest_f, text="RUE")
+        rue_label.grid(row=1, column=1)
+
+        lue_label = tk.Label(self.tremor_rest_f, text="LUE")
+        lue_label.grid(row=1, column=2)
+
         return self
+
+        # var = tk.StringVar()
+        # var.set(all_options[i][0]) # set defaults
+        # all_vars.append(var)
+        #
+        # menuargs = (self, var, *all_options[i+c])
+        # menu = tk.OptionMenu(*menuargs)
+        # menu.grid(row=rownum+1, column=c, sticky="W")
 
 
 #################################### PROGRAM RUN #######################################################################
