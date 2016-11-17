@@ -414,7 +414,7 @@ class updrs_page(tk.Frame):
         #     rownum += 2
 
     def title_frame(self, parent):
-        self.title_f = tk.Frame(parent, width = 1280, height = 75, bg=MAIN_COLOR)
+        self.title_f = tk.Frame(parent, width = 1280, height = 50, bg=MAIN_COLOR)
 
         title = tk.Label(self.title_f, text="Unified Parkinson\'s Disease Rating Scale", font=TITLE_FONT, bg=MAIN_COLOR, fg="white")
         title.place(relx=0.5, rely=0.5, anchor='center')
@@ -427,7 +427,7 @@ class updrs_page(tk.Frame):
         return self
 
     def subtitle_frame(self, parent):
-        self.subtitle_f = tk.Frame(parent, width=1280, height=75)
+        self.subtitle_f = tk.Frame(parent, width=1280, height=50)
 
         subtitle = tk.Label(self.subtitle_f, text="Motor Exam", font=TITLE_FONT)
         subtitle.place(relx=0.5, rely=0.5, anchor='center')
