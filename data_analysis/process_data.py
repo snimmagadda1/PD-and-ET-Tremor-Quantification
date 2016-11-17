@@ -56,11 +56,40 @@ def remove_nan(data):
     return cleaned_list
 
 
-def calc_amplitude(data):
-    """Get the amplitude of a tremor peak
-    :param data: array of data (np.array) containing a single peak
-    :return: amplitude of peak
+def get_disp_amplitude(enmofilt, lowcut, fs):
+    """Get the average displacement of a subset of raw acceleration data
+    :param data: array of filtered acceleration data as ENMO (as numpy array)
+    :param lowcut: choice of highpass filter cutoff for removing DC
+    :param fs: sampling frequency of data in Hz
+    :return: average displacement of data in mm
     """
+
+    from scipy.integrate import cumtrapz as integrate
+    from scipy.signal import hilbert as envelope
+    import numpy as np
+
+
+    accel = enmofilt*9.8
+    accel = accel - np.mean(accel) # recenter about 0
+    accel_lowpassed = butter_highpass_IIR_filter(accel, lowcut, fs)
+
+    vel = integrate(accel_lowpassed, dx=1/fs, initial=0)
+    vel = vel - np.mean(vel) # recenter about 0
+    vel_lowpassed = butter_highpass_IIR_filter(vel, lowcut, fs)
+
+    disp = integrate(vel_lowpassed, dx=1/fs, initial=0)
+    disp = disp - np.mean(disp) # recenter about 0
+    disp = disp*1000 # convert to mm
+
+    # Use Hilbert transform to find envelope of displacement, take average value as mean (of both lower and upper envelopes)
+    envelope_high = np.abs(envelope(disp))
+    envelope_low = np.abs(envelope(disp*-1))
+
+    mean_disp = (np.mean(envelope_high) + np.mean(envelope_low))/2
+
+    return mean_disp
+
+
 
 
 def psd_welch(data, fs, nperseg1=256):
@@ -133,7 +162,7 @@ def gravity_compensate(q, acc):
 
 
 def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
-    """ Calculate magnitude of accelration
+    """ Calculate magnitude of acceleration
 
        :param accel_x: acceleration x vector (m/s^2)
        :param accel_y: acceleration y vector (m/s^2)
@@ -224,6 +253,21 @@ def butter_lowpass_IIR(highcut, fs, order=4):
     b, a = iirfilter(order, [high], btype='lowpass', ftype='butter')
     return b, a
 
+def butter_highpass_IIR(lowcut, fs, order=4):
+    """ Get coefficients for Butterworth lowpass filter.
+    Use with butter_lowpass_IIR_filter
+
+    :param lowcut: lower cutoff frequency (Hz)
+    :param fs: sampling frequency (Hz)
+    :param order: filter order
+    :return: Butterworth bandpass filter coefficients
+    """
+    from scipy.signal import iirfilter
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    b, a = iirfilter(order, [low], btype='highpass', ftype='butter')
+    return b, a
+
 
 def butter_lowpass_filter(data, highcut, fs, order=5):
     """ Filter data using parameters
@@ -251,6 +295,20 @@ def butter_lowpass_IIR_filter(data, highcut, fs, order=5):
     """
     from scipy.signal import filtfilt
     b, a = butter_lowpass_IIR(highcut, fs, order=order)
+    y = filtfilt(b, a, data, padlen=100, padtype='odd')
+    return y
+
+def butter_highpass_IIR_filter(data, lowcut, fs, order=5):
+    """ Filter data using parameters. IIR filter
+
+    :param data: data to apply filter to
+    :param highcut: uppper cutoff frequency (Hz)
+    :param fs: sampling frequency (Hz)
+    :param order: filter order
+    :return:
+    """
+    from scipy.signal import filtfilt
+    b, a = butter_highpass_IIR(lowcut, fs, order=order)
     y = filtfilt(b, a, data, padlen=100, padtype='odd')
     return y
 
