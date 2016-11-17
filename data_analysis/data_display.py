@@ -645,9 +645,6 @@ def test_welch_wrist_data():
 def display_acceleration(self, f, a):
     """Display the mangitude of acceleration inside embedded tkinter graph
 
-    :param x_accel: x component of acceleration
-    :param y_accel: y component of acceleration
-    :param z_accel: z component of acceleration
     :param f: figure (plt.Figure())
     :param a: axis (plt.axis)
     :return:
@@ -695,7 +692,7 @@ if __name__ == "__main__":
     f = plt.Figure()
     a = f.add_subplot(111)
 
-    display_acceleration(1,1,1,f,a)
+    display_acceleration(f,a)
 
     pass
 
