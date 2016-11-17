@@ -93,18 +93,20 @@ if __name__ == "__main__":
     from process_data import *
 
 
-    x,y,z = extrapolate_accel_data_testing('sinusoid_8hz_fs_115.txt')
-    filtcutoff = 20
+    x,y,z = get_data('data_rate_test.txt')
+
+    filtcutoff = 14
     fs = 100
     filtx = butter_lowpass_IIR_filter(x, filtcutoff, fs)
     filty = butter_lowpass_IIR_filter(y, filtcutoff, fs)
     filtz = butter_lowpass_IIR_filter(z, filtcutoff, fs)
 
-    enmo = np.array(remove_gravity_ENMO(filtx,filty,filtz))
+    accel = remove_gravity_ENMO(filtx,filty,filtz)
 
-    print(get_disp_amplitude(enmo, 2, 100))
+    print(get_disp_amplitude(np.array(accel), 1, 100))
+
     # convert to m^2 / s
-    enmo = enmo * 9.8
+    enmo = np.array(accel) * 9.8
     # recenter about 0
     enmo = enmo - np.mean(enmo)
 
@@ -132,6 +134,16 @@ if __name__ == "__main__":
     envelope_high = np.abs(scipy.signal.hilbert(disp))
     envelope_low = -1*np.abs(scipy.signal.hilbert(-1*disp))
 
+    plt.subplot(411)
+    plt.plot(accel)
+    plt.title('raw acceleration')
+    plt.subplot(412)
+    plt.plot(enmo)
+    plt.title('filtered acceleration recentered')
+    plt.subplot(413)
+    plt.plot(vel)
+    plt.title('velocity recentered')
+    plt.subplot(414)
     plt.plot(disp)
     plt.plot(envelope_high)
     plt.plot(envelope_low)

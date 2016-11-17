@@ -81,11 +81,10 @@ def get_disp_amplitude(enmofilt, lowcut, fs):
     disp = disp - np.mean(disp) # recenter about 0
     disp = disp*1000 # convert to mm
 
-    # Use Hilbert transform to find envelope of displacement, take average value as mean (of both lower and upper envelopes)
-    envelope_high = np.abs(envelope(disp))
-    envelope_low = np.abs(envelope(disp*-1))
+    # Use Hilbert transform to find envelope of displacement, take average value as mean of envelope
+    envelope = np.abs(envelope(disp))
 
-    mean_disp = (np.mean(envelope_high) + np.mean(envelope_low))/2
+    mean_disp = np.mean(envelope)
 
     return mean_disp
 
