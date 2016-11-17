@@ -31,21 +31,6 @@ def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
     return Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point
 
 
-def meters_to_mm(data):
-    """Convert meters to mm
-    This is convention for accelerometer data
-
-    :param data: data in mm
-    :return:
-    """
-    import numpy as np
-    np_data = np.array(data)
-
-    converted = np_data * 1000
-
-    return converted.tolist()
-
-
 def remove_nan(data):
     """Remove Nan and empty values from data stream
     :param data: array of data (np.array)
