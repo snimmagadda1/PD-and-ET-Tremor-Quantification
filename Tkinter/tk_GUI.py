@@ -25,7 +25,7 @@ sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464/'
 pd.options.mode.chained_assignment = None
 
 TITLE_FONT = ("Verdana", 24)
-LARGE_FONT = ("Verdana", 12)
+LARGE_FONT = ("Verdana", 18)
 NORM_FONT = ("Verdana", 10)
 SMALL_FONT = ("Verdana", 8)
 
@@ -161,7 +161,7 @@ class start_page(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
-        accelerometer based tremor classification platform."""), font=LARGE_FONT)
+        accelerometer based tremor classification platform."""))
         label.pack(pady=10, padx=10)
 
         # User name and login
@@ -330,6 +330,16 @@ class updrs_page(tk.Frame):
                            "2 = Mild and present most of time.",
                            "3 = Moderate and present most of time.",
                            "4 = Marked and present most of time."]
+    tremor_action_options = ["0 = Absent.",
+                             "1 = Slight, present with action.",
+                             "2 = Moderate, present with action.",
+                             "3 = Moderate present with action and posture holding.",
+                             "4 = Marked, interferes with feeding."]
+    rigidity_options = ["0 = Absent.",
+                        "1 = Slight or detectable only when activated by mirror or other movements.",
+                        "2 = Mild to moderate.",
+                        "3 = Marked, but full range of motion easily achieved.",
+                        "4 = Severe, range of motion achieved with difficulty."]
 
     speech_options = ["0 = Normal.",
                       "1 = Slight loss of expression, diction and/or volume.",
@@ -341,11 +351,7 @@ class updrs_page(tk.Frame):
                       "2 = Slight but definitely abnormal diminution of facial expression.",
                       "3 = Moderate hypomimia; lips parted some of the time.",
                       "4 = Masked or fixed facies with severe or complete loss of facial expression; lips parted 1/4 inch or more."]
-    rigidity_options = ["0 = Absent.",
-                        "1 = Slight or detectable only when activated by mirror or other movements.",
-                        "2 = Mild to moderate.",
-                        "3 = Marked, but full range of motion easily achieved.",
-                        "4 = Severe, range of motion achieved with difficulty."]
+
     hand_options = ["0 = Normal.",
                     "1 = Mild slowing and/or reduction in amplitude.",
                     "2 = Moderately impaired. Definite and early fatiguing. May have occasional arrests in movement.",
@@ -406,91 +412,150 @@ class updrs_page(tk.Frame):
                   "Postural Stability",
                   "Body Bradykinesia and Hypokinesia"]
 
+
+
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
         self.grid()
 
-        self.title_frame(self).grid(row=0, column=0)
-        self.border_frame(self).grid(row=1, column=0)
-        self.tremor_rest_frame(self).grid(row=2, column=0)
+        title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR)
+        self.title_frame(self, title_frame)
+        title_frame.grid(row=0, column=0, sticky="N", columnspan=2)
 
-        # self.misc_options_frame(parent)
-        # self.tremor_rest_frame(parent)
-        # self.tremor_postural_frame(parent)
-        # self.rigidity_frame(parent)
-        # self.fingertaps_frame(parent)
-        # self.hand_movements_frame(parent)
-        # self.rapid_alternating_frame(parent)
-        # self.leg_agility_frame(parent)
+        border_frame = tk.Frame(self, width=1280, height=5, bg="black")
+        self.border_frame(self, border_frame)
+        border_frame.grid(row=1, column=0, sticky="N", columnspan=2)
+
+        tremor_rest_frame = tk.Frame(self, width=640, height=100)
+        tremor_rest_vars = self.tremor_rest_frame(self, tremor_rest_frame)
+        tremor_rest_frame.grid(row=2, column=0)
+
+        tremor_action_frame = tk.Frame(self, width=640, height=100)
+        tremor_action_vars = self.tremor_action_frame(self, tremor_action_frame)
+        tremor_action_frame.grid(row=2, column=1)
+
+        rigidity_frame = tk.Frame(self, width=640, height=100)
+        rigidity_vars = self.rigidity_frame(self, rigidity_frame)
+        rigidity_frame.grid(row=3, column=0)
 
 
+    def title_frame(self, parent, frame):
+        title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Motor Exam", font=TITLE_FONT, bg=MAIN_COLOR, fg="white")
+        title.grid()
 
+    def border_frame(self, parent, frame):
+        frame.grid()
 
+    def tremor_rest_frame(self, parent, frame):
+        # variables
+        facial_var = tk.StringVar()
+        facial_var.set(parent.tremor_rest_options[0])  # set default
+        rue_var = tk.StringVar()
+        rue_var.set(parent.tremor_rest_options[0])  # set default
+        lue_var = tk.StringVar()
+        lue_var.set(parent.tremor_rest_options[0])  # set default
 
-        # all_vars = []
-        # rownum = 1
-        # num_columns = 4
-        #
-        # for i in range(0, len(all_options), num_columns):
-        #     for c in range(num_columns):
-        #         # Label
-        #         label = tk.Label(self, text=all_titles[i+c])
-        #         label.grid(row=rownum, column=c, sticky="W")
-        #
-        #         # Menu
-        #         var = tk.StringVar()
-        #         var.set(all_options[i][0]) # set defaults
-        #         all_vars.append(var)
-        #
-        #         menuargs = (self, var, *all_options[i+c])
-        #         menu = tk.OptionMenu(*menuargs)
-        #         menu.grid(row=rownum+1, column=c, sticky="W")
-        #
-        #     rownum += 2
-
-    def title_frame(self, parent):
-        self.title_f = tk.Frame(parent, width = 1280, height = 50, bg=MAIN_COLOR)
-
-        title = tk.Label(self.title_f, text="Unified Parkinson\'s Disease Rating Scale - Motor Exam", font=TITLE_FONT, bg=MAIN_COLOR, fg="white")
-        title.place(relx=0.5, rely=0.5, anchor='center')
-        self.title_f.grid()
-        return self
-
-    def border_frame(self, parent):
-        self.border_f = tk.Frame(parent, width=1280, height=5, bg="black")
-        self.border_f.grid()
-        return self
-
-    def tremor_rest_frame(self, parent):
-        self.tremor_rest_f = tk.Frame(parent, width=1280, height=200)
-        self.tremor_rest_f.grid()
+        vars = [facial_var, rue_var, lue_var]
 
         # Subtitle
-        tremor_rest_label = tk.Label(self.tremor_rest_f, text="Tremor at Rest")
+        tremor_rest_label = tk.Label(frame, text="Tremor at Rest", font=LARGE_FONT)
         tremor_rest_label.grid(row=0, column=0, columnspan=3)
 
         # Labels
-        face_label = tk.Label(self.tremor_rest_f, text="Face")
+        face_label = tk.Label(frame, text="Face")
         face_label.grid(row=1,column=0)
 
-        rue_label = tk.Label(self.tremor_rest_f, text="RUE")
+        rue_label = tk.Label(frame, text="Right Upper Extremity")
         rue_label.grid(row=1, column=1)
 
-        lue_label = tk.Label(self.tremor_rest_f, text="LUE")
+        lue_label = tk.Label(frame, text="Left Upper Extremity")
         lue_label.grid(row=1, column=2)
 
-        return self
+        # Menus
 
-        # var = tk.StringVar()
-        # var.set(all_options[i][0]) # set defaults
-        # all_vars.append(var)
-        #
-        # menuargs = (self, var, *all_options[i+c])
-        # menu = tk.OptionMenu(*menuargs)
-        # menu.grid(row=rownum+1, column=c, sticky="W")
+        facial_args = (frame, facial_var, *parent.tremor_rest_options)
+        rue_args = (frame, rue_var, *parent.tremor_rest_options)
+        lue_args = (frame, lue_var, *parent.tremor_rest_options)
 
 
+        facial = tk.OptionMenu(*facial_args)
+        facial.grid(row=2, column=0, padx=50)
+        rue = tk.OptionMenu(*rue_args)
+        rue.grid(row=2, column=1, padx=50)
+        lue = tk.OptionMenu(*lue_args)
+        lue.grid(row=2, column=2, padx=50)
+        return vars
+
+    def tremor_action_frame(self, parent, frame):
+        # variables
+        rue_var = tk.StringVar()
+        rue_var.set(parent.tremor_action_options[0])  # set default
+        lue_var = tk.StringVar()
+        lue_var.set(parent.tremor_action_options[0])  # set default
+
+        vars = [rue_var, lue_var]
+
+        # Subtitle
+        tremor_action_label = tk.Label(frame, text="Action or Postural Tremor", font=LARGE_FONT)
+        tremor_action_label.grid(row=0, column=0, columnspan=2)
+
+        # Labels
+        rue_label = tk.Label(frame, text="Right Upper Extremity")
+        rue_label.grid(row=1, column=0)
+
+        lue_label = tk.Label(frame, text="Left Upper Extremity")
+        lue_label.grid(row=1, column=1)
+
+        # Menus
+
+        rue_args = (frame, rue_var, *parent.tremor_action_options)
+        lue_args = (frame, lue_var, *parent.tremor_action_options)
+
+        rue = tk.OptionMenu(*rue_args)
+        rue.grid(row=2, column=0, padx=50)
+        lue = tk.OptionMenu(*lue_args)
+        lue.grid(row=2, column=1, padx=50)
+        return vars
+
+    def rigidity_frame(self, parent, frame):
+        # variables
+        neck_var = tk.StringVar()
+        neck_var.set(parent.rigidity_options[0])  # set default
+        rue_var = tk.StringVar()
+        rue_var.set(parent.rigidity_options[0])  # set default
+        lue_var = tk.StringVar()
+        lue_var.set(parent.rigidity_options[0])  # set default
+
+        vars = [neck_var, rue_var, lue_var]
+
+        # Subtitle
+        rigidity_label = tk.Label(frame, text="Rigidity", font=LARGE_FONT)
+        rigidity_label.grid(row=0, column=0, columnspan=3)
+
+        # Labels
+        neck_label = tk.Label(frame, text="Neck")
+        neck_label.grid(row=1, column=0)
+
+        rue_label = tk.Label(frame, text="Right Upper Extremity")
+        rue_label.grid(row=1, column=1)
+
+        lue_label = tk.Label(frame, text="Left Upper Extremity")
+        lue_label.grid(row=1, column=2)
+
+        # Menus
+
+        neck_args = (frame, neck_var, *parent.rigidity_options)
+        rue_args = (frame, rue_var, *parent.rigidity_options)
+        lue_args = (frame, lue_var, *parent.rigidity_options)
+
+        neck = tk.OptionMenu(*neck_args)
+        neck.grid(row=2, column=0, padx=50)
+        rue = tk.OptionMenu(*rue_args)
+        rue.grid(row=2, column=1, padx=50)
+        lue = tk.OptionMenu(*lue_args)
+        lue.grid(row=2, column=2, padx=50)
+        return vars
 #################################### PROGRAM RUN #######################################################################
 def main():
     app = TremorApp()
