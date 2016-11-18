@@ -324,17 +324,6 @@ class psd_graph_page(tk.Frame):
 
 
 class updrs_motor_page(tk.Frame):
-
-    tremor_rest_options = ["0 = Absent.",
-                           "1 = Slight and infrequent.",
-                           "2 = Mild and present most of time.",
-                           "3 = Moderate and present most of time.",
-                           "4 = Marked and present most of time."]
-    tremor_action_options = ["0 = Absent.",
-                             "1 = Slight, present with action.",
-                             "2 = Moderate, present with action.",
-                             "3 = Moderate present with action and posture holding.",
-                             "4 = Marked, interferes with feeding."]
     rigidity_options = ["0 = Absent.",
                         "1 = Slight or detectable only when activated by mirror or other movements.",
                         "2 = Mild to moderate.",
@@ -384,7 +373,33 @@ class updrs_motor_page(tk.Frame):
                            "3 = Moderate slowness, poverty or small amplitude of movement.",
                            "4 = Marked slowness, poverty or small amplitude of movement."]
 
+    all_options = [speech_options,
+                   facial_options,
+                   rigidity_options,
+                   movement_options,
+                   movement_options,
+                   movement_options,
+                   movement_options,
+                   arising_options,
+                   posture_options,
+                   gait_options,
+                   poststability_options,
+                   kinesia_options]
 
+    all_labels = ["Speech",
+                  "Facial Expression",
+                  "Rigidity",
+                  "Finger Taps",
+                  "Hand Movements",
+                  "Rapid Alternating Movement of Hands",
+                  "Leg Agility",
+                  "Arising from Chair",
+                  "Posture",
+                  "Gait",
+                  "Postural Stability",
+                  "Body Bradykinesia and Hypokinesia"]
+
+    all_vars = []
 
     def __init__(self, parent, controller):
 
@@ -402,41 +417,35 @@ class updrs_motor_page(tk.Frame):
         self.navigation_frame(self, navigation_frame, controller)
         navigation_frame.grid(row=2, column=0, columnspan=2)
 
-        handmovements_frame = tk.Frame(self, width=640, height=100)
-        handmovements_vars = self.handmovements_frame(self, handmovements_frame)
-        handmovements_frame.grid(row=3, column=0)
+        i = 0
+        for r in range(3, 15, 2):
+            # Labels
 
-        legagility_frame = tk.Frame(self, width=640, height=100)
-        legagility_vars = self.legagility_frame(self, legagility_frame)
-        legagility_frame.grid(row=4, column=1)
+            label1 = tk.Label(self, text=self.all_labels[i])
+            label1.grid(row=r, column=0)
+            label2 = tk.Label(self, text=self.all_labels[i + 1])
+            label2.grid(row=r, column=1)
 
-        tremor_action_frame = tk.Frame(self, width=640, height=100)
-        tremor_action_vars = self.tremor_action_frame(self, tremor_action_frame)
-        tremor_action_frame.grid(row=4, column=0)
+            # Variables
 
-        fingertaps_frame = tk.Frame(self, width=640, height=100)
-        fingertaps_vars = self.fingertaps_frame(self, fingertaps_frame)
-        fingertaps_frame.grid(row=3, column=1)
+            var1 = tk.StringVar()
+            var1.set(self.all_options[i][0])
+            self.all_vars.append(var1)
+            var2 = tk.StringVar()
+            var2.set(self.all_options[i + 1][0])
+            self.all_vars.append(var2)
 
-        tremor_rest_frame = tk.Frame(self, width=640, height=100)
-        tremor_rest_vars = self.tremor_rest_frame(self, tremor_rest_frame)
-        tremor_rest_frame.grid(row=5, column=0, columnspan=2)
+            # Menus
 
-        rapidalternating_frame = tk.Frame(self, width=1280, height=100)
-        rapidalternating_vars = self.rapidalternating_frame(self, rapidalternating_frame)
-        rapidalternating_frame.grid(row=6, column=0, columnspan=2)
+            args1 = (self, var1, *self.all_options[i])
+            menu1 = tk.OptionMenu(*args1)
+            menu1.grid(row=r + 1, column=0, padx=50, pady=20)
 
-        rigidity_frame = tk.Frame(self, width=640, height=100)
-        rigidity_vars = self.rigidity_frame(self, rigidity_frame)
-        rigidity_frame.grid(row=7, column=0, columnspan=2)
+            args2 = (self, var2, *self.all_options[i + 1])
+            menu2 = tk.OptionMenu(*args1)
+            menu2.grid(row=r + 1, column=1, padx=50, pady=20)
 
-        misc1_frame = tk.Frame(self, width=1280, height=100)
-        misc1_vars = self.misc1_frame(self, misc1_frame)
-        misc1_frame.grid(row=8, column=0, columnspan=2)
-
-        misc2_frame = tk.Frame(self, width=1280, height=100)
-        misc2_vars = self.misc2_frame(self, misc2_frame)
-        misc2_frame.grid(row=9, column=0, columnspan=2)
+            i += 1
 
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Motor Exam", font=TITLE_FONT,
@@ -454,333 +463,95 @@ class updrs_motor_page(tk.Frame):
                                    command=lambda: controller.show_frame(updrs_mentation_page))
         mentation_butt.grid(row=0, column=2)
 
-
-
-    def tremor_rest_frame(self, parent, frame):
-        # variables
-        facial_var = tk.StringVar()
-        facial_var.set(parent.tremor_rest_options[0])  # set default
-        rue_var = tk.StringVar()
-        rue_var.set(parent.tremor_rest_options[0])  # set default
-        lue_var = tk.StringVar()
-        lue_var.set(parent.tremor_rest_options[0])  # set default
-
-        vars = [facial_var, rue_var, lue_var]
-
-        # Subtitle
-        tremor_rest_label = tk.Label(frame, text="Tremor at Rest", font=LARGE_FONT)
-        tremor_rest_label.grid(row=0, column=0, columnspan=3)
-
-        # Labels
-        face_label = tk.Label(frame, text="Face")
-        face_label.grid(row=1,column=0)
-
-        rue_label = tk.Label(frame, text="Right Upper Extremity")
-        rue_label.grid(row=1, column=1)
-
-        lue_label = tk.Label(frame, text="Left Upper Extremity")
-        lue_label.grid(row=1, column=2)
-
-        # Menus
-
-        facial_args = (frame, facial_var, *parent.tremor_rest_options)
-        rue_args = (frame, rue_var, *parent.tremor_rest_options)
-        lue_args = (frame, lue_var, *parent.tremor_rest_options)
-
-
-        facial = tk.OptionMenu(*facial_args)
-        facial.grid(row=2, column=0, padx=50)
-        rue = tk.OptionMenu(*rue_args)
-        rue.grid(row=2, column=1, padx=50)
-        lue = tk.OptionMenu(*lue_args)
-        lue.grid(row=2, column=2, padx=50)
-        return vars
-
-    def tremor_action_frame(self, parent, frame):
-        # variables
-        rue_var = tk.StringVar()
-        rue_var.set(parent.tremor_action_options[0])  # set default
-        lue_var = tk.StringVar()
-        lue_var.set(parent.tremor_action_options[0])  # set default
-
-        vars = [rue_var, lue_var]
-
-        # Subtitle
-        tremor_action_label = tk.Label(frame, text="Action or Postural Tremor", font=LARGE_FONT)
-        tremor_action_label.grid(row=0, column=0, columnspan=2)
-
-        # Labels
-        rue_label = tk.Label(frame, text="Right Upper Extremity")
-        rue_label.grid(row=1, column=0)
-
-        lue_label = tk.Label(frame, text="Left Upper Extremity")
-        lue_label.grid(row=1, column=1)
-
-        # Menus
-
-        rue_args = (frame, rue_var, *parent.tremor_action_options)
-        lue_args = (frame, lue_var, *parent.tremor_action_options)
-
-        rue = tk.OptionMenu(*rue_args)
-        rue.grid(row=2, column=0, padx=50)
-        lue = tk.OptionMenu(*lue_args)
-        lue.grid(row=2, column=1, padx=50)
-        return vars
-
-    def rigidity_frame(self, parent, frame):
-        # variables
-        neck_var = tk.StringVar()
-        neck_var.set(parent.rigidity_options[0])  # set default
-        rue_var = tk.StringVar()
-        rue_var.set(parent.rigidity_options[0])  # set default
-        lue_var = tk.StringVar()
-        lue_var.set(parent.rigidity_options[0])  # set default
-
-        vars = [neck_var, rue_var, lue_var]
-
-        # Subtitle
-        rigidity_label = tk.Label(frame, text="Rigidity", font=LARGE_FONT)
-        rigidity_label.grid(row=0, column=0, columnspan=3)
-
-        # Labels
-        neck_label = tk.Label(frame, text="Neck")
-        neck_label.grid(row=1, column=0)
-
-        rue_label = tk.Label(frame, text="Right Upper Extremity")
-        rue_label.grid(row=1, column=1)
-
-        lue_label = tk.Label(frame, text="Left Upper Extremity")
-        lue_label.grid(row=1, column=2)
-
-        # Menus
-
-        neck_args = (frame, neck_var, *parent.rigidity_options)
-        rue_args = (frame, rue_var, *parent.rigidity_options)
-        lue_args = (frame, lue_var, *parent.rigidity_options)
-
-        neck = tk.OptionMenu(*neck_args)
-        neck.grid(row=2, column=0, padx=50)
-        rue = tk.OptionMenu(*rue_args)
-        rue.grid(row=2, column=1, padx=50)
-        lue = tk.OptionMenu(*lue_args)
-        lue.grid(row=2, column=2, padx=50)
-        return vars
-
-    def fingertaps_frame(self, parent, frame):
-        # variables
-        right_var = tk.StringVar()
-        right_var.set(parent.movement_options[0])  # set default
-        left_var = tk.StringVar()
-        left_var.set(parent.movement_options[0])  # set default
-
-        vars = [right_var, left_var]
-
-        # Subtitle
-        fingertaps_label = tk.Label(frame, text="Finger Taps", font=LARGE_FONT)
-        fingertaps_label.grid(row=0, column=0, columnspan=2)
-
-        # Labels
-        right_label = tk.Label(frame, text="Right")
-        right_label.grid(row=1, column=0)
-
-        left_label = tk.Label(frame, text="Left")
-        left_label.grid(row=1, column=1)
-
-        # Menus
-
-        right_args = (frame, right_var, *parent.movement_options)
-        left_args = (frame, left_var, *parent.movement_options)
-
-        right = tk.OptionMenu(*right_args)
-        right.grid(row=2, column=0, padx=50)
-        left = tk.OptionMenu(*left_args)
-        left.grid(row=2, column=1, padx=50)
-        return vars
-
-    def handmovements_frame(self, parent, frame):
-        # variables
-        right_var = tk.StringVar()
-        right_var.set(parent.movement_options[0])  # set default
-        left_var = tk.StringVar()
-        left_var.set(parent.movement_options[0])  # set default
-
-        vars = [right_var, left_var]
-
-        # Subtitle
-        handmovements_label = tk.Label(frame, text="Hand Movements (open/close rapidly)", font=LARGE_FONT)
-        handmovements_label.grid(row=0, column=0, columnspan=2)
-
-        # Labels
-        right_label = tk.Label(frame, text="Right")
-        right_label.grid(row=1, column=0)
-
-        left_label = tk.Label(frame, text="Left")
-        left_label.grid(row=1, column=1)
-
-        # Menus
-
-        right_args = (frame, right_var, *parent.movement_options)
-        left_args = (frame, left_var, *parent.movement_options)
-
-        right = tk.OptionMenu(*right_args)
-        right.grid(row=2, column=0, padx=50)
-        left = tk.OptionMenu(*left_args)
-        left.grid(row=2, column=1, padx=50)
-        return vars
-
-    def rapidalternating_frame(self, parent, frame):
-        # variables
-        right_var = tk.StringVar()
-        right_var.set(parent.movement_options[0])  # set default
-        left_var = tk.StringVar()
-        left_var.set(parent.movement_options[0])  # set default
-
-        vars = [right_var, left_var]
-
-        # Subtitle
-        rapidalternating_label = tk.Label(frame, text="Rapid Alternating Movements (pronate and supinate hands)", font=LARGE_FONT)
-        rapidalternating_label.grid(row=0, column=0, columnspan=2)
-
-        # Labels
-        right_label = tk.Label(frame, text="Right")
-        right_label.grid(row=1, column=0)
-
-        left_label = tk.Label(frame, text="Left")
-        left_label.grid(row=1, column=1)
-
-        # Menus
-
-        right_args = (frame, right_var, *parent.movement_options)
-        left_args = (frame, left_var, *parent.movement_options)
-
-        right = tk.OptionMenu(*right_args)
-        right.grid(row=2, column=0, padx=50)
-        left = tk.OptionMenu(*left_args)
-        left.grid(row=2, column=1, padx=50)
-        return vars
-
-    def legagility_frame(self, parent, frame):
-        # variables
-        right_var = tk.StringVar()
-        right_var.set(parent.movement_options[0])  # set default
-        left_var = tk.StringVar()
-        left_var.set(parent.movement_options[0])  # set default
-
-        vars = [right_var, left_var]
-
-        # Subtitle
-        legagility_label = tk.Label(frame, text="Leg Agility (tap heel on ground, 3 inches amplitude)", font=LARGE_FONT)
-        legagility_label.grid(row=0, column=0, columnspan=2)
-
-        # Labels
-        right_label = tk.Label(frame, text="Right")
-        right_label.grid(row=1, column=0)
-
-        left_label = tk.Label(frame, text="Left")
-        left_label.grid(row=1, column=1)
-
-        # Menus
-
-        right_args = (frame, right_var, *parent.movement_options)
-        left_args = (frame, left_var, *parent.movement_options)
-
-        right = tk.OptionMenu(*right_args)
-        right.grid(row=2, column=0, padx=50)
-        left = tk.OptionMenu(*left_args)
-        left.grid(row=2, column=1, padx=50)
-        return vars
-
-    def misc1_frame(self, parent, frame):
-        # variables
-        speech_var = tk.StringVar()
-        speech_var.set(parent.speech_options[0])  # set default
-        facial_var = tk.StringVar()
-        facial_var.set(parent.facial_options[0])  # set default
-        arising_var = tk.StringVar()
-        arising_var.set(parent.arising_options[0])  # set default
-
-        vars = [speech_var, facial_var, arising_var]
-
-        # Subtitle
-        misc_label = tk.Label(frame, text="Other", font=LARGE_FONT)
-        misc_label.grid(row=0, column=0, columnspan=3)
-
-        # Labels
-        speech_label = tk.Label(frame, text="Speech")
-        speech_label.grid(row=1, column=0)
-
-        facial_label = tk.Label(frame, text="Facial Expression")
-        facial_label.grid(row=1, column=1)
-
-        arising_label = tk.Label(frame, text="Arising from chair (arms folded across chest)")
-        arising_label.grid(row=1, column=2)
-
-        # Menus
-
-        speech_args = (frame, speech_var, *parent.speech_options)
-        facial_args = (frame, facial_var, *parent.facial_options)
-        arising_args = (frame, arising_var, *parent.arising_options)
-
-
-        speech = tk.OptionMenu(*speech_args)
-        speech.grid(row=2, column=0, padx=50)
-        facial = tk.OptionMenu(*facial_args)
-        facial.grid(row=2, column=1, padx=50)
-        arising = tk.OptionMenu(*arising_args)
-        arising.grid(row=2, column=2, padx=50)
-
-
-        return vars
-
-    def misc2_frame(self, parent, frame):
-        # vars
-        posture_var = tk.StringVar()
-        posture_var.set(parent.posture_options[0])  # set default
-        gait_var = tk.StringVar()
-        gait_var.set(parent.gait_options[0])  # set default
-        poststability_var = tk.StringVar()
-        poststability_var.set(parent.poststability_options[0])  # set default
-        kinesia_var = tk.StringVar()
-        kinesia_var.set(parent.kinesia_options[0])  # set default
-
-        vars = [posture_var, gait_var, poststability_var, kinesia_var]
-
-        # Subtitle
-        misc_label = tk.Label(frame, text="Other", font=LARGE_FONT)
-        misc_label.grid(row=0, column=0, columnspan=4)
-
-        # Labels
-        posture_label = tk.Label(frame, text="Posture")
-        posture_label.grid(row=1, column=0)
-
-        gait_label = tk.Label(frame, text="Gait")
-        gait_label.grid(row=1, column=1)
-
-        poststability_label = tk.Label(frame, text="Postural Stability (retropulsion test)")
-        poststability_label.grid(row=1, column=2)
-
-        kinesia_label = tk.Label(frame, text="Body Bradykinesia")
-        kinesia_label.grid(row=1, column=3)
-
-        # Menus
-
-        posture_args = (frame, posture_var, *parent.posture_options)
-        gait_args = (frame, gait_var, *parent.gait_options)
-        poststability_args = (frame, poststability_var, *parent.poststability_options)
-        kinesia_args = (frame, kinesia_var, *parent.kinesia_options)
-
-        posture = tk.OptionMenu(*posture_args)
-        posture.grid(row=2, column=0, padx=50)
-        gait = tk.OptionMenu(*gait_args)
-        gait.grid(row=2, column=1, padx=50)
-        poststability = tk.OptionMenu(*poststability_args)
-        poststability.grid(row=2, column=2, padx=50)
-        kinesia = tk.OptionMenu(*kinesia_args)
-        kinesia.grid(row=2, column=3, padx=50)
-
-        return vars
-
 class updrs_dailyliving_page(tk.Frame):
+
+    speech_options = ["0 = Normal.",
+                      "1 = Mildly affected, no difficulty being understood.",
+                      "2 = Moderately affected, may be asked to repeat",
+                      "3 = Severely affected, frequently asked to repeat",
+                      "4 = Unintelligible most of time"]
+    salivation_options = ["0 = Normal",
+                          "1 = Slight but definite excess of saliva in mouth; may have nighttime drooling.",
+                          "2 = Moderately excessive saliva with some drooling.",
+                          "3 = Marked excess of saliva with some drooling.",
+                          "4 = Marked drooling, requires constant tissue or handkerchief."]
+    swallowing_options = ["0 = Normal.",
+                          "1 = Rare choking.",
+                          "2 = Occasional choking.",
+                          "3 = Requires soft food.",
+                          "4 = Requires NG tube or gastrotomy feeding."]
+    handwriting_options = ["0 = Normal.",
+                           "1 = Slightly slow or small.",
+                           "2 = Moderately slow or small; all words are legible.",
+                           "3 = Severely affected; not all words are legible.",
+                           "4 = The majority of words are not legible."]
+    food_options = ["0 = Normal.",
+                    "1 = Somewhat slow and clumsy, but no help needed.",
+                    "2 = Can cut most foods, although clumsy and slow; some help needed.",
+                    "3 = Food must be cut by someone, but can still feed slowly.",
+                    "4 = Needs to be fed."]
+    dressing_options = ["0 = Normal.",
+                        "1 = Somewhat slow, but no help needed.",
+                        "2 = Occasional assistance buttoning, getting arms in sleeves.",
+                        "3 = Considerable help required, but can do some things alone.",
+                        "4 = Helpless."]
+    hygiene_options = ["0 = Normal.",
+                       "1 = Somewhat slow, but no help needed.",
+                       "2 = Needs help to shower or bathe; or very slow in hygienic care.",
+                       "3 = Requires assistance for washing, brushing teeth, combing har, going to bathroom.",
+                       "4 = Foley catheter or other mechanical aids."]
+    turning_options = ["0 = Normal.",
+                       "1 = Somewhat slow and clumsy, but no help needed.",
+                       "2 = Can turn alone or adjust sheets, but with great difficulty.",
+                       "3 = Can initiate, but not turn or adjust sheets alone.",
+                       "4 = Helpless."]
+    falling_options = ["0 = None.",
+                       "1 = Rare falling.",
+                       "2 = Occasionally falls, less than once per day.",
+                       "3 = Falls an average of once daily.",
+                       "4 = Falls more than once daily."]
+    freezing_options = ["0 = None.",
+                        "1 = Rare freezing when walking; may have start hesitation.",
+                        "2 = Occasional freezing when walking.",
+                        "3 = Frequent freezing. Occasionally falls from freezing.",
+                        "4 = Frequent falls from freezing."]
+    walking_options = ["0 = Normal.",
+                       "1 = Mild difficulty. May not swing arms or may tend to drag leg.",
+                       "2 = Moderate difficulty, but requires little or no assistance.",
+                       "3 = Severe disturbance of walking, requiring assistance.",
+                       "4 = Cannot walk at all, even with assistance."]
+    sensory_options = ["0 = None.",
+                       "1 = Occasionally has numbness, tingling, or mild aching."
+                       "2 = Frequently has numbness, tingling, or aching; not distressing.",
+                       "3 = Frequent painful sensations.",
+                       "4 = Excruciating pain."]
+
+    all_options = [speech_options,
+                   salivation_options,
+                   swallowing_options,
+                   handwriting_options,
+                   food_options,
+                   dressing_options,
+                   hygiene_options,
+                   turning_options,
+                   falling_options,
+                   freezing_options,
+                   walking_options,
+                   sensory_options]
+
+    all_labels = ["Speech",
+                  "Salivation",
+                  "Swallowing",
+                  "Handwriting",
+                  "Cutting Food and Handling Utensils",
+                  "Dressing",
+                  "Hygiene",
+                  "Turning in Bed and Adjusting Bed Clothes",
+                  "Falling (Unrelated to Freezing)",
+                  "Freezing when Walking",
+                  "Walking",
+                  "Sensory Complaints Related to Parkinsonism"]
+    all_vars = []
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -796,6 +567,38 @@ class updrs_dailyliving_page(tk.Frame):
         navigation_frame = tk.Frame(self, width=1280, height=100)
         self.navigation_frame(self, navigation_frame, controller)
         navigation_frame.grid(row=2, column=0, columnspan=2)
+
+        i = 0
+        for r in range(3, 17, 2):
+            #Labels
+
+            label1 = tk.Label(self, text=self.all_labels[i])
+            label1.grid(row=r, column=0)
+            label2 = tk.Label(self, text=self.all_labels[i+1])
+            label2.grid(row=r, column=1)
+
+            #Variables
+
+            var1 = tk.StringVar()
+            var1.set(self.all_options[i][0])
+            self.all_vars.append(var1)
+            var2 = tk.StringVar()
+            var2.set(self.all_options[i+1][0])
+            self.all_vars.append(var2)
+
+            #Menus
+
+            args1 = (self, var1, *self.all_options[i])
+            menu1 = tk.OptionMenu(*args1)
+            menu1.grid(row=r+1, column=0, padx=50, pady=20)
+
+            args2 = (self, var2, *self.all_options[i+1])
+            menu2 = tk.OptionMenu(*args1)
+            menu2.grid(row=r + 1, column=1, padx=50, pady=20)
+
+            i += 1
+
+
 
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Activities of Daily Living", font=TITLE_FONT,
@@ -813,21 +616,76 @@ class updrs_dailyliving_page(tk.Frame):
                                    command=lambda: controller.show_frame(updrs_mentation_page))
         mentation_butt.grid(row=0, column=2)
 
+
+
 class updrs_mentation_page(tk.Frame):
+
+    intellectual_options = ["0 = None.",
+                            "1 = Mild. Consistent forgetfulness with partial recollection of events and no other difficulties.",
+                            "2 = Moderate memory loss, with disorientation and moderate difficulty handling complex problems.",
+                            "3 = Severe memory loss with disorientation for time and often to place. Severe impairment in handling problems.",
+                            "4 = Severe memory loss with orientation preserved to person only. Unable to make judgements or solve problems."]
+    thought_options = ["0 = None.",
+                       "1 = Vivid dreaming.",
+                       "2 = \"Benign\" hallucinations with insight retained.",
+                       "3 = Occasional to frequent hallucinations or delusions; without insight; could interfere with daily activities.",
+                       "4 = Persistent hallucinations, delusions, or florrid psychosis. Not able to care for self."]
+    depression_options = ["0 = None.",
+                          "1 = Periods of sadness or guilt greater than normal, never sustained for days or weeks.",
+                          "2 = Sustained depression (1 week or more).",
+                          "3 = Sustained depression with vegetative symptoms (insomnia, anorexia, weight loss, loss of interest).",
+                          "4 = Sustained depression with vegetative symptoms and suicidal thoughts or intent."]
+    motivation_options = ["0 = Normal.",
+                          "1 = Less assertive than usual; more passive.",
+                          "2 = Loss of initiative or disinterest in elective (nonroutine) activities.",
+                          "3 = Loss of initiative or disinterest in day to day (routine) activities.",
+                          "4 = Withdrawn, complete loss of motivation."]
+
+    all_options = [intellectual_options,
+                   thought_options,
+                   depression_options,
+                   motivation_options]
+    all_labels = ["Intellectual Impairment",
+                  "Thought Disorder",
+                  "Depression",
+                  "Motivation/Initiative"]
+    all_vars = []
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.grid()
 
         title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR)
         self.title_frame(self, title_frame)
-        title_frame.grid(row=0, column=0, columnspan=2)
+        title_frame.grid(row=0, column=0)
 
         border_frame = tk.Frame(self, width=1280, height=5, bg="black")
-        border_frame.grid(row=1, column=0, columnspan=2)
+        border_frame.grid(row=1, column=0)
 
         navigation_frame = tk.Frame(self, width=1280, height=100)
         self.navigation_frame(self, navigation_frame, controller)
-        navigation_frame.grid(row=2, column=0, columnspan=2)
+        navigation_frame.grid(row=2, column=0)
+
+        i = 0
+        for r in range(3, 11, 2):
+            # Labels
+
+            label1 = tk.Label(self, text=self.all_labels[i])
+            label1.grid(row=r, column=0)
+
+            # Variables
+
+            var1 = tk.StringVar()
+            var1.set(self.all_options[i][0])
+            self.all_vars.append(var1)
+
+            # Menus
+
+            args1 = (self, var1, *self.all_options[i])
+            menu1 = tk.OptionMenu(*args1)
+            menu1.grid(row=r + 1, column=0, padx=50, pady=20)
+
+            i += 1
 
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Mentation, Behavior, and Mood",
@@ -853,7 +711,7 @@ class updrs_mentation_page(tk.Frame):
 def main():
     app = TremorApp()
     app.geometry("1280x720")
-    gani = animation.FuncAnimation(f, animate, interval=5000)
+    ani = animation.FuncAnimation(f, animate, interval=5000)
     app.mainloop()
 
 if __name__ == '__main__':
