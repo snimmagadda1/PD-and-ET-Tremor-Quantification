@@ -567,7 +567,7 @@ def iteratively_test_welch_methods():
 
 def test_welch_wrist_data():
     """Test welch method of PSD estimation visually on data when wearing device
-
+    
     :return: Plots
     """
 
@@ -643,8 +643,8 @@ def test_welch_wrist_data():
 def display_acceleration(frame, f, a):
     """Display the magnitude of acceleration inside embedded tkinter graph
 
-    :param f: figure (plt.Figure())
-    :param a: axis (plt.axis)
+    :param f: Parent GUI Figure
+    :param a: Parent GUI axis
     :return:
     """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
@@ -729,6 +729,20 @@ def display_displacement(frame, f, a):
 
 
 def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
+    """Display 4 windows of welch calculated PSD in GUI
+
+    :param frame:
+    :param f: figure
+    :param a1: axis 1
+    :param a2: axis 2
+    :param a3: axis 3
+    :param a4: axis 4
+    :param a5: axis 5
+    :param a6: axis 6
+    :param a7: axis 7
+    :param a8: axis 8
+    :return:
+    """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, \
         remove_gravity_ENMO, gs_to_accel, psd_welch, is_tremor
     from data_analysis.package_data import get_windows
@@ -877,9 +891,13 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     f.tight_layout()
 
 
+def generate_sin(freq):
+    """Generate simple sinusoid for tests
 
-
-def generate_noisy_sin(freq):
+    :param freq: frequency of sinusoid to make
+    :return:
+    """
+    import numpy as np
     time_len = 16
     fs = 100
 
@@ -889,17 +907,24 @@ def generate_noisy_sin(freq):
     return time, y
 
 
+def test_welch_params(nperseg, noverlap):
+    """Test effects of window size and overlap size on
+    Welch accuracy
+
+    :param nperseg: number of points in window
+    :param noverlap: number of points to overlap
+    :return: plots
+    """
+
 
 
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    # declare main plot and geometry here
-    f = plt.Figure()
-    a = f.add_subplot(111)
-
-    display_acceleration(f, a)
+    time, y = generate_sin(8)
+    plt.plot(time,y)
+    plt.show()
 
     pass
 
