@@ -567,7 +567,7 @@ def iteratively_test_welch_methods():
 
 def test_welch_wrist_data():
     """Test welch method of PSD estimation visually on data when wearing device
-    
+
     :return: Plots
     """
 
@@ -891,8 +891,9 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     f.tight_layout()
 
 
-def generate_sin(freq):
-    """Generate simple sinusoid for tests
+def generate_noisy_sin(freq):
+    """Generate noisy sinusoid corrupted by 0.001 V**2/Hz
+    of white noise sampled at given frequency
 
     :param freq: frequency of sinusoid to make
     :return:
@@ -902,19 +903,40 @@ def generate_sin(freq):
     fs = 100
 
     time = np.linspace(0, 16, fs*16)
+    noise_power = 0.001 * fs /2
     y = 0.1*np.sin(2*np.pi*freq*time)
+    y += np.random.normal(scale=np.sqrt(noise_power), size=time.shape)
 
     return time, y
 
 
-def test_welch_params(nperseg, noverlap):
+def test_welch_params(data, nperseg, noverlap):
     """Test effects of window size and overlap size on
     Welch accuracy
 
+    :param data: data segment to perform test on
     :param nperseg: number of points in window
     :param noverlap: number of points to overlap
     :return: plots
     """
+    import matplotlib.pyplot as plt
+    from data_analysis.process_data import psd_welch_test, get_DF
+
+    fig = plt.Figure()
+    a1 = fig.add_subplot(111)
+    time = len(data) / 100
+
+    f, pxx = psd_welch_test(data, 100, nperseg, noverlap)
+    plt.semilogy(f, pxx)
+    x, y = get_DF(f, pxx)
+    print(x)
+    plt.scatter(x, y)
+    plt.axvline(x=x)
+    plt.xlabel('Frequency (HZ)')
+    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
+    plt.title('Welch Method on %d sec data noverlap = %d nperseg = %d ' % (time, noverlap, nperseg))
+    plt.show()
+
 
 
 
@@ -922,9 +944,18 @@ def test_welch_params(nperseg, noverlap):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    time, y = generate_sin(8)
-    plt.plot(time,y)
-    plt.show()
+    time, y = generate_noisy_sin(8)
+
+    half_sec = y[0:40]
+    one_sec = y[0:100]
+    one_and_half_sec = y[0:150]
+    two_sec = y[0:200]
+    two_and_half_sec = y[0:250]
+    three_sec = y[0:300]
+    three_and_half_sec = y[0:350]
+    four_sec = y[0:400]
+
+    test_welch_params(four_sec, 100, 50)
 
     pass
 
