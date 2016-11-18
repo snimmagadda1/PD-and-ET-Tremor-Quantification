@@ -915,27 +915,31 @@ def test_welch_params(data, nperseg, noverlap):
     Welch accuracy
 
     :param data: data segment to perform test on
-    :param nperseg: number of points in window
-    :param noverlap: number of points to overlap
+    :param nperseg: number of points in window to test (np.array)
+    :param noverlap: number of points to overlap to test (np.array)
     :return: plots
     """
     import matplotlib.pyplot as plt
     from data_analysis.process_data import psd_welch_test, get_DF
+    plt.rcParams['toolbar'] = 'None'
+    fig = plt.figure(num=None, figsize=(16, 12), dpi=80, facecolor='w', edgecolor='k')
+    j = 0
+    time = len(data) / 100.0
 
-    fig = plt.Figure()
-    a1 = fig.add_subplot(111)
-    time = len(data) / 100
+    for i in range(1, 8):
+        ax = fig.add_subplot(2, 4, i)
+        f, pxx = psd_welch_test(data, 100, nperseg[j], noverlap[j])
+        ax.semilogy(f, pxx)
+        x, y = get_DF(f, pxx)
+        ax.scatter(x,y)
+        plt.title('DF: %.1f Hz \n noverlap = %d|nperseg = %d' % (x, noverlap[j], nperseg[j]))
 
-    f, pxx = psd_welch_test(data, 100, nperseg, noverlap)
-    plt.semilogy(f, pxx)
-    x, y = get_DF(f, pxx)
-    print(x)
-    plt.scatter(x, y)
-    plt.axvline(x=x)
-    plt.xlabel('Frequency (HZ)')
-    plt.ylabel('PSD (m/s$^2$)$^2$/Hz]')
-    plt.title('Welch Method on %d sec data noverlap = %d nperseg = %d ' % (time, noverlap, nperseg))
+        j = j + 1
+    fig.tight_layout()
     plt.show()
+
+
+
 
 
 
@@ -945,8 +949,9 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     time, y = generate_noisy_sin(8)
+    import numpy as np
 
-    half_sec = y[0:40]
+    half_sec = y[0:50]
     one_sec = y[0:100]
     one_and_half_sec = y[0:150]
     two_sec = y[0:200]
@@ -955,9 +960,11 @@ if __name__ == "__main__":
     three_and_half_sec = y[0:350]
     four_sec = y[0:400]
 
-    test_welch_params(four_sec, 100, 50)
+    npersegs = np.arange(50,400, 50)
+    noverlaps = np.arange(25,200, 25)
 
-    pass
+    test_welch_params(four_sec, npersegs, noverlaps)
+
 
 
 
