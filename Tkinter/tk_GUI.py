@@ -29,6 +29,8 @@ LARGE_FONT = ("Verdana", 18)
 NORM_FONT = ("Verdana", 10)
 SMALL_FONT = ("Verdana", 8)
 
+UPDRS_LABEL_FONT = ("Verdana", 14, "bold")
+
 MAIN_COLOR = "#5DBCD2"
 
 style.use("ggplot")
@@ -421,9 +423,9 @@ class updrs_motor_page(tk.Frame):
         for r in range(3, 15, 2):
             # Labels
 
-            label1 = tk.Label(self, text=self.all_labels[i])
+            label1 = tk.Label(self, text=self.all_labels[i], font=UPDRS_LABEL_FONT)
             label1.grid(row=r, column=0)
-            label2 = tk.Label(self, text=self.all_labels[i + 1])
+            label2 = tk.Label(self, text=self.all_labels[i + 1], font=UPDRS_LABEL_FONT)
             label2.grid(row=r, column=1)
 
             # Variables
@@ -442,7 +444,7 @@ class updrs_motor_page(tk.Frame):
             menu1.grid(row=r + 1, column=0, padx=50, pady=20)
 
             args2 = (self, var2, *self.all_options[i + 1])
-            menu2 = tk.OptionMenu(*args1)
+            menu2 = tk.OptionMenu(*args2)
             menu2.grid(row=r + 1, column=1, padx=50, pady=20)
 
             i += 1
@@ -572,9 +574,9 @@ class updrs_dailyliving_page(tk.Frame):
         for r in range(3, 17, 2):
             #Labels
 
-            label1 = tk.Label(self, text=self.all_labels[i])
+            label1 = tk.Label(self, text=self.all_labels[i], font=UPDRS_LABEL_FONT)
             label1.grid(row=r, column=0)
-            label2 = tk.Label(self, text=self.all_labels[i+1])
+            label2 = tk.Label(self, text=self.all_labels[i+1], font=UPDRS_LABEL_FONT)
             label2.grid(row=r, column=1)
 
             #Variables
@@ -593,7 +595,7 @@ class updrs_dailyliving_page(tk.Frame):
             menu1.grid(row=r+1, column=0, padx=50, pady=20)
 
             args2 = (self, var2, *self.all_options[i+1])
-            menu2 = tk.OptionMenu(*args1)
+            menu2 = tk.OptionMenu(*args2)
             menu2.grid(row=r + 1, column=1, padx=50, pady=20)
 
             i += 1
@@ -670,7 +672,7 @@ class updrs_mentation_page(tk.Frame):
         for r in range(3, 11, 2):
             # Labels
 
-            label1 = tk.Label(self, text=self.all_labels[i])
+            label1 = tk.Label(self, text=self.all_labels[i], font=UPDRS_LABEL_FONT)
             label1.grid(row=r, column=0)
 
             # Variables
