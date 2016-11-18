@@ -105,7 +105,7 @@ class TremorApp(tk.Tk):
         setting1 = tk.Menu(menubar, tearoff=1)
         setting1.add_command(label="Start Page", command=lambda: self.show_frame(start_page))
         setting1.add_command(label="Graph Page", command=lambda: self.show_frame(graph_page))
-        setting1.add_command(label="Patient Page", command=lambda: self.show_frame(updrs_page))
+        setting1.add_command(label="Patient Page", command=lambda: self.show_frame(updrs_motor_page))
         menubar.add_cascade(label="Navigation", menu=setting1)
 
         setting2 = tk.Menu(menubar, tearoff=1)
@@ -126,7 +126,7 @@ class TremorApp(tk.Tk):
 
         self.frames = {}
         # this is where new pages are added if needed
-        for F in (start_page, graph_page,  updrs_page, psd_graph_page):
+        for F in (start_page, graph_page,  updrs_motor_page, psd_graph_page, updrs_dailyliving_page, updrs_mentation_page):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -323,7 +323,7 @@ class psd_graph_page(tk.Frame):
 
 
 
-class updrs_page(tk.Frame):
+class updrs_motor_page(tk.Frame):
 
     tremor_rest_options = ["0 = Absent.",
                            "1 = Slight and infrequent.",
@@ -398,6 +398,10 @@ class updrs_page(tk.Frame):
         border_frame = tk.Frame(self, width=1280, height=5, bg="black")
         border_frame.grid(row=1, column=0, columnspan=2)
 
+        navigation_frame = tk.Frame(self, width=1280, height=100)
+        self.navigation_frame(self, navigation_frame, controller)
+        navigation_frame.grid(row=2, column=0, columnspan=2)
+
         handmovements_frame = tk.Frame(self, width=640, height=100)
         handmovements_vars = self.handmovements_frame(self, handmovements_frame)
         handmovements_frame.grid(row=3, column=0)
@@ -438,6 +442,18 @@ class updrs_page(tk.Frame):
         title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Motor Exam", font=TITLE_FONT,
                          bg=MAIN_COLOR, fg="white", padx=308, pady=8)
         title.grid()
+
+    def navigation_frame(self, parent, frame, controller):
+        motor_exam_butt = tk.Button(frame, text="Motor Exam", command=lambda: controller.show_frame(updrs_motor_page))
+        motor_exam_butt.grid(row=0, column=0)
+
+        daily_living_butt = tk.Button(frame, text="Activities of Daily Living", command=lambda: controller.show_frame(updrs_dailyliving_page))
+        daily_living_butt.grid(row=0, column=1)
+
+        mentation_butt = tk.Button(frame, text="Mentation, Behavior, and Mood",
+                                   command=lambda: controller.show_frame(updrs_mentation_page))
+        mentation_butt.grid(row=0, column=2)
+
 
 
     def tremor_rest_frame(self, parent, frame):
@@ -763,6 +779,74 @@ class updrs_page(tk.Frame):
         kinesia.grid(row=2, column=3, padx=50)
 
         return vars
+
+class updrs_dailyliving_page(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.grid()
+
+        title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR)
+        self.title_frame(self, title_frame)
+        title_frame.grid(row=0, column=0, columnspan=2)
+
+        border_frame = tk.Frame(self, width=1280, height=5, bg="black")
+        border_frame.grid(row=1, column=0, columnspan=2)
+
+        navigation_frame = tk.Frame(self, width=1280, height=100)
+        self.navigation_frame(self, navigation_frame, controller)
+        navigation_frame.grid(row=2, column=0, columnspan=2)
+
+    def title_frame(self, parent, frame):
+        title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Activities of Daily Living", font=TITLE_FONT,
+                         bg=MAIN_COLOR, fg="white", padx=236, pady=8)
+        title.grid()
+
+    def navigation_frame(self, parent, frame, controller):
+        motor_exam_butt = tk.Button(frame, text="Motor Exam", command=lambda: controller.show_frame(updrs_motor_page))
+        motor_exam_butt.grid(row=0, column=0)
+
+        daily_living_butt = tk.Button(frame, text="Activities of Daily Living",
+                                      command=lambda: controller.show_frame(updrs_dailyliving_page))
+        daily_living_butt.grid(row=0, column=1)
+        mentation_butt = tk.Button(frame, text="Mentation, Behavior, and Mood",
+                                   command=lambda: controller.show_frame(updrs_mentation_page))
+        mentation_butt.grid(row=0, column=2)
+
+class updrs_mentation_page(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.grid()
+
+        title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR)
+        self.title_frame(self, title_frame)
+        title_frame.grid(row=0, column=0, columnspan=2)
+
+        border_frame = tk.Frame(self, width=1280, height=5, bg="black")
+        border_frame.grid(row=1, column=0, columnspan=2)
+
+        navigation_frame = tk.Frame(self, width=1280, height=100)
+        self.navigation_frame(self, navigation_frame, controller)
+        navigation_frame.grid(row=2, column=0, columnspan=2)
+
+    def title_frame(self, parent, frame):
+        title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Mentation, Behavior, and Mood",
+                         font=TITLE_FONT,
+                         bg=MAIN_COLOR, fg="white", padx=192, pady=8)
+        title.grid()
+
+    def navigation_frame(self, parent, frame, controller):
+        motor_exam_butt = tk.Button(frame, text="Motor Exam",
+                                    command=lambda: controller.show_frame(updrs_motor_page))
+        motor_exam_butt.grid(row=0, column=0)
+
+        daily_living_butt = tk.Button(frame, text="Activities of Daily Living",
+                                      command=lambda: controller.show_frame(updrs_dailyliving_page))
+        daily_living_butt.grid(row=0, column=1)
+
+        mentation_butt = tk.Button(frame, text="Mentation, Behavior, and Mood",
+                                   command=lambda: controller.show_frame(updrs_mentation_page))
+        mentation_butt.grid(row=0, column=2)
 
 
 #################################### PROGRAM RUN #######################################################################
