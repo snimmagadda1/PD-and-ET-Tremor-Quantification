@@ -59,7 +59,7 @@ def acquire_data():
         # Now wait up to one minute to receive data from the device.
         print('Waiting to receive data from the device...')
         start = time.time()
-        num_reads = 1500
+        num_reads = 2000
         with open(filename, 'w') as f:
             for i in range(0, num_reads):
                 received = uart.read(timeout_sec=60)
