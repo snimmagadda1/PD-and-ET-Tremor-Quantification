@@ -109,6 +109,7 @@ class TremorApp(tk.Tk):
         setting1.add_command(label="Start Page", command=lambda: self.show_frame(start_page))
         setting1.add_command(label="Graph Page", command=lambda: self.show_frame(graph_page))
         setting1.add_command(label="Patient Page", command=lambda: self.show_frame(updrs_motor_page))
+        setting1.add_command(label="Statistics Page", command=lambda: self.show_frame(stats_page))
         menubar.add_cascade(label="Navigation", menu=setting1)
 
         setting2 = tk.Menu(menubar, tearoff=1)
@@ -129,7 +130,7 @@ class TremorApp(tk.Tk):
 
         self.frames = {}
         # this is where new pages are added if needed
-        for F in (start_page, graph_page,  updrs_motor_page, psd_graph_page, updrs_dailyliving_page, updrs_mentation_page):
+        for F in (start_page, graph_page,  updrs_motor_page, psd_graph_page, updrs_dailyliving_page, updrs_mentation_page, stats_page):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -324,6 +325,49 @@ class psd_graph_page(tk.Frame):
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+class stats_page(tk.Frame):
+    score_dict = {}
+    total_score = 0
+    def __init__(self, parent, controller):
+
+        tk.Frame.__init__(self, parent)
+        self.grid()
+
+        title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR)
+        self.title_frame(self, title_frame)
+        title_frame.grid(row=0, column=0, columnspan=2)
+
+        border_frame = tk.Frame(self, width=1280, height=5, bg="black")
+        border_frame.grid(row=1, column=0, columnspan=2)
+
+        calc_butt = tk.Button(self, text="Calculate UPDRS Score", command=self.calc_updrs_score)
+        calc_butt.grid(row=2, column=0, columnspan=2)
+
+    def title_frame(self, parent, frame):
+        title = tk.Label(frame, text="Test Statistics", font=TITLE_FONT,
+                         bg=MAIN_COLOR, fg="white", padx=350, pady=8)
+        title.grid(sticky="N")
+
+    def calc_updrs_score(self):
+        self.score_dict = {'speech': int(updrs_motor_page.all_vars[0].get()[0]),
+                           'facial': int(updrs_motor_page.all_vars[1].get()[0]),
+                           'rigidity': int(updrs_motor_page.all_vars[2].get()[0]),
+                           'finger': int(updrs_motor_page.all_vars[3].get()[0]),
+                           'hand': int(updrs_motor_page.all_vars[4].get()[0]),
+                           'alternating': int(updrs_motor_page.all_vars[5].get()[0]),
+                           'rigidity': int(updrs_motor_page.all_vars[6].get()[0]),
+                           'leg': int(updrs_motor_page.all_vars[7].get()[0]),
+                           'posture': int(updrs_motor_page.all_vars[8].get()[0]),
+                           'gait': int(updrs_motor_page.all_vars[9].get()[0]),
+                           'poststability': int(updrs_motor_page.all_vars[10].get()[0]),
+                           'arising': int(updrs_motor_page.all_vars[11].get()[0])}
+        
+        self.total_score = sum([int(updrs_motor_page.all_vars[i].get()[0]) for i in range(len(updrs_motor_page.all_vars))])
+        self.total_score += sum([int(updrs_dailyliving_page.all_vars[i].get()[0]) for i in range(len(updrs_dailyliving_page.all_vars))])
+        self.total_score += sum([int(updrs_mentation_page.all_vars[i].get()[0]) for i in range(len(updrs_mentation_page.all_vars))])
+        print(self.score_dict)
+        print(self.total_score)
+
 
 
 class updrs_motor_page(tk.Frame):
@@ -468,15 +512,6 @@ class updrs_motor_page(tk.Frame):
         mentation_butt = tk.Button(frame, text="Mentation, Behavior, and Mood",
                                    command=lambda: controller.show_frame(updrs_mentation_page))
         mentation_butt.grid(row=0, column=2)
-
-        calc_score_butt = tk.Button(frame, text="Calculate UPDRS Score", command=self.calc_score)
-        calc_score_butt.grid(row=0, column=3)
-
-    def calc_score(self):
-        self.score_dict = {'speech': int(self.all_vars[0].get()[0])}
-        self.total_score = sum([int(self.all_vars[i].get()[0]) for i in range(len(self.all_vars))])
-        print(self.score_dict)
-        print(self.total_score)
 
 class updrs_dailyliving_page(tk.Frame):
 
