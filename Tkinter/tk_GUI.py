@@ -10,6 +10,7 @@ import time
 import queue
 import pandas as pd
 
+is_logged = False
 
 # import statements for user written functions
 from data_analysis.data_display import display_acceleration, display_displacement, display_psd
@@ -77,6 +78,7 @@ class ThreadedClient(threading.Thread):
 
 # Main app class
 class TremorApp(tk.Tk):
+    global is_logged
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -118,9 +120,21 @@ class TremorApp(tk.Tk):
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(start_page)
+        self.show_frame_1(start_page)
 
     def show_frame(self, cont):
+        """
+        Function to show an new window
+        :param cont: the frame to show
+        :return:
+        """
+        if(is_logged):
+            frame = self.frames[cont]
+            frame.tkraise()
+        else:
+            return
+
+    def show_frame_1(self, cont):
         """
         Function to show an new window
         :param cont: the frame to show
@@ -131,8 +145,11 @@ class TremorApp(tk.Tk):
 
 
 class start_page(tk.Frame):
+    global is_logged
 
     def _login_button_clicked(self, controller):
+        global is_logged
+
         """Check credentials against login
 
         :return: NA
@@ -141,7 +158,8 @@ class start_page(tk.Frame):
         password = self.enter_pwd.get()
 
         if username == "essential" and password == "tremor":
-            controller.show_frame(graph_page)
+            controller.show_frame_1(graph_page)
+            is_logged = True
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -177,6 +195,7 @@ class start_page(tk.Frame):
 
 
 class graph_page(tk.Frame):
+    global is_logged
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -244,6 +263,7 @@ class graph_page(tk.Frame):
 
 
 class psd_graph_page(tk.Frame):
+    global is_logged
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -307,6 +327,8 @@ class psd_graph_page(tk.Frame):
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 class stats_page(tk.Frame):
+    global is_logged
+
     score_dict = {}
     total_score = 0
     mean_disp_wins = [0, 0, 0, 0]
@@ -438,6 +460,8 @@ class stats_page(tk.Frame):
 
 
 class updrs_motor_page(tk.Frame):
+    global is_logged
+
     rigidity_options = ["0 = Absent.",
                         "1 = Slight or detectable only when activated by mirror or other movements.",
                         "2 = Mild to moderate.",
@@ -581,6 +605,8 @@ class updrs_motor_page(tk.Frame):
         mentation_butt.grid(row=0, column=2)
 
 class updrs_dailyliving_page(tk.Frame):
+    global is_logged
+
 
     speech_options = ["0 = Normal.",
                       "1 = Mildly affected, no difficulty being understood.",
@@ -736,6 +762,8 @@ class updrs_dailyliving_page(tk.Frame):
 
 
 class updrs_mentation_page(tk.Frame):
+    global is_logged
+
 
     intellectual_options = ["0 = None.",
                             "1 = Mild. Consistent forgetfulness with partial recollection of events and no other difficulties.",
