@@ -797,19 +797,21 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     acceleration_filtered_no_grav_1 = gs_to_accel(acceleration_filtered_no_gravg_1)
 
     # plot filtered acceleration without gravity
-    a1.plot(time, acceleration_filtered_no_grav_1, color='c')
+    a1.plot(time, acceleration_filtered_no_grav_1, color='c', label='Acceleration')
     a1.set_xlabel('time (s)')
     a1.set_ylabel('acceleration (m/s^2)')
     a1.set_xticks([0,1,2,3,4])
+    a1.legend()
 
     # calculate psd of window
     f_1, pxx_1 = psd_welch(acceleration_filtered_no_grav_1, fs)
 
     alert, DF = is_tremor(f_1, pxx_1)
 
-    a5.semilogy(f_1, pxx_1, color='r')
-    a5.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+    a5.semilogy(f_1, pxx_1, color='r', label='PSD')
+    a5.set_title('DF = %.1f Hz | Tremor: %r' %(DF, alert))
     a5.set_xlabel('Frequency (Hz)')
+    a5.legend()
 
 # WINDOW 2
     # remove high frequencies
@@ -842,7 +844,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     alert, DF = is_tremor(f_2, pxx_2)
 
     a6.semilogy(f_2, pxx_2, color='r')
-    a6.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+    a6.set_title('DF = %.1f Hz | Tremor: %r' %(DF, alert))
     a6.set_xlabel('Frequency (Hz)')
 
 
@@ -876,7 +878,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     alert, DF = is_tremor(f_3, pxx_3)
 
     a7.semilogy(f_3, pxx_3, color='r')
-    a7.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+    a7.set_title('DF = %.1f Hz | Tremor: %r' %(DF, alert))
     a7.set_xlabel('Frequency (Hz)')
 
 
@@ -911,7 +913,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     alert, DF = is_tremor(f_4, pxx_4)
 
     a8.semilogy(f_4, pxx_4, color='r')
-    a8.set_title('PSD - DF = %.1f Hz| Tremor: %r' %(DF, alert))
+    a8.set_title('DF= %.1f Hz | Tremor: %r' %(DF, alert))
     a8.set_xlabel('Frequency (Hz)')
     f.tight_layout()
 
