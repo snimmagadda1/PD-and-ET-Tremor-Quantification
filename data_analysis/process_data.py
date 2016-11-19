@@ -253,6 +253,7 @@ def butter_lowpass_IIR(highcut, fs, order=4):
     b, a = iirfilter(order, [high], btype='lowpass', ftype='butter')
     return b, a
 
+
 def butter_highpass_IIR(lowcut, fs, order=4):
     """ Get coefficients for Butterworth lowpass filter.
     Use with butter_lowpass_IIR_filter
@@ -298,6 +299,7 @@ def butter_lowpass_IIR_filter(data, highcut, fs, order=5):
     y = filtfilt(b, a, data, padlen=100, padtype='odd')
     return y
 
+
 def butter_highpass_IIR_filter(data, lowcut, fs, order=5):
     """ Filter data using parameters. IIR filter
 
@@ -340,6 +342,20 @@ def get_disp_quant(mean_disp):
         return (mean_disp/tremor_high)*scale_high
 
 
+
+
+def describe_tremor_freq(DF):
+    """Describe a tremor as a percentage of PD and ET
+    characteristics
+
+    :param DF: Dominant frequency of the tremor (result from is_tremor)
+    :return: %PD, %ET
+    """
+    # PD = 3-7 Hz - mean = 5
+    # ET = 4-12 Hz - mean = 8
+
+    # %PD
+    
 
 
 def demonstrate_functions():
