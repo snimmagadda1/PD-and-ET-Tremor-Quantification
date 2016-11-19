@@ -34,11 +34,15 @@ UPDRS_LABEL_FONT = ("Verdana", 14, "bold")
 MAIN_COLOR = "#5DBCD2"
 
 style.use("ggplot")
+plt.rcParams['axes.facecolor']='w'
 
-# declare main plot and geometry here
+# declare main plot and geometry here and characteristics
 f = plt.Figure()
+f.patch.set_facecolor('#5DBCD2')
 f2= plt.Figure()
+f2.patch.set_facecolor('#5DBCD2')
 a = f.add_subplot(111)
+a.grid(which='major', linestyle='--', color='#5DBCD2')
 a1 = f2.add_subplot(241)
 a2 = f2.add_subplot(242)
 a3 = f2.add_subplot(243)

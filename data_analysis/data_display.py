@@ -679,10 +679,13 @@ def display_acceleration(frame, f, a):
 
 
     # plot filtered acceleration without gravity
-    frame.line = a.plot(time, acceleration_filtered_no_grav, color='g')
-    a.set_xlabel('time (s)')
-    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)')
-    a.set_title(r'Magnitude of Acceleration')
+    frame.line = a.plot(time, acceleration_filtered_no_grav, color='c', label='Acceleration')
+    a.set_xlabel('time (s)', color='w')
+    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)', color='w')
+    a.set_title(r'Magnitude of Acceleration', color='w')
+    a.legend()
+    a.grid(which='major', linestyle='--', color='#5DBCD2')
+
 
 def display_displacement(frame, f, a):
     """Displays displacement vector of given tremor
@@ -699,6 +702,7 @@ def display_displacement(frame, f, a):
         remove_gravity_ENMO, gs_to_accel
     from data_analysis.package_data import get_data
     import numpy as np
+    import matplotlib.pyplot as plt
 
     f.canvas.draw()
     a.clear()
@@ -721,11 +725,13 @@ def display_displacement(frame, f, a):
     mean_disp, disp, envelope = get_disp_amplitude(enmo, lowcut, fs)
 
     # plot on GUI
-    frame.line = a.plot(time, disp, color='g')
-    a.plot(time, envelope, color='r')
-    a.set_xlabel('time (s)')
-    a.set_ylabel('Displacement (mm)')
-    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp))
+    frame.line = a.plot(time, disp, label='Displacement', color='c')
+    a.plot(time, envelope, label='Envelope', linestyle='dashed', color='r')
+    a.set_xlabel('time (s)', color='w')
+    a.set_ylabel('Displacement (mm)', color='w')
+    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp), color='w')
+    a.grid(which='major', linestyle='--', color='#5DBCD2')
+    a.legend()
 
 
 def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
@@ -751,13 +757,21 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
 
     f.canvas.draw()
     a1.clear()
+    a1.grid(which='major', linestyle='--', color='#5DBCD2')
     a2.clear()
+    a2.grid(which='major', linestyle='--', color='#5DBCD2')
     a3.clear()
+    a3.grid(which='major', linestyle='--', color='#5DBCD2')
     a4.clear()
+    a4.grid(which='major', linestyle='--', color='#5DBCD2')
     a5.clear()
+    a5.grid(which='major', linestyle='--', color='#5DBCD2')
     a6.clear()
+    a6.grid(which='major', linestyle='--', color='#5DBCD2')
     a7.clear()
+    a7.grid(which='major', linestyle='--', color='#5DBCD2')
     a8.clear()
+    a8.grid(which='major', linestyle='--', color='#5DBCD2')
 
     highcut = 14
     fs = 100
@@ -933,12 +947,6 @@ def test_welch_params(data, nperseg, noverlap):
     ax.scatter(x,y)
     plt.title('DF: %.1f Hz \n noverlap = %d|nperseg = %d' % (x, noverlap, nperseg))
     plt.show()
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
