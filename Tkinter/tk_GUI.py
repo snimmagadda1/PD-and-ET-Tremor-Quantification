@@ -366,12 +366,28 @@ class stats_page(tk.Frame):
                            'finger': int(updrs_motor_page.all_vars[3].get()[0]),
                            'hand': int(updrs_motor_page.all_vars[4].get()[0]),
                            'alternating': int(updrs_motor_page.all_vars[5].get()[0]),
-                           'rigidity': int(updrs_motor_page.all_vars[6].get()[0]),
-                           'leg': int(updrs_motor_page.all_vars[7].get()[0]),
+                           'leg': int(updrs_motor_page.all_vars[6].get()[0]),
+                           'arising': int(updrs_motor_page.all_vars[7].get()[0]),
                            'posture': int(updrs_motor_page.all_vars[8].get()[0]),
                            'gait': int(updrs_motor_page.all_vars[9].get()[0]),
                            'poststability': int(updrs_motor_page.all_vars[10].get()[0]),
-                           'arising': int(updrs_motor_page.all_vars[11].get()[0])}
+                           'kinesia': int(updrs_motor_page.all_vars[11].get()[0]),
+                           'speechdaily': int(updrs_dailyliving_page.all_vars[0].get()[0]),
+                           'salivation': int(updrs_dailyliving_page.all_vars[1].get()[0]),
+                           'swallowing': int(updrs_dailyliving_page.all_vars[2].get()[0]),
+                           'handwriting': int(updrs_dailyliving_page.all_vars[3].get()[0]),
+                           'food': int(updrs_dailyliving_page.all_vars[4].get()[0]),
+                           'dressing': int(updrs_dailyliving_page.all_vars[5].get()[0]),
+                           'hygiene': int(updrs_dailyliving_page.all_vars[6].get()[0]),
+                           'turning': int(updrs_dailyliving_page.all_vars[7].get()[0]),
+                           'falling': int(updrs_dailyliving_page.all_vars[8].get()[0]),
+                           'freezing': int(updrs_dailyliving_page.all_vars[9].get()[0]),
+                           'walking': int(updrs_dailyliving_page.all_vars[10].get()[0]),
+                           'sensory': int(updrs_dailyliving_page.all_vars[11].get()[0]),
+                           'intellectual': int(updrs_mentation_page.all_vars[0].get()[0]),
+                           'thought': int(updrs_mentation_page.all_vars[1].get()[0]),
+                           'depression': int(updrs_mentation_page.all_vars[2].get()[0]),
+                           'motivation': int(updrs_mentation_page.all_vars[3].get()[0]),}
         
         self.total_score = sum([int(updrs_motor_page.all_vars[i].get()[0]) for i in range(len(updrs_motor_page.all_vars))])
         self.total_score += sum([int(updrs_dailyliving_page.all_vars[i].get()[0]) for i in range(len(updrs_dailyliving_page.all_vars))])
