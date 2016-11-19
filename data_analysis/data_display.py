@@ -952,8 +952,6 @@ def get_stats():
     return mean_disp_wins, is_tremor_wins, df_wins
 
 
-
-
 def generate_noisy_sin(freq):
     """Generate noisy sinusoid corrupted by 0.001 V**2/Hz
     of white noise sampled at given frequency
