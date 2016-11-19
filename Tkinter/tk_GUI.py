@@ -10,12 +10,12 @@ import time
 import queue
 import pandas as pd
 
-is_logged = False
 
 # import statements for user written functions
 from data_analysis.data_display import display_acceleration, display_displacement, display_psd
 
 pd.options.mode.chained_assignment = None
+is_logged = False
 
 # font settings
 TITLE_FONT = ("Verdana", 24)
