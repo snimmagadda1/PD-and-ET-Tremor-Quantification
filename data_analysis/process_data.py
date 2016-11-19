@@ -344,7 +344,7 @@ def describe_tremor_freq(DF):
     # ET = 4-12 Hz - mean = 8
 
     # %PD
-    
+
 
 
 def demonstrate_functions():

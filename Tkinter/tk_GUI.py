@@ -5,7 +5,6 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from matplotlib import style
 import tkinter as tk
-import sys
 import threading
 import time
 import queue

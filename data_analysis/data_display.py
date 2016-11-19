@@ -726,7 +726,7 @@ def display_displacement(frame, f, a):
 
     # plot on GUI
     frame.line = a.plot(time, disp, label='Displacement', color='c')
-    a.plot(time, envelope, label='Envelope', linestyle='dashed', color='r')
+    a.plot(time, envelope, label='Envelope', color='r')
     a.set_xlabel('Time (s)')
     a.set_ylabel('Displacement (mm)')
     a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp),)
