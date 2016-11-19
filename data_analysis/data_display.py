@@ -680,12 +680,11 @@ def display_acceleration(frame, f, a):
 
     # plot filtered acceleration without gravity
     frame.line = a.plot(time, acceleration_filtered_no_grav, color='c', label='Acceleration')
-    a.set_xlabel('Time (s)', color='w', fontweight='bold')
-    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)', color='w', fontweight='bold')
-    a.set_title(r'Magnitude of Acceleration', color='w', fontweight='bold')
+    a.set_xlabel('Time (s)')
+    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)')
+    a.set_title(r'Magnitude of Acceleration')
     a.legend()
-    a.grid(which='major', linestyle='--', color='#5DBCD2')
-    a.tick_params(axis='both', colors='w')
+    a.grid(which='major', linestyle='--', color='grey')
 
 
 def display_displacement(frame, f, a):
@@ -728,12 +727,11 @@ def display_displacement(frame, f, a):
     # plot on GUI
     frame.line = a.plot(time, disp, label='Displacement', color='c')
     a.plot(time, envelope, label='Envelope', linestyle='dashed', color='r')
-    a.set_xlabel('Time (s)', color='w', fontweight='bold')
-    a.set_ylabel('Displacement (mm)', color='w', fontweight='bold')
-    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp), color='w', fontweight='bold')
-    a.grid(which='major', linestyle='--', color='#5DBCD2')
+    a.set_xlabel('Time (s)')
+    a.set_ylabel('Displacement (mm)')
+    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp),)
+    a.grid(False)
     a.legend()
-    a.tick_params(axis='both', colors='w')
 
 
 def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
@@ -759,29 +757,21 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
 
     f.canvas.draw()
     a1.clear()
-    a1.grid(which='major', linestyle='--', color='#5DBCD2')
+    a1.grid(which='major', linestyle='--', color='grey')
     a2.clear()
-    a2.grid(which='major', linestyle='--', color='#5DBCD2')
+    a2.grid(which='major', linestyle='--', color='grey')
     a3.clear()
-    a3.grid(which='major', linestyle='--', color='#5DBCD2')
+    a3.grid(which='major', linestyle='--', color='grey')
     a4.clear()
-    a4.grid(which='major', linestyle='--', color='#5DBCD2')
+    a4.grid(which='major', linestyle='--', color='grey')
     a5.clear()
-    a5.grid(which='major', linestyle='--', color='#5DBCD2')
+    a5.grid(which='major', linestyle='--', color='grey')
     a6.clear()
-    a6.grid(which='major', linestyle='--', color='#5DBCD2')
+    a6.grid(which='major', linestyle='--', color='grey')
     a7.clear()
-    a7.grid(which='major', linestyle='--', color='#5DBCD2')
+    a7.grid(which='major', linestyle='--', color='grey')
     a8.clear()
-    a8.grid(which='major', linestyle='--', color='#5DBCD2')
-    a1.tick_params(axis='both', colors='w')
-    a2.tick_params(axis='both', colors='w')
-    a3.tick_params(axis='both', colors='w')
-    a4.tick_params(axis='both', colors='w')
-    a5.tick_params(axis='both', colors='w')
-    a6.tick_params(axis='both', colors='w')
-    a7.tick_params(axis='both', colors='w')
-    a8.tick_params(axis='both', colors='w')
+    a8.grid(which='major', linestyle='--', color='grey')
 
     highcut = 14
     fs = 100

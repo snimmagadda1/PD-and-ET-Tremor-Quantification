@@ -34,31 +34,20 @@ UPDRS_LABEL_FONT = ("Verdana", 14, "bold")
 MAIN_COLOR = "#5DBCD2"
 
 style.use("ggplot")
-plt.rcParams['axes.facecolor']='w'
 # declare main plot and geometry here and characteristics
 f = plt.Figure()
-f.patch.set_facecolor('#5DBCD2')
 f2= plt.Figure()
-f2.patch.set_facecolor('#5DBCD2')
 a = f.add_subplot(111)
-a.tick_params(axis='both', colors='w')
-a.grid(which='major', linestyle='--', color='#5DBCD2')
+a.tick_params(axis='both')
+a.grid(which='major', linestyle='--', color='grey')
 a1 = f2.add_subplot(241)
-a1.tick_params(axis='both', colors='w')
 a2 = f2.add_subplot(242)
-a2.tick_params(axis='both', colors='w')
 a3 = f2.add_subplot(243)
-a3.tick_params(axis='both', colors='w')
 a4 = f2.add_subplot(244)
-a4.tick_params(axis='both', colors='w')
 a5 = f2.add_subplot(245)
-a5.tick_params(axis='both', colors='w')
 a6 = f2.add_subplot(246)
-a6.tick_params(axis='both', colors='w')
 a7 = f2.add_subplot(247)
-a7.tick_params(axis='both', colors='w')
 a8 = f2.add_subplot(248)
-a8.tick_params(axis='both', colors='w')
 
 
 
