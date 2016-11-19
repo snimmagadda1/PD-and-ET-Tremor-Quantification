@@ -112,17 +112,6 @@ class TremorApp(tk.Tk):
         setting1.add_command(label="Statistics Page", command=lambda: self.show_frame(stats_page))
         menubar.add_cascade(label="Navigation", menu=setting1)
 
-        setting2 = tk.Menu(menubar, tearoff=1)
-        setting2.add_command(label="A", command=lambda: popupmsg("Not supported just yet!"))
-        setting2.add_command(label="B", command=lambda: popupmsg("Not supported just yet!"))
-        setting2.add_command(label="C", command=lambda: popupmsg("Not supported just yet!"))
-        setting2.add_command(label="D", command=lambda: popupmsg("Not supported just yet!"))
-        menubar.add_cascade(label="Display", menu=setting2)
-
-        setting3 = tk.Menu(menubar, tearoff=1)
-        setting3.add_command(label="A", command=lambda: popupmsg("Not supported just yet!"))
-        setting3.add_command(label="B", command=lambda: popupmsg("Not supported just yet!"))
-        menubar.add_cascade(label="Help", menu=setting3)
 
         tk.Tk.config(self, menu=menubar)
 
