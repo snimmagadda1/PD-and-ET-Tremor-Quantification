@@ -80,16 +80,26 @@ def get_disp_amplitude(enmofilt, lowcut, fs):
     return mean_disp, disp, disp_envelope
 
 
-
-
-def psd_welch(data, fs, nperseg1=256):
+def psd_welch(data, fs):
     """Estimate PSD using welch method
     :param data:
     :return:
     """
     from scipy import signal
 
-    f, Pxx_den = signal.welch(data, fs, nperseg=nperseg1, return_onesided=True)
+    f, Pxx_den = signal.welch(data, fs, nperseg=150, noverlap=75, return_onesided=True)
+
+    return f, Pxx_den
+
+
+def psd_welch_test(data, fs, nperseg, noverlap):
+    """Estimate PSD using welch method
+    :param data:
+    :return:
+    """
+    from scipy import signal
+
+    f, Pxx_den = signal.welch(data, fs, nperseg=nperseg, noverlap=noverlap, return_onesided=True)
 
     return f, Pxx_den
 

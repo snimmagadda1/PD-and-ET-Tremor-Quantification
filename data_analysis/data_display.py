@@ -643,8 +643,8 @@ def test_welch_wrist_data():
 def display_acceleration(frame, f, a):
     """Display the magnitude of acceleration inside embedded tkinter graph
 
-    :param f: figure (plt.Figure())
-    :param a: axis (plt.axis)
+    :param f: Parent GUI Figure
+    :param a: Parent GUI axis
     :return:
     """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, remove_gravity_ENMO, gs_to_accel
@@ -729,6 +729,20 @@ def display_displacement(frame, f, a):
 
 
 def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
+    """Display 4 windows of welch calculated PSD in GUI
+
+    :param frame:
+    :param f: figure
+    :param a1: axis 1
+    :param a2: axis 2
+    :param a3: axis 3
+    :param a4: axis 4
+    :param a5: axis 5
+    :param a6: axis 6
+    :param a7: axis 7
+    :param a8: axis 8
+    :return:
+    """
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, \
         remove_gravity_ENMO, gs_to_accel, psd_welch, is_tremor
     from data_analysis.package_data import get_windows
@@ -877,16 +891,51 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     f.tight_layout()
 
 
-
-
 def generate_noisy_sin(freq):
+    """Generate noisy sinusoid corrupted by 0.001 V**2/Hz
+    of white noise sampled at given frequency
+
+    :param freq: frequency of sinusoid to make
+    :return:
+    """
+    import numpy as np
     time_len = 16
     fs = 100
 
     time = np.linspace(0, 16, fs*16)
+    noise_power = 0.001 * fs /2
     y = 0.1*np.sin(2*np.pi*freq*time)
+    y += np.random.normal(scale=np.sqrt(noise_power), size=time.shape)
 
     return time, y
+
+
+def test_welch_params(data, nperseg, noverlap):
+    """Test effects of window size and overlap size on
+    Welch accuracy
+
+    :param data: data segment to perform test on
+    :param nperseg: number of points in window to test (np.array)
+    :param noverlap: number of points to overlap to test (np.array)
+    :return: plots
+    """
+    import matplotlib.pyplot as plt
+    from data_analysis.process_data import psd_welch_test, get_DF
+    plt.rcParams['toolbar'] = 'None'
+    fig = plt.figure(num=None, figsize=(16, 12), dpi=80, facecolor='w', edgecolor='k')
+    j = 0
+    time = len(data) / 100.0
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    f, pxx = psd_welch_test(data, 100, nperseg, noverlap)
+    ax.semilogy(f, pxx)
+    x, y = get_DF(f, pxx)
+    ax.scatter(x,y)
+    plt.title('DF: %.1f Hz \n noverlap = %d|nperseg = %d' % (x, noverlap, nperseg))
+    plt.show()
+
+
+
 
 
 
@@ -895,13 +944,20 @@ def generate_noisy_sin(freq):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    # declare main plot and geometry here
-    f = plt.Figure()
-    a = f.add_subplot(111)
+    time, y = generate_noisy_sin(8)
+    import numpy as np
 
-    display_acceleration(f, a)
+    half_sec = y[0:50]
+    one_and_half_sec = y[0:150]
+    two_sec = y[0:200]
+    two_and_half_sec = y[0:250]
+    three_sec = y[0:300]
+    three_and_half_sec = y[0:350]
+    four_sec = y[0:400]
 
-    pass
+
+    test_welch_params(four_sec, 150, 75)
+
 
 
 
