@@ -66,12 +66,18 @@ def get_disp_amplitude(enmofilt, lowcut, fs):
     disp = disp - np.mean(disp) # recenter about 0
     disp = disp*1000 # convert to mm
 
+    # discarding edges for plotting visualization
+    for i in range(0, int(len(disp)*.15)):
+        disp[i] = 0
+    for i in range(int(len(disp)*.85), len(disp)):
+        disp[i] = 0
+
     # Use Hilbert transform to find envelope of displacement, take average value as mean of envelope
-    envelope = np.abs(envelope(disp))
+    disp_envelope = np.abs(envelope(disp))
 
-    mean_disp = np.mean(envelope)
+    mean_disp = np.mean(disp_envelope[int(len(disp)*.15):int(len(disp)*.85)]) # only consider middle 70% for mean
 
-    return mean_disp, disp, envelope
+    return mean_disp, disp, disp_envelope
 
 
 

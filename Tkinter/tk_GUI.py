@@ -402,6 +402,9 @@ class updrs_motor_page(tk.Frame):
                   "Body Bradykinesia and Hypokinesia"]
 
     all_vars = []
+    score_dict = {}
+    total_score = 0
+
 
     def __init__(self, parent, controller):
 
@@ -464,6 +467,15 @@ class updrs_motor_page(tk.Frame):
         mentation_butt = tk.Button(frame, text="Mentation, Behavior, and Mood",
                                    command=lambda: controller.show_frame(updrs_mentation_page))
         mentation_butt.grid(row=0, column=2)
+
+        calc_score_butt = tk.Button(frame, text="Calculate UPDRS Score", command=self.calc_score)
+        calc_score_butt.grid(row=0, column=3)
+
+    def calc_score(self):
+        self.score_dict = {'speech': int(self.all_vars[0].get()[0])}
+        self.total_score = sum([int(self.all_vars[i].get()[0]) for i in range(len(self.all_vars))])
+        print(self.score_dict)
+        print(self.total_score)
 
 class updrs_dailyliving_page(tk.Frame):
 
