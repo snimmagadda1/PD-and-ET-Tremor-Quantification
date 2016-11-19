@@ -680,9 +680,9 @@ def display_acceleration(frame, f, a):
 
     # plot filtered acceleration without gravity
     frame.line = a.plot(time, acceleration_filtered_no_grav, color='c', label='Acceleration')
-    a.set_xlabel('time (s)', color='w')
-    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)', color='w')
-    a.set_title(r'Magnitude of Acceleration', color='w')
+    a.set_xlabel('Time (s)', color='w', fontweight='bold')
+    a.set_ylabel('Acceleration - Gravity Compensated (m/s$^2$)', color='w', fontweight='bold')
+    a.set_title(r'Magnitude of Acceleration', color='w', fontweight='bold')
     a.legend()
     a.grid(which='major', linestyle='--', color='#5DBCD2')
     a.tick_params(axis='both', colors='w')
@@ -728,9 +728,9 @@ def display_displacement(frame, f, a):
     # plot on GUI
     frame.line = a.plot(time, disp, label='Displacement', color='c')
     a.plot(time, envelope, label='Envelope', linestyle='dashed', color='r')
-    a.set_xlabel('time (s)', color='w')
-    a.set_ylabel('Displacement (mm)', color='w')
-    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp), color='w')
+    a.set_xlabel('Time (s)', color='w', fontweight='bold')
+    a.set_ylabel('Displacement (mm)', color='w', fontweight='bold')
+    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp), color='w', fontweight='bold')
     a.grid(which='major', linestyle='--', color='#5DBCD2')
     a.legend()
     a.tick_params(axis='both', colors='w')
