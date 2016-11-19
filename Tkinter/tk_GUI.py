@@ -24,17 +24,17 @@ sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464/'
 
 pd.options.mode.chained_assignment = None
 
+# font settings
 TITLE_FONT = ("Verdana", 24)
 LARGE_FONT = ("Verdana", 18)
 NORM_FONT = ("Verdana", 10)
 SMALL_FONT = ("Verdana", 8)
-
 UPDRS_LABEL_FONT = ("Verdana", 14, "bold")
-
 MAIN_COLOR = "#5DBCD2"
 
-style.use("ggplot")
 # declare main plot and geometry here and characteristics
+
+style.use("ggplot")
 f = plt.Figure()
 f2= plt.Figure()
 a = f.add_subplot(111)
@@ -112,17 +112,6 @@ class TremorApp(tk.Tk):
         setting1.add_command(label="Statistics Page", command=lambda: self.show_frame(stats_page))
         menubar.add_cascade(label="Navigation", menu=setting1)
 
-        setting2 = tk.Menu(menubar, tearoff=1)
-        setting2.add_command(label="A", command=lambda: popupmsg("Not supported just yet!"))
-        setting2.add_command(label="B", command=lambda: popupmsg("Not supported just yet!"))
-        setting2.add_command(label="C", command=lambda: popupmsg("Not supported just yet!"))
-        setting2.add_command(label="D", command=lambda: popupmsg("Not supported just yet!"))
-        menubar.add_cascade(label="Display", menu=setting2)
-
-        setting3 = tk.Menu(menubar, tearoff=1)
-        setting3.add_command(label="A", command=lambda: popupmsg("Not supported just yet!"))
-        setting3.add_command(label="B", command=lambda: popupmsg("Not supported just yet!"))
-        menubar.add_cascade(label="Help", menu=setting3)
 
         tk.Tk.config(self, menu=menubar)
 
