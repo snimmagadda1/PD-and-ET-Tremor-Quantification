@@ -905,6 +905,42 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     f.tight_layout()
 
 
+def get_stats():
+    from data_analysis.package_data import get_windows
+    from data_analysis.process_data import butter_lowpass_IIR_filter, get_disp_amplitude, is_tremor, remove_gravity_ENMO, psd_welch
+    import numpy as np
+    x_wins, y_wins, z_wins = get_windows('data_rate_test.txt', 4)
+
+    highcut = 14
+    lowcut = 1
+    fs = 100
+
+    mean_disp_wins = []
+    is_tremor_wins = []
+    df_wins = []
+
+    for i in range(len(x_wins)):
+        xfilt = butter_lowpass_IIR_filter(x_wins[i], highcut, fs)
+        yfilt = butter_lowpass_IIR_filter(y_wins[i], highcut, fs)
+        zfilt = butter_lowpass_IIR_filter(z_wins[i], highcut, fs)
+
+        enmofilt = np.array(remove_gravity_ENMO(xfilt, yfilt, zfilt))
+
+        mean_disp, disp, env = get_disp_amplitude(enmofilt, lowcut, fs)
+
+        mean_disp_wins.append(mean_disp)
+
+        freqs, pxx = psd_welch(enmofilt, fs)
+        is_trem, df = is_tremor(freqs, pxx)
+
+        is_tremor_wins.append(is_trem)
+        df_wins.append(df)
+
+    return mean_disp_wins, is_tremor_wins, df_wins
+
+
+
+
 def generate_noisy_sin(freq):
     """Generate noisy sinusoid corrupted by 0.001 V**2/Hz
     of white noise sampled at given frequency

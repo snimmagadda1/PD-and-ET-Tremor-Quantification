@@ -108,7 +108,7 @@ class TremorApp(tk.Tk):
         setting1 = tk.Menu(menubar, tearoff=1)
         setting1.add_command(label="Start Page", command=lambda: self.show_frame(start_page))
         setting1.add_command(label="Graph Page", command=lambda: self.show_frame(graph_page))
-        setting1.add_command(label="Patient Page", command=lambda: self.show_frame(updrs_motor_page))
+        setting1.add_command(label="UPDRS Page", command=lambda: self.show_frame(updrs_motor_page))
         setting1.add_command(label="Statistics Page", command=lambda: self.show_frame(stats_page))
         menubar.add_cascade(label="Navigation", menu=setting1)
 
@@ -328,27 +328,99 @@ class psd_graph_page(tk.Frame):
 class stats_page(tk.Frame):
     score_dict = {}
     total_score = 0
+    mean_disp_wins = [0, 0, 0, 0]
+    is_tremor_wins = [False, False, False, False]
+    df_wins = [0, 0, 0, 0]
+
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
         self.grid()
 
-        title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR)
+        title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR, padx=154)
         self.title_frame(self, title_frame)
         title_frame.grid(row=0, column=0, columnspan=2)
 
         border_frame = tk.Frame(self, width=1280, height=5, bg="black")
         border_frame.grid(row=1, column=0, columnspan=2)
 
-        calc_butt = tk.Button(self, text="Calculate UPDRS Score", command=self.calc_updrs_score)
-        calc_butt.grid(row=2, column=0, columnspan=2)
+        show_stats_butt = tk.Button(self, text="Update Statistics", command= lambda: self.show_stats(self))
+        show_stats_butt.grid(row=2, column=0, columnspan=2)
+
 
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Test Statistics", font=TITLE_FONT,
-                         bg=MAIN_COLOR, fg="white", padx=350, pady=8)
+                         bg=MAIN_COLOR, fg="white", padx=400, pady=8)
         title.grid(sticky="N")
 
-    def calc_updrs_score(self):
+    def show_stats(self, parent):
+        import numpy as np
+
+        parent.calc_tremor(parent)
+        parent.calc_updrs_score(parent)
+
+        actual_disps = []
+
+        if parent.is_tremor_wins[0]:
+            mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = %.2f mm" %(parent.mean_disp_wins[0]))
+            df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz" %(parent.df_wins[0]))
+            actual_disps.append(parent.mean_disp_wins[0])
+        else:
+            mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = No tremor detected")
+            df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz" % (parent.df_wins[0]))
+
+        mean_disp1.grid(row=3, column=0)
+        df1.grid(row=7, column=0)
+
+        if parent.is_tremor_wins[1]:
+            mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = %.2f mm" %(parent.mean_disp_wins[1]))
+            df2 = tk.Label(parent, text="Dominant Frequency for Window 2 = %.1f Hz" % (parent.df_wins[1]))
+            actual_disps.append(parent.mean_disp_wins[1])
+        else:
+            mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = No tremor detected")
+            df2 = tk.Label(parent, text="Dominant Frequency for Window 2 = %.1f Hz" % (parent.df_wins[1]))
+
+        mean_disp2.grid(row=4, column=0)
+        df2.grid(row=8, column=0)
+
+        if parent.is_tremor_wins[2]:
+            mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = %.2f mm" %(parent.mean_disp_wins[2]))
+            df3 = tk.Label(parent, text="Dominant Frequency for Window 3 = %.1f Hz" % (parent.df_wins[2]))
+            actual_disps.append(parent.mean_disp_wins[2])
+        else:
+            mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = No tremor detected")
+            df3 = tk.Label(parent, text="Dominant Frequency for Window 3 = %.1f Hz" % (parent.df_wins[2]))
+
+        mean_disp3.grid(row=5, column=0)
+        df3.grid(row=9, column=0)
+
+        if parent.is_tremor_wins[3]:
+            mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = %.2f mm" %(parent.mean_disp_wins[3]))
+            df4 = tk.Label(parent, text="Dominant Frequency for Window 4 = %.1f Hz" % (parent.df_wins[3]))
+            actual_disps.append(parent.mean_disp_wins[3])
+        else:
+            mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = No tremor detected")
+            df4 = tk.Label(parent, text="Dominant Frequency for Window 4 = %.1f Hz" % (parent.df_wins[3]))
+
+        mean_disp4.grid(row=6, column=0)
+        df4.grid(row=10, column=0)
+
+        if len(actual_disps) > 0:
+            mean_disp = tk.Label(parent, text="Overall Mean Displacement = %.2f mm" %(np.mean(actual_disps)))
+            df = tk.Label(parent, text="Overall Dominant Frequency = %.1f Hz" % (np.mean(parent.df_wins)))
+        else:
+            mean_disp = tk.Label(parent, text="Overall Mean Displacement = No tremor detected")
+            df = tk.Label(parent, text="Overall Dominant Frequency = %.1f Hz" % (np.mean(parent.df_wins)))
+
+        mean_disp.grid(row=3, column=1, rowspan=4)
+        df.grid(row=7, column=1, rowspan=4)
+
+    def calc_tremor(self, parent):
+        from data_analysis.data_display import get_stats
+
+        parent.mean_disp_wins, parent.is_tremor_wins, parent.df_wins = get_stats()
+
+    def calc_updrs_score(self, parent):
         self.score_dict = {'speech': int(updrs_motor_page.all_vars[0].get()[0]),
                            'facial': int(updrs_motor_page.all_vars[1].get()[0]),
                            'rigidity': int(updrs_motor_page.all_vars[2].get()[0]),
@@ -376,13 +448,11 @@ class stats_page(tk.Frame):
                            'intellectual': int(updrs_mentation_page.all_vars[0].get()[0]),
                            'thought': int(updrs_mentation_page.all_vars[1].get()[0]),
                            'depression': int(updrs_mentation_page.all_vars[2].get()[0]),
-                           'motivation': int(updrs_mentation_page.all_vars[3].get()[0]),}
+                           'motivation': int(updrs_mentation_page.all_vars[3].get()[0])}
         
-        self.total_score = sum([int(updrs_motor_page.all_vars[i].get()[0]) for i in range(len(updrs_motor_page.all_vars))])
-        self.total_score += sum([int(updrs_dailyliving_page.all_vars[i].get()[0]) for i in range(len(updrs_dailyliving_page.all_vars))])
-        self.total_score += sum([int(updrs_mentation_page.all_vars[i].get()[0]) for i in range(len(updrs_mentation_page.all_vars))])
-        print(self.score_dict)
-        print(self.total_score)
+        parent.total_score = sum([int(updrs_motor_page.all_vars[i].get()[0]) for i in range(len(updrs_motor_page.all_vars))])
+        parent.total_score += sum([int(updrs_dailyliving_page.all_vars[i].get()[0]) for i in range(len(updrs_dailyliving_page.all_vars))])
+        parent.total_score += sum([int(updrs_mentation_page.all_vars[i].get()[0]) for i in range(len(updrs_mentation_page.all_vars))])
 
 
 
