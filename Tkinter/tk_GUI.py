@@ -24,17 +24,17 @@ sys.path.insert(0, '/Users/Sai/Box Sync/Home Folder snn7/Private/Misc/BME 464/'
 
 pd.options.mode.chained_assignment = None
 
+# font settings
 TITLE_FONT = ("Verdana", 24)
 LARGE_FONT = ("Verdana", 18)
 NORM_FONT = ("Verdana", 10)
 SMALL_FONT = ("Verdana", 8)
-
 UPDRS_LABEL_FONT = ("Verdana", 14, "bold")
-
 MAIN_COLOR = "#5DBCD2"
 
-style.use("ggplot")
 # declare main plot and geometry here and characteristics
+
+style.use("ggplot")
 f = plt.Figure()
 f2= plt.Figure()
 a = f.add_subplot(111)
