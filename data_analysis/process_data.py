@@ -365,12 +365,7 @@ def describe_tremor_freq(df):
     percent_pd = 1 - dist_pd/dist_tot
     percent_et = 1 - dist_et/dist_tot
 
-<<<<<<< HEAD
-    # %PD
-
-=======
     return percent_pd, percent_et
->>>>>>> d3c80eea6623fa3bea685f6b62d5430271d8bb3f
 
 
 def demonstrate_functions():
