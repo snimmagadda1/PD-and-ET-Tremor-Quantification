@@ -344,7 +344,7 @@ def get_disp_quant(mean_disp):
 
 
 
-def describe_tremor_freq(DF):
+def describe_tremor_freq(df):
     """Describe a tremor as a percentage of PD and ET
     characteristics
 
@@ -353,9 +353,19 @@ def describe_tremor_freq(DF):
     """
     # PD = 3-7 Hz - mean = 5
     # ET = 4-12 Hz - mean = 8
+    import numpy as np
 
-    # %PD
-    
+    pd_mean = 5
+    et_mean = 8
+
+    dist_pd = np.abs(df-pd_mean)
+    dist_et = np.abs(df-et_mean)
+    dist_tot = dist_pd + dist_et
+
+    percent_pd = 1 - dist_pd/dist_tot
+    percent_et = 1 - dist_et/dist_tot
+
+    return percent_pd, percent_et
 
 
 def demonstrate_functions():
