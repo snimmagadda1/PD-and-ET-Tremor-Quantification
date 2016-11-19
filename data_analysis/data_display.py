@@ -685,6 +685,7 @@ def display_acceleration(frame, f, a):
     a.set_title(r'Magnitude of Acceleration', color='w')
     a.legend()
     a.grid(which='major', linestyle='--', color='#5DBCD2')
+    a.tick_params(axis='both', colors='w')
 
 
 def display_displacement(frame, f, a):
@@ -732,6 +733,7 @@ def display_displacement(frame, f, a):
     a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp), color='w')
     a.grid(which='major', linestyle='--', color='#5DBCD2')
     a.legend()
+    a.tick_params(axis='both', colors='w')
 
 
 def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
@@ -772,6 +774,14 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a7.grid(which='major', linestyle='--', color='#5DBCD2')
     a8.clear()
     a8.grid(which='major', linestyle='--', color='#5DBCD2')
+    a1.tick_params(axis='both', colors='w')
+    a2.tick_params(axis='both', colors='w')
+    a3.tick_params(axis='both', colors='w')
+    a4.tick_params(axis='both', colors='w')
+    a5.tick_params(axis='both', colors='w')
+    a6.tick_params(axis='both', colors='w')
+    a7.tick_params(axis='both', colors='w')
+    a8.tick_params(axis='both', colors='w')
 
     highcut = 14
     fs = 100
