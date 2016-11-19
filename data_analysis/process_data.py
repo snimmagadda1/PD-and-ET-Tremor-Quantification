@@ -330,6 +330,17 @@ def is_tremor(f, Pxx_den):
 
     return isTremor, DF
 
+def get_disp_quant(mean_disp):
+    tremor_high = 0
+    scale_high = 10
+
+    if (mean_disp > scale_high):
+        return 10
+    else:
+        return (mean_disp/tremor_high)*scale_high
+
+
+
 
 def demonstrate_functions():
     import numpy as np
