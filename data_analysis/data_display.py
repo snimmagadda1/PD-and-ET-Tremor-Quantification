@@ -925,17 +925,13 @@ def test_welch_params(data, nperseg, noverlap):
     fig = plt.figure(num=None, figsize=(16, 12), dpi=80, facecolor='w', edgecolor='k')
     j = 0
     time = len(data) / 100.0
-
-    for i in range(1, 8):
-        ax = fig.add_subplot(2, 4, i)
-        f, pxx = psd_welch_test(data, 100, nperseg[j], noverlap[j])
-        ax.semilogy(f, pxx)
-        x, y = get_DF(f, pxx)
-        ax.scatter(x,y)
-        plt.title('DF: %.1f Hz \n noverlap = %d|nperseg = %d' % (x, noverlap[j], nperseg[j]))
-
-        j = j + 1
-    fig.tight_layout()
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    f, pxx = psd_welch_test(data, 100, nperseg, noverlap)
+    ax.semilogy(f, pxx)
+    x, y = get_DF(f, pxx)
+    ax.scatter(x,y)
+    plt.title('DF: %.1f Hz \n noverlap = %d|nperseg = %d' % (x, noverlap, nperseg))
     plt.show()
 
 
@@ -952,7 +948,6 @@ if __name__ == "__main__":
     import numpy as np
 
     half_sec = y[0:50]
-    one_sec = y[0:100]
     one_and_half_sec = y[0:150]
     two_sec = y[0:200]
     two_and_half_sec = y[0:250]
@@ -960,10 +955,8 @@ if __name__ == "__main__":
     three_and_half_sec = y[0:350]
     four_sec = y[0:400]
 
-    npersegs = np.arange(50,400, 50)
-    noverlaps = np.arange(25,200, 25)
 
-    test_welch_params(four_sec, npersegs, noverlaps)
+    test_welch_params(four_sec, 150, 75)
 
 
 
