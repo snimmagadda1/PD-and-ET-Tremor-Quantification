@@ -808,7 +808,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
 
     alert, DF = is_tremor(f_1, pxx_1)
 
-    a5.semilogy(f_1, pxx_1, color='r', label='PSD')
+    a5.semilogy(f_1, pxx_1, color='r', label='Power Spectral Density')
     a5.set_title('DF = %.1f Hz | Tremor: %r' %(DF, alert))
     a5.set_xlabel('Frequency (Hz)')
     a5.legend()

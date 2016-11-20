@@ -309,9 +309,13 @@ class psd_graph_page(tk.Frame):
                                  command=lambda: spawnthread(bluetooth_acquire))
         start_button.pack(side=tk.LEFT)
 
-        plot_psd_button = tk.Button(topframe, text="Calculate PSD",
+        plot_psd_button = tk.Button(topframe, text="Calculate Window Statistics",
                                  command=lambda:display_psd(self, f2, a1, a2, a3, a4, a5, a6, a7, a8))
         plot_psd_button.pack(side=tk.LEFT)
+
+        display_psd_button = tk.Button(topframe, text="Display Window Statistics",
+                                    command=lambda: display_psd(self, f2, a1, a2, a3, a4, a5, a6, a7, a8))
+        display_psd_button.pack(side=tk.LEFT)
 
         change_plot_page_button = tk.Button(topframe, text="To Overall Measurement Page",
                                              command=lambda: controller.show_frame(graph_page))
