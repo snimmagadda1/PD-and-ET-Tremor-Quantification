@@ -43,6 +43,12 @@ a7 = f2.add_subplot(247)
 a8 = f2.add_subplot(248)
 
 
+def combine_funcs(*funcs):
+    def combined_func(*args, **kwargs):
+        for func_to_do in funcs:
+            func_to_do(*args, **kwargs)
+    return combined_func
+
 
 def popupmsg(msg):
     """
