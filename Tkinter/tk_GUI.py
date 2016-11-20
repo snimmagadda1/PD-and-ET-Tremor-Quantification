@@ -364,7 +364,49 @@ class stats_page(tk.Frame):
         title.grid(sticky="N")
 
     def export_stats(self, parent):
-        pass
+        import numpy as np
+
+        fd = tk.filedialog.asksaveasfile(mode='w', defaultextension=".txt")
+        if fd is None:  # asksaveasfile return `None` if dialog closed with "cancel".
+            return
+        tremor_stats = """Overall Statistics
+
+Tremor Severity (scaled 0-10) = %.1f
+Frequency Analysis = %d percent confidence Parkinson's Disease, %d percent confidence Essential Tremor
+Mean Displacement Amplitude = %.2f mm
+Dominant Frequency = %.1f Hz
+
+Window Statistics
+
+Window 1:
+    Mean Displacement = %.2f mm
+    Dominant Frequency = %.1f Hz
+    Tremor Detected = %r
+Window 2:
+    Mean Displacement = %.2f mm
+    Dominant Frequency = %.1f Hz
+    Tremor Detected = %r
+Window 3:
+    Mean Displacement = %.2f mm
+    Dominant Frequency = %.1f Hz
+    Tremor Detected = %r
+Window 4:
+    Mean Displacement = %.2f mm
+    Dominant Frequency = %.1f Hz
+    Tremor Detected = %r
+
+UPDRS Scores
+
+""" %(parent.tremor_severity, parent.pd_percent, parent.et_percent, np.mean(parent.mean_disp_wins), np.mean(parent.df_wins),
+      parent.mean_disp_wins[0], parent.df_wins[0], parent.is_tremor_wins[0],
+      parent.mean_disp_wins[1], parent.df_wins[1], parent.is_tremor_wins[1],
+      parent.mean_disp_wins[2], parent.df_wins[2], parent.is_tremor_wins[2],
+      parent.mean_disp_wins[3], parent.df_wins[3], parent.is_tremor_wins[3])
+
+        fd.write(tremor_stats)
+        for label in parent.score_dict.keys():
+            fd.write(label + "  =  " + str(parent.score_dict[label]) + "\n")
+        fd.close()
         # fill in export stats here
 
     def show_stats(self, parent):
@@ -396,47 +438,46 @@ class stats_page(tk.Frame):
         freq_window_label = tk.Label(parent, text="Window Statistics - Dominant Frequency", font=UPDRS_LABEL_FONT)
         freq_window_label.grid(row=11, column=1, columnspan=2, sticky="w")
 
+        mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = %.2f mm (Tremor = %r)" % (
+        parent.mean_disp_wins[0], parent.is_tremor_wins[0]))
+        df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz (Tremor = %r)" % (
+        parent.df_wins[0], parent.is_tremor_wins[0]))
 
         if parent.is_tremor_wins[0]:
-            mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = %.2f mm" %(parent.mean_disp_wins[0]))
-            df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz" %(parent.df_wins[0]))
             actual_disps.append(parent.mean_disp_wins[0])
-        else:
-            mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = No tremor detected")
-            df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz" % (parent.df_wins[0]))
 
         mean_disp1.grid(row=7, column=1, sticky="w")
         df1.grid(row=12, column=1, sticky="w")
 
+        mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = %.2f mm (Tremor = %r)" % (
+            parent.mean_disp_wins[1], parent.is_tremor_wins[1]))
+        df2 = tk.Label(parent, text="Dominant Frequency for Window 2 = %.1f Hz (Tremor = %r)" % (
+            parent.df_wins[1], parent.is_tremor_wins[1]))
+
         if parent.is_tremor_wins[1]:
-            mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = %.2f mm" %(parent.mean_disp_wins[1]))
-            df2 = tk.Label(parent, text="Dominant Frequency for Window 2 = %.1f Hz" % (parent.df_wins[1]))
             actual_disps.append(parent.mean_disp_wins[1])
-        else:
-            mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = No tremor detected")
-            df2 = tk.Label(parent, text="Dominant Frequency for Window 2 = %.1f Hz" % (parent.df_wins[1]))
 
         mean_disp2.grid(row=8, column=1, sticky="w")
         df2.grid(row=13, column=1, sticky="w")
 
+        mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = %.2f mm (Tremor = %r)" % (
+            parent.mean_disp_wins[2], parent.is_tremor_wins[2]))
+        df3 = tk.Label(parent, text="Dominant Frequency for Window 3 = %.1f Hz (Tremor = %r)" % (
+            parent.df_wins[2], parent.is_tremor_wins[2]))
+
         if parent.is_tremor_wins[2]:
-            mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = %.2f mm" %(parent.mean_disp_wins[2]))
-            df3 = tk.Label(parent, text="Dominant Frequency for Window 3 = %.1f Hz" % (parent.df_wins[2]))
             actual_disps.append(parent.mean_disp_wins[2])
-        else:
-            mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = No tremor detected")
-            df3 = tk.Label(parent, text="Dominant Frequency for Window 3 = %.1f Hz" % (parent.df_wins[2]))
 
         mean_disp3.grid(row=9, column=1, sticky="w")
         df3.grid(row=14, column=1, sticky="w")
 
+        mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = %.2f mm (Tremor = %r)" % (
+            parent.mean_disp_wins[3], parent.is_tremor_wins[3]))
+        df4 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz (Tremor = %r)" % (
+            parent.df_wins[3], parent.is_tremor_wins[3]))
+
         if parent.is_tremor_wins[3]:
-            mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = %.2f mm" %(parent.mean_disp_wins[3]))
-            df4 = tk.Label(parent, text="Dominant Frequency for Window 4 = %.1f Hz" % (parent.df_wins[3]))
             actual_disps.append(parent.mean_disp_wins[3])
-        else:
-            mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = No tremor detected")
-            df4 = tk.Label(parent, text="Dominant Frequency for Window 4 = %.1f Hz" % (parent.df_wins[3]))
 
         mean_disp4.grid(row=10, column=1, sticky="w")
         df4.grid(row=15, column=1, sticky="w")
@@ -482,34 +523,34 @@ class stats_page(tk.Frame):
         parent.mean_disp_wins, parent.is_tremor_wins, parent.df_wins, parent.tremor_severity, parent.pd_percent, parent.et_percent = get_stats()
 
     def calc_updrs_score(self, parent):
-        self.score_dict = {'speech': int(updrs_motor_page.all_vars[0].get()[0]),
-                           'facial': int(updrs_motor_page.all_vars[1].get()[0]),
-                           'rigidity': int(updrs_motor_page.all_vars[2].get()[0]),
-                           'finger': int(updrs_motor_page.all_vars[3].get()[0]),
-                           'hand': int(updrs_motor_page.all_vars[4].get()[0]),
-                           'alternating': int(updrs_motor_page.all_vars[5].get()[0]),
-                           'leg': int(updrs_motor_page.all_vars[6].get()[0]),
-                           'arising': int(updrs_motor_page.all_vars[7].get()[0]),
-                           'posture': int(updrs_motor_page.all_vars[8].get()[0]),
-                           'gait': int(updrs_motor_page.all_vars[9].get()[0]),
-                           'poststability': int(updrs_motor_page.all_vars[10].get()[0]),
-                           'kinesia': int(updrs_motor_page.all_vars[11].get()[0]),
-                           'speechdaily': int(updrs_dailyliving_page.all_vars[0].get()[0]),
-                           'salivation': int(updrs_dailyliving_page.all_vars[1].get()[0]),
-                           'swallowing': int(updrs_dailyliving_page.all_vars[2].get()[0]),
-                           'handwriting': int(updrs_dailyliving_page.all_vars[3].get()[0]),
-                           'food': int(updrs_dailyliving_page.all_vars[4].get()[0]),
-                           'dressing': int(updrs_dailyliving_page.all_vars[5].get()[0]),
-                           'hygiene': int(updrs_dailyliving_page.all_vars[6].get()[0]),
-                           'turning': int(updrs_dailyliving_page.all_vars[7].get()[0]),
-                           'falling': int(updrs_dailyliving_page.all_vars[8].get()[0]),
-                           'freezing': int(updrs_dailyliving_page.all_vars[9].get()[0]),
-                           'walking': int(updrs_dailyliving_page.all_vars[10].get()[0]),
-                           'sensory': int(updrs_dailyliving_page.all_vars[11].get()[0]),
-                           'intellectual': int(updrs_mentation_page.all_vars[0].get()[0]),
-                           'thought': int(updrs_mentation_page.all_vars[1].get()[0]),
-                           'depression': int(updrs_mentation_page.all_vars[2].get()[0]),
-                           'motivation': int(updrs_mentation_page.all_vars[3].get()[0])}
+        self.score_dict = {updrs_motor_page.all_labels[0]: int(updrs_motor_page.all_vars[0].get()[0]),
+                           updrs_motor_page.all_labels[1]: int(updrs_motor_page.all_vars[1].get()[0]),
+                           updrs_motor_page.all_labels[2]: int(updrs_motor_page.all_vars[2].get()[0]),
+                           updrs_motor_page.all_labels[3]: int(updrs_motor_page.all_vars[3].get()[0]),
+                           updrs_motor_page.all_labels[4]: int(updrs_motor_page.all_vars[4].get()[0]),
+                           updrs_motor_page.all_labels[5]: int(updrs_motor_page.all_vars[5].get()[0]),
+                           updrs_motor_page.all_labels[6]: int(updrs_motor_page.all_vars[6].get()[0]),
+                           updrs_motor_page.all_labels[7]: int(updrs_motor_page.all_vars[7].get()[0]),
+                           updrs_motor_page.all_labels[8]: int(updrs_motor_page.all_vars[8].get()[0]),
+                           updrs_motor_page.all_labels[9]: int(updrs_motor_page.all_vars[9].get()[0]),
+                           updrs_motor_page.all_labels[10]: int(updrs_motor_page.all_vars[10].get()[0]),
+                           updrs_motor_page.all_labels[11]: int(updrs_motor_page.all_vars[11].get()[0]),
+                           updrs_dailyliving_page.all_labels[0]: int(updrs_dailyliving_page.all_vars[0].get()[0]),
+                           updrs_dailyliving_page.all_labels[1]: int(updrs_dailyliving_page.all_vars[1].get()[0]),
+                           updrs_dailyliving_page.all_labels[2]: int(updrs_dailyliving_page.all_vars[2].get()[0]),
+                           updrs_dailyliving_page.all_labels[3]: int(updrs_dailyliving_page.all_vars[3].get()[0]),
+                           updrs_dailyliving_page.all_labels[4]: int(updrs_dailyliving_page.all_vars[4].get()[0]),
+                           updrs_dailyliving_page.all_labels[5]: int(updrs_dailyliving_page.all_vars[5].get()[0]),
+                           updrs_dailyliving_page.all_labels[6]: int(updrs_dailyliving_page.all_vars[6].get()[0]),
+                           updrs_dailyliving_page.all_labels[7]: int(updrs_dailyliving_page.all_vars[7].get()[0]),
+                           updrs_dailyliving_page.all_labels[8]: int(updrs_dailyliving_page.all_vars[8].get()[0]),
+                           updrs_dailyliving_page.all_labels[9]: int(updrs_dailyliving_page.all_vars[9].get()[0]),
+                           updrs_dailyliving_page.all_labels[10]: int(updrs_dailyliving_page.all_vars[10].get()[0]),
+                           updrs_dailyliving_page.all_labels[11]: int(updrs_dailyliving_page.all_vars[11].get()[0]),
+                           updrs_mentation_page.all_labels[0]: int(updrs_mentation_page.all_vars[0].get()[0]),
+                           updrs_mentation_page.all_labels[1]: int(updrs_mentation_page.all_vars[1].get()[0]),
+                           updrs_mentation_page.all_labels[2]: int(updrs_mentation_page.all_vars[2].get()[0]),
+                           updrs_mentation_page.all_labels[3]: int(updrs_mentation_page.all_vars[3].get()[0])}
         
         parent.total_score = sum([int(updrs_motor_page.all_vars[i].get()[0]) for i in range(len(updrs_motor_page.all_vars))])
         parent.total_score += sum([int(updrs_dailyliving_page.all_vars[i].get()[0]) for i in range(len(updrs_dailyliving_page.all_vars))])
