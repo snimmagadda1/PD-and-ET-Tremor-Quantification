@@ -920,7 +920,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
 
 def get_stats():
     from data_analysis.package_data import get_windows
-    from data_analysis.process_data import butter_lowpass_IIR_filter, get_disp_amplitude, is_tremor, remove_gravity_ENMO, psd_welch
+    from data_analysis.process_data import butter_lowpass_IIR_filter, get_disp_amplitude, is_tremor, remove_gravity_ENMO, psd_welch, get_disp_quant,  describe_tremor_freq
     import numpy as np
     x_wins, y_wins, z_wins = get_windows('data_rate_test.txt', 4)
 
@@ -949,7 +949,11 @@ def get_stats():
         is_tremor_wins.append(is_trem)
         df_wins.append(df)
 
-    return mean_disp_wins, is_tremor_wins, df_wins
+
+    disp_quant = get_disp_quant(np.mean(mean_disp_wins))
+    pd, et = describe_tremor_freq(np.mean(df_wins))
+
+    return mean_disp_wins, is_tremor_wins, df_wins, disp_quant, pd, et
 
 
 def generate_noisy_sin(freq):

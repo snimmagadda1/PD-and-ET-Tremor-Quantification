@@ -333,7 +333,7 @@ def is_tremor(f, Pxx_den):
     return isTremor, DF
 
 def get_disp_quant(mean_disp):
-    tremor_high = 0
+    tremor_high = 50
     scale_high = 10
 
     if (mean_disp > scale_high):
@@ -362,8 +362,8 @@ def describe_tremor_freq(df):
     dist_et = np.abs(df-et_mean)
     dist_tot = dist_pd + dist_et
 
-    percent_pd = 1 - dist_pd/dist_tot
-    percent_et = 1 - dist_et/dist_tot
+    percent_pd = 100*(1 - dist_pd/dist_tot)
+    percent_et = 100*(1 - dist_et/dist_tot)
 
     return percent_pd, percent_et
 

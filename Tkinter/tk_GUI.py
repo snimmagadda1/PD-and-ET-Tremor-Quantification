@@ -335,6 +335,10 @@ class stats_page(tk.Frame):
     is_tremor_wins = [False, False, False, False]
     df_wins = [0, 0, 0, 0]
 
+    tremor_severity = 0
+    et_percent = 50
+    pd_percent = 50
+
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
@@ -342,19 +346,26 @@ class stats_page(tk.Frame):
 
         title_frame = tk.Frame(self, width=1280, height=50, bg=MAIN_COLOR, padx=154)
         self.title_frame(self, title_frame)
-        title_frame.grid(row=0, column=0, columnspan=2)
+        title_frame.grid(row=0, column=0, columnspan=4)
 
         border_frame = tk.Frame(self, width=1280, height=5, bg="black")
-        border_frame.grid(row=1, column=0, columnspan=2)
+        border_frame.grid(row=1, column=0, columnspan=4)
 
         show_stats_butt = tk.Button(self, text="Update Statistics", command= lambda: self.show_stats(self))
-        show_stats_butt.grid(row=2, column=0, columnspan=2)
+        show_stats_butt.grid(row=2, column=1, sticky="e")
+
+        export_stats_butt = tk.Button(self, text="Export Statistics", command= lambda: self.export_stats(self))
+        export_stats_butt.grid(row=2, column=2, sticky="w")
 
 
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Test Statistics", font=TITLE_FONT,
                          bg=MAIN_COLOR, fg="white", padx=400, pady=8)
         title.grid(sticky="N")
+
+    def export_stats(self, parent):
+        pass
+        # fill in export stats here
 
     def show_stats(self, parent):
         import numpy as np
@@ -364,6 +375,28 @@ class stats_page(tk.Frame):
 
         actual_disps = []
 
+        disp_label = tk.Label(parent, text="Tremor Severity (scaled 0-10)", font=UPDRS_LABEL_FONT)
+        disp_label.grid(row=3, column=1, sticky="w")
+
+        freq_label = tk.Label(parent, text="Frequency Analysis", font=UPDRS_LABEL_FONT)
+        freq_label.grid(row=3, column=2, sticky="w")
+
+        disp_quant = tk.Label(parent, text="%.1f" %(parent.tremor_severity))
+        disp_quant.grid(row=4, column=1, rowspan=2, sticky="w")
+
+        pd_quant = tk.Label(parent, text="%d percent confidence Parkinson's Disease" %(parent.pd_percent))
+        pd_quant.grid(row=4, column=2, sticky="w")
+
+        et_quant = tk.Label(parent, text="%d percent confidence Essential Tremor" %(parent.et_percent))
+        et_quant.grid(row=5, column=2, sticky="w")
+
+        disp_window_label = tk.Label(parent, text="Window Statistics - Mean Tremor Displacement", font=UPDRS_LABEL_FONT)
+        disp_window_label.grid(row=6, column=1, columnspan=2, sticky="w")
+
+        freq_window_label = tk.Label(parent, text="Window Statistics - Dominant Frequency", font=UPDRS_LABEL_FONT)
+        freq_window_label.grid(row=11, column=1, columnspan=2, sticky="w")
+
+
         if parent.is_tremor_wins[0]:
             mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = %.2f mm" %(parent.mean_disp_wins[0]))
             df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz" %(parent.df_wins[0]))
@@ -372,8 +405,8 @@ class stats_page(tk.Frame):
             mean_disp1 = tk.Label(parent, text="Mean Displacement for Window 1 = No tremor detected")
             df1 = tk.Label(parent, text="Dominant Frequency for Window 1 = %.1f Hz" % (parent.df_wins[0]))
 
-        mean_disp1.grid(row=3, column=0)
-        df1.grid(row=7, column=0)
+        mean_disp1.grid(row=7, column=1, sticky="w")
+        df1.grid(row=12, column=1, sticky="w")
 
         if parent.is_tremor_wins[1]:
             mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = %.2f mm" %(parent.mean_disp_wins[1]))
@@ -383,8 +416,8 @@ class stats_page(tk.Frame):
             mean_disp2 = tk.Label(parent, text="Mean Displacement for Window 2 = No tremor detected")
             df2 = tk.Label(parent, text="Dominant Frequency for Window 2 = %.1f Hz" % (parent.df_wins[1]))
 
-        mean_disp2.grid(row=4, column=0)
-        df2.grid(row=8, column=0)
+        mean_disp2.grid(row=8, column=1, sticky="w")
+        df2.grid(row=13, column=1, sticky="w")
 
         if parent.is_tremor_wins[2]:
             mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = %.2f mm" %(parent.mean_disp_wins[2]))
@@ -394,8 +427,8 @@ class stats_page(tk.Frame):
             mean_disp3 = tk.Label(parent, text="Mean Displacement for Window 3 = No tremor detected")
             df3 = tk.Label(parent, text="Dominant Frequency for Window 3 = %.1f Hz" % (parent.df_wins[2]))
 
-        mean_disp3.grid(row=5, column=0)
-        df3.grid(row=9, column=0)
+        mean_disp3.grid(row=9, column=1, sticky="w")
+        df3.grid(row=14, column=1, sticky="w")
 
         if parent.is_tremor_wins[3]:
             mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = %.2f mm" %(parent.mean_disp_wins[3]))
@@ -405,8 +438,8 @@ class stats_page(tk.Frame):
             mean_disp4 = tk.Label(parent, text="Mean Displacement for Window 4 = No tremor detected")
             df4 = tk.Label(parent, text="Dominant Frequency for Window 4 = %.1f Hz" % (parent.df_wins[3]))
 
-        mean_disp4.grid(row=6, column=0)
-        df4.grid(row=10, column=0)
+        mean_disp4.grid(row=10, column=1, sticky="w")
+        df4.grid(row=15, column=1, sticky="w")
 
         if len(actual_disps) > 0:
             mean_disp = tk.Label(parent, text="Overall Mean Displacement = %.2f mm" %(np.mean(actual_disps)))
@@ -415,13 +448,38 @@ class stats_page(tk.Frame):
             mean_disp = tk.Label(parent, text="Overall Mean Displacement = No tremor detected")
             df = tk.Label(parent, text="Overall Dominant Frequency = %.1f Hz" % (np.mean(parent.df_wins)))
 
-        mean_disp.grid(row=3, column=1, rowspan=4)
-        df.grid(row=7, column=1, rowspan=4)
+        mean_disp.grid(row=7, column=2, rowspan=4, sticky="w")
+        df.grid(row=12, column=2, rowspan=4, sticky="w")
+
+        all_vars = []
+        all_vars.extend(updrs_motor_page.all_vars)
+        all_vars.extend(updrs_dailyliving_page.all_vars)
+        all_vars.extend(updrs_mentation_page.all_vars)
+
+        all_labels = []
+        all_labels.extend(updrs_motor_page.all_labels)
+        all_labels.extend(updrs_dailyliving_page.all_labels)
+        all_labels.extend(updrs_mentation_page.all_labels)
+
+        updrs_label = tk.Label(parent, text="UPDRS Scores", font=UPDRS_LABEL_FONT)
+        updrs_label.grid(row=16, column=1, columnspan=2, sticky="w")
+
+        i = 0
+        for r in range(17, 31):
+            updrs_var1 = tk.Label(parent, text="%s = %d" %(all_labels[i], int(all_vars[i].get()[0])))
+            updrs_var1.grid(row=r, column=1, sticky="w")
+
+            updrs_var2 = tk.Label(parent, text="%s = %d" %(all_labels[i+1], int(all_vars[i+1].get()[0])))
+            updrs_var2.grid(row=r, column=2, sticky="w")
+
+            i += 2
+
+
 
     def calc_tremor(self, parent):
         from data_analysis.data_display import get_stats
 
-        parent.mean_disp_wins, parent.is_tremor_wins, parent.df_wins = get_stats()
+        parent.mean_disp_wins, parent.is_tremor_wins, parent.df_wins, parent.tremor_severity, parent.pd_percent, parent.et_percent = get_stats()
 
     def calc_updrs_score(self, parent):
         self.score_dict = {'speech': int(updrs_motor_page.all_vars[0].get()[0]),
@@ -524,7 +582,7 @@ class updrs_motor_page(tk.Frame):
                    poststability_options,
                    kinesia_options]
 
-    all_labels = ["Speech",
+    all_labels = ["Speech - Motor Exam",
                   "Facial Expression",
                   "Rigidity",
                   "Finger Taps",
@@ -682,7 +740,7 @@ class updrs_dailyliving_page(tk.Frame):
                    walking_options,
                    sensory_options]
 
-    all_labels = ["Speech",
+    all_labels = ["Speech - Daily Living",
                   "Salivation",
                   "Swallowing",
                   "Handwriting",
