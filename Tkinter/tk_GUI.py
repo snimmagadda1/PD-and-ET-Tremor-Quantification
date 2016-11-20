@@ -172,7 +172,7 @@ class start_page(tk.Frame):
         name_label.pack(side='top')
 
         self.enter_name = tk.Entry(self, justify='center')
-        self.enter_name.insert(0, "...")
+        self.enter_name.insert(0, "")
         self.enter_name.pack(side='top')
         username = self.enter_name.get()
 
@@ -180,7 +180,7 @@ class start_page(tk.Frame):
         pwd_label.pack(side='top')
 
         self.enter_pwd = tk.Entry(self, justify='center')
-        self.enter_pwd.insert(0, "...")
+        self.enter_pwd.insert(0, "")
         self.enter_pwd.pack(side='top')
         password = self.enter_pwd.get()
 
