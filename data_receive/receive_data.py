@@ -1,6 +1,7 @@
 import Adafruit_BluefruitLE
 from Adafruit_BluefruitLE.services import UART
 import time
+import sys
 
 # Get the BLE provider for the current platform.
 ble = Adafruit_BluefruitLE.get_provider()
@@ -68,16 +69,20 @@ def acquire_data():
         stop = time.time()
         print('Time = ' + str(stop - start) + ' s')
 
+
     finally:
         # Make sure device is disconnected on exit.
         device.disconnect()
 
+def main():
+    # Initialize the BLE system.  MUST be called before other BLE calls!
+    ble.initialize()
 
-# Initialize the BLE system.  MUST be called before other BLE calls!
-ble.initialize()
+    # Start the mainloop to process BLE events, and run the provided function in
+    # a background thread.  When the provided main function stops running, returns
+    # an integer status code, or throws an error the program will exit.
 
-# Start the mainloop to process BLE events, and run the provided function in
-# a background thread.  When the provided main function stops running, returns
-# an integer status code, or throws an error the program will exit.
+    ble.run_mainloop_with(acquire_data)
 
-ble.run_mainloop_with(acquire_data)
+if __name__ == "__main__":
+    main()

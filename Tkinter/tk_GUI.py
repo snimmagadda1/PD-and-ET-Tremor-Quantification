@@ -715,7 +715,7 @@ class updrs_motor_page(tk.Frame):
             menu2 = tk.OptionMenu(*args2)
             menu2.grid(row=r + 1, column=1, padx=50, pady=20)
 
-            i += 1
+            i += 2
 
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Motor Exam", font=TITLE_FONT,
@@ -841,7 +841,7 @@ class updrs_dailyliving_page(tk.Frame):
         navigation_frame.grid(row=2, column=0, columnspan=2)
 
         i = 0
-        for r in range(3, 17, 2):
+        for r in range(3, 15, 2):
             #Labels
 
             label1 = tk.Label(self, text=self.all_labels[i], font=UPDRS_LABEL_FONT)
@@ -868,7 +868,7 @@ class updrs_dailyliving_page(tk.Frame):
             menu2 = tk.OptionMenu(*args2)
             menu2.grid(row=r + 1, column=1, padx=50, pady=20)
 
-            i += 1
+            i += 2
 
 
 
