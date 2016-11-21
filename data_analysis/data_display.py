@@ -724,6 +724,15 @@ def display_displacement(frame, f, a):
     # get displacement and envelope
     mean_disp, disp, envelope = get_disp_amplitude(enmo, lowcut, fs)
 
+    mean_disp_wins, is_tremor_wins, df_wins, disp_quant, pd, et = get_stats()
+
+    actual_disps = []
+    for i in range(len(mean_disp_wins)):
+        if is_tremor_wins[i]:
+            actual_disps.append(mean_disp_wins[i])
+
+    mean_disp = np.mean(actual_disps)
+
     # plot on GUI
     frame.line = a.plot(time, disp, label='Displacement', color='c')
     a.plot(time, envelope, label='Envelope', color='r')
@@ -954,7 +963,7 @@ def get_stats():
     for i in range(len(mean_disp_wins)):
         if is_tremor_wins[i]:
             actual_disps.append(mean_disp_wins[i])
-    print(np.mean(actual_disps))
+
     disp_quant = get_disp_quant(np.mean(actual_disps))
     pd, et = describe_tremor_freq(np.mean(df_wins))
 
