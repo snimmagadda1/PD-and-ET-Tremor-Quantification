@@ -57,15 +57,26 @@ def popupmsg(msg):
     :return:
     """
     popup = tk.Tk()
-    alert_message = tk.Label(popup, text="Collecting Data", font=TITLE_FONT)
-    alert_message.pack(side='top')
+    title_f = tk.Frame(popup, width=1280, height=50, bg=MAIN_COLOR)
+
+    title = tk.Label(title_f, text="Alert: Collecting Data", font=TITLE_FONT,
+                         bg=MAIN_COLOR, fg="white")
+    title.place(relx=0.5, rely=0.5, anchor='center')
+    title_f.pack()
+
+    border_f = tk.Frame(popup, width=1280, height=5, bg="black")
+    border_f.pack()
+
+    # make button frame
+    # alert_message = tk.Label(popup, text="Collecting Data", font=TITLE_FONT)
+    # alert_message.pack(side='top')
 
     pb_hd = ttk.Progressbar(popup, orient='horizontal', mode='determinate')
     pb_hd.pack(expand=True, fill=tk.BOTH, side=tk.TOP)
-    pb_hd.start(345)
+    pb_hd.start(355)
 
 
-    popup.geometry("720x440")
+    popup.geometry("720x220")
     popup.wm_title("Alert")
     popup.after(35000, lambda: popup.destroy())
     popup.mainloop()
