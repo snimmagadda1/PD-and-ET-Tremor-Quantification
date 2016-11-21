@@ -286,7 +286,7 @@ class graph_page(tk.Frame):
                                       command=lambda: controller.show_frame(displacement_graph_page))
         plot_displacement_button.pack(side=tk.LEFT)
 
-        change_plot_page_button = tk.Button(topframe, text="To Individual Measurement Page",
+        change_plot_page_button = tk.Button(topframe, text="To Frequency Page",
                                              command=lambda: controller.show_frame(psd_graph_page))
         change_plot_page_button.pack(side=tk.BOTTOM)
 
@@ -347,7 +347,7 @@ class displacement_graph_page(tk.Frame):
                                  command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('Acquiring. Please Wait')))
         start_button.pack(side=tk.LEFT)
 
-        calc_displacement_button = tk.Button(topframe, text="Calculate Displacment ",
+        calc_displacement_button = tk.Button(topframe, text="Calculate Displacement ",
                                                 command=lambda: display_displacement(self, f3, a1_1, a1_2, a1_3, a1_4,
                                                                                      a1_5, a1_6, a1_7, a1_8))
         calc_displacement_button.pack(side=tk.LEFT)
@@ -397,7 +397,7 @@ class psd_graph_page(tk.Frame):
         def title_frame(parent):
                 self.title_f = tk.Frame(parent, width=1280, height=50, bg=MAIN_COLOR)
 
-                title = tk.Label(self.title_f, text="Graphs: Individual Signals", font=TITLE_FONT,
+                title = tk.Label(self.title_f, text="Graphs: Frequency Page", font=TITLE_FONT,
                                  bg=MAIN_COLOR, fg="white")
                 title.place(relx=0.5, rely=0.5, anchor='center')
                 self.title_f.pack()

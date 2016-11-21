@@ -759,6 +759,8 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a1.plot(np.arange(0,len(acceleration_filtered_no_grav_1),1), acceleration_filtered_no_grav_1, label='Acceleration')
     a1.set_title('Acceleration')
     a1.set_ylabel('m/s$^2$')
+    a1.set_xticks([0, 100, 200, 300, 400])
+    a1.set_xticklabels(['0','1','2','3','4'])
 
     a1.legend()
     a5.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
@@ -766,6 +768,8 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a5.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
     a5.set_xlabel('Time (s)')
     a5.set_ylabel('Displacement (mm)')
+    a5.set_xticks([0, 100, 200, 300, 400])
+    a5.set_xticklabels(['0', '1', '2', '3', '4'])
     a5.legend()
 
 
@@ -795,11 +799,15 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a2.plot(np.arange(0, len(acceleration_filtered_no_grav_2), 1), acceleration_filtered_no_grav_2,
             label='Acceleration')
     a2.set_title('Acceleration')
+    a2.set_xticks([0, 100, 200, 300, 400])
+    a2.set_xticklabels(['4', '5', '6', '7', '8'])
     a6.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
     a6.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
     a6.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
     a6.set_xlabel('Time (s)')
     a6.set_ylabel('Displacement (mm)')
+    a6.set_xticks([0, 100, 200, 300, 400])
+    a6.set_xticklabels(['4', '5', '6', '7', '8'])
 
     # WINDOW 3
     # remove high frequencies
@@ -827,11 +835,15 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a3.plot(np.arange(0, len(acceleration_filtered_no_grav_1), 1), acceleration_filtered_no_grav_3,
             label='Acceleration')
     a3.set_title('Acceleration')
+    a3.set_xticks([0, 100, 200, 300, 400])
+    a3.set_xticklabels(['8', '9', '10', '11', '12'])
     a7.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
     a7.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
     a7.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
     a7.set_xlabel('Time (s)')
     a7.set_ylabel('Displacement (mm)')
+    a7.set_xticks([0, 100, 200, 300, 400])
+    a7.set_xticklabels(['8', '9', '10', '11', '12'])
 
 
     # WINDOW 4
@@ -859,11 +871,15 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a4.plot(np.arange(0, len(acceleration_filtered_no_grav_1), 1), acceleration_filtered_no_grav_4,
             label='Acceleration')
     a4.set_title('Acceleration')
+    a4.set_xticks([0, 100, 200, 300, 400])
+    a4.set_xticklabels(['12', '13', '14', '15', '16'])
     a8.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
     a8.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
     a8.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
     a8.set_xlabel('Time (s)')
     a8.set_ylabel('Displacement (mm)')
+    a8.set_xticks([0, 100, 200, 300, 400])
+    a8.set_xticklabels(['12', '13', '14', '15', '16'])
 
 
     f.tight_layout()
