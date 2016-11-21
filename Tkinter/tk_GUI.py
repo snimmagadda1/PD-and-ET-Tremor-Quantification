@@ -427,13 +427,13 @@ Window 4:
     Dominant Frequency = %.1f Hz
     Tremor Detected = %r
 
-UPDRS Scores
+UPDRS Scores: Total = %d
 
 """ %(parent.tremor_severity, parent.pd_percent, parent.et_percent, np.mean(parent.mean_disp_wins), np.mean(parent.df_wins),
       parent.mean_disp_wins[0], parent.df_wins[0], parent.is_tremor_wins[0],
       parent.mean_disp_wins[1], parent.df_wins[1], parent.is_tremor_wins[1],
       parent.mean_disp_wins[2], parent.df_wins[2], parent.is_tremor_wins[2],
-      parent.mean_disp_wins[3], parent.df_wins[3], parent.is_tremor_wins[3])
+      parent.mean_disp_wins[3], parent.df_wins[3], parent.is_tremor_wins[3], parent.total_score)
 
         fd.write(tremor_stats)
         for label in parent.score_dict.keys():
@@ -534,7 +534,7 @@ UPDRS Scores
         all_labels.extend(updrs_dailyliving_page.all_labels)
         all_labels.extend(updrs_mentation_page.all_labels)
 
-        updrs_label = tk.Label(parent, text="UPDRS Scores", font=UPDRS_LABEL_FONT)
+        updrs_label = tk.Label(parent, text="UPDRS Scores: Total = %d" %(parent.total_score), font=UPDRS_LABEL_FONT)
         updrs_label.grid(row=16, column=1, columnspan=2, sticky="w")
 
         i = 0
