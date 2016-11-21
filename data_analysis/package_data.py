@@ -28,6 +28,7 @@ def get_data(filename):
 
     return np.array(x), np.array(y), np.array(z)
 
+
 def get_windows(filename, window_size):
     """
 
@@ -50,6 +51,7 @@ def get_windows(filename, window_size):
         z_windows.append(z[i * fs * window_size:(i + 1) * fs * window_size])
 
     return x_windows, y_windows, z_windows
+
 
 def extrapolate_accel_data_testing(filename):
     """Extrapolate data from a txt file

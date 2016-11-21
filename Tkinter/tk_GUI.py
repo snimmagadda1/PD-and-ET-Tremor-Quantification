@@ -31,6 +31,16 @@ MAIN_COLOR = "#5DBCD2"
 style.use("ggplot")
 f = plt.Figure()
 f2= plt.Figure()
+f3 = plt.Figure()
+a1_1 = f3.add_subplot(241)
+a1_2 = f3.add_subplot(242)
+a1_3 = f3.add_subplot(243)
+a1_4 = f3.add_subplot(244)
+a1_5 = f3.add_subplot(245)
+a1_6 = f3.add_subplot(246)
+a1_7 = f3.add_subplot(247)
+a1_8 = f3.add_subplot(248)
+
 a = f.add_subplot(111)
 a.tick_params(axis='both')
 a.grid(which='major', linestyle='--', color='grey')
@@ -141,7 +151,7 @@ class TremorApp(tk.Tk):
 
         self.frames = {}
         # this is where new pages are added if needed
-        for F in (start_page, graph_page,  updrs_motor_page, psd_graph_page, updrs_dailyliving_page, updrs_mentation_page, stats_page):
+        for F in (start_page, graph_page,  displacement_graph_page, updrs_motor_page, psd_graph_page, updrs_dailyliving_page, updrs_mentation_page, stats_page):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -272,8 +282,8 @@ class graph_page(tk.Frame):
                                 command=lambda: display_acceleration(self, f, a))
         plot_accel_button.pack(side=tk.LEFT)
 
-        plot_displacement_button = tk.Button(topframe, text="Display Displacement",
-                                      command=lambda: display_displacement(self, f, a))
+        plot_displacement_button = tk.Button(topframe, text="To Displacement Page",
+                                      command=lambda: controller.show_frame(displacement_graph_page))
         plot_displacement_button.pack(side=tk.LEFT)
 
         change_plot_page_button = tk.Button(topframe, text="To Individual Measurement Page",
@@ -282,6 +292,80 @@ class graph_page(tk.Frame):
 
         # pack plot canvas
         canvas = FigureCanvasTkAgg(f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+
+        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar.update()
+        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+
+class displacement_graph_page(tk.Frame):
+    global is_logged
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        #  Threading definitions
+        thread_queue = queue.Queue()
+        def bluetooth_acquire():
+            import subprocess as sub
+            sub.call('./blubutt.sh', shell=True)
+
+        def spawnthread(fcn):
+            thread = ThreadedClient(thread_queue, fcn)
+            thread.start()
+            #periodiccall(thread)
+
+        def periodiccall(thread):
+            if (thread.is_alive()):
+                parent.after(100, lambda: periodiccall(thread))
+
+        def title_frame(parent):
+                self.title_f = tk.Frame(parent, width=1280, height=50, bg=MAIN_COLOR)
+
+                title = tk.Label(self.title_f, text="Graphs: Displacement Page", font=TITLE_FONT,
+                                 bg=MAIN_COLOR, fg="white")
+                title.place(relx=0.5, rely=0.5, anchor='center')
+                self.title_f.pack()
+                return self
+
+        def border_frame(parent):
+                self.border_f = tk.Frame(parent, width=1280, height=5, bg="black")
+                self.border_f.pack()
+                return self
+
+
+        # make button frame
+        title_frame_widget = title_frame(self)
+        border_frame_widget = border_frame(self)
+
+
+        topframe = tk.Frame(self)
+        topframe.pack(side=tk.TOP)
+
+        start_button = tk.Button(topframe, text="Start Measurement",
+                                 command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('Acquiring. Please Wait')))
+        start_button.pack(side=tk.LEFT)
+
+        calc_displacement_button = tk.Button(topframe, text="Calculate Displacment ",
+                                                command=lambda: display_displacement(self, f3, a1_1, a1_2, a1_3, a1_4,
+                                                                                     a1_5, a1_6, a1_7, a1_8))
+        calc_displacement_button.pack(side=tk.LEFT)
+
+        display_displacement_button = tk.Button(topframe, text="Display Displacement ",
+                                            command=lambda: display_displacement(self, f3, a1_1, a1_2, a1_3, a1_4, a1_5, a1_6, a1_7, a1_8))
+        display_displacement_button.pack(side=tk.LEFT)
+
+        change_plot_page_button = tk.Button(topframe, text="To Acceleration Page",
+                                             command=lambda: controller.show_frame(graph_page))
+        change_plot_page_button.pack(side=tk.LEFT)
+
+        change_plot_page_button_1 = tk.Button(topframe, text="To Frequency Page",
+                                            command=lambda: controller.show_frame(psd_graph_page))
+        change_plot_page_button_1.pack(side=tk.LEFT)
+
+        # pack plot canvas
+        canvas = FigureCanvasTkAgg(f3, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
@@ -345,9 +429,13 @@ class psd_graph_page(tk.Frame):
                                     command=lambda: display_psd(self, f2, a1, a2, a3, a4, a5, a6, a7, a8))
         display_psd_button.pack(side=tk.LEFT)
 
-        change_plot_page_button = tk.Button(topframe, text="To Overall Measurement Page",
+        change_plot_page_button = tk.Button(topframe, text="To Acceleration Page",
                                              command=lambda: controller.show_frame(graph_page))
-        change_plot_page_button.pack(side=tk.BOTTOM)
+        change_plot_page_button.pack(side=tk.LEFT)
+
+        change_plot_page_button_1 = tk.Button(topframe, text="To Displacement Page",
+                                            command=lambda: controller.show_frame(displacement_graph_page))
+        change_plot_page_button_1.pack(side=tk.LEFT)
 
         # pack plot canvas
         canvas = FigureCanvasTkAgg(f2, self)
@@ -357,6 +445,7 @@ class psd_graph_page(tk.Frame):
         toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
 
 class stats_page(tk.Frame):
     global is_logged

@@ -687,7 +687,7 @@ def display_acceleration(frame, f, a):
     a.grid(which='major', linestyle='--', color='grey')
 
 
-def display_displacement(frame, f, a):
+def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     """Displays displacement vector of given tremor
 
     :param frame: Parent GUI frame window where the graph is displayed
@@ -699,13 +699,20 @@ def display_displacement(frame, f, a):
     from data_analysis.process_data import get_disp_amplitude, butter_lowpass_IIR_filter, remove_gravity_ENMO
 
     from data_analysis.process_data import butter_lowpass_IIR_filter, calculate_magnitude_acceleration, \
-        remove_gravity_ENMO, gs_to_accel
-    from data_analysis.package_data import get_data
+        remove_gravity_ENMO, gs_to_accel, psd_welch, is_tremor
+    from data_analysis.package_data import get_data, get_windows
     import numpy as np
     import matplotlib.pyplot as plt
 
     f.canvas.draw()
-    a.clear()
+    a1.clear()
+    a2.clear()
+    a3.clear()
+    a4.clear()
+    a5.clear()
+    a6.clear()
+    a7.clear()
+    a8.clear()
 
     highcut = 14
     lowcut = 1
@@ -724,23 +731,141 @@ def display_displacement(frame, f, a):
     # get displacement and envelope
     mean_disp, disp, envelope = get_disp_amplitude(enmo, lowcut, fs)
 
-    mean_disp_wins, is_tremor_wins, df_wins, disp_quant, pd, et = get_stats()
+    x_wins, y_wins, z_wins = get_windows('data_rate_test.txt', 4)
 
-    actual_disps = []
-    for i in range(len(mean_disp_wins)):
-        if is_tremor_wins[i]:
-            actual_disps.append(mean_disp_wins[i])
+    # WINDOW 1
+    # remove high frequencies
+    x_filt_w1 = butter_lowpass_IIR_filter(x_wins[0], highcut, fs)
+    y_filt_w1 = butter_lowpass_IIR_filter(y_wins[0], highcut, fs)
+    z_filt_w1 = butter_lowpass_IIR_filter(z_wins[0], highcut, fs)
+    time = np.arange(0, len(x_filt_w1), 1) / float(fs)
 
-    mean_disp = np.mean(actual_disps)
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_1 = calculate_magnitude_acceleration(x_filt_w1, y_filt_w1, z_filt_w1)
+    acceleration_raw_no_gravg_1 = remove_gravity_ENMO(x_filt_w1, y_filt_w1, z_filt_w1)
 
-    # plot on GUI
-    frame.line = a.plot(time, disp, label='Displacement', color='c')
-    a.plot(time, envelope, label='Envelope', color='r')
-    a.set_xlabel('Time (s)')
-    a.set_ylabel('Displacement (mm)')
-    a.set_title('Displacement vs Time (w/ Envelope): Mean = %.2f mm' %(mean_disp),)
-    a.grid(False)
-    a.legend()
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_1 = calculate_magnitude_acceleration(x_filt_w1, y_filt_w1, z_filt_w1)
+    acceleration_filtered_no_gravg_1 = remove_gravity_ENMO(x_filt_w1, y_filt_w1, z_filt_w1)
+
+    # remove gravity
+    acceleration_filtered_no_grav_1 = gs_to_accel(acceleration_filtered_no_gravg_1)
+
+    f_1, pxx_1 = psd_welch(acceleration_filtered_no_grav_1, fs)
+
+    alert, DF = is_tremor(f_1, pxx_1)
+
+    mean_disp, disp, envelope = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_1), lowcut, fs)
+    a1.plot(np.arange(0,len(acceleration_filtered_no_grav_1),1), acceleration_filtered_no_grav_1, label='Acceleration')
+    a1.set_title('Acceleration')
+    a1.legend()
+    a5.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
+    a5.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
+    a5.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
+    a5.set_xlabel('Time (s)')
+    a5.set_ylabel('Displacement (mm)')
+    a5.legend()
+
+
+    # WINDOW 2
+    # remove high frequencies
+    x_filt_w2 = butter_lowpass_IIR_filter(x_wins[1], highcut, fs)
+    y_filt_w2 = butter_lowpass_IIR_filter(y_wins[1], highcut, fs)
+    z_filt_w2 = butter_lowpass_IIR_filter(z_wins[1], highcut, fs)
+    time = np.arange(0, len(x_filt_w2), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_2 = calculate_magnitude_acceleration(x_filt_w2, y_filt_w2, z_filt_w2)
+    acceleration_raw_no_gravg_2 = remove_gravity_ENMO(x_filt_w2, y_filt_w2, z_filt_w2)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_2 = calculate_magnitude_acceleration(x_filt_w2, y_filt_w2, z_filt_w2)
+    acceleration_filtered_no_gravg_2 = remove_gravity_ENMO(x_filt_w2, y_filt_w2, z_filt_w2)
+
+    # remove gravity
+    acceleration_filtered_no_grav_2 = gs_to_accel(acceleration_filtered_no_gravg_2)
+
+    f_1, pxx_1 = psd_welch(acceleration_filtered_no_grav_2, fs)
+
+    alert, DF = is_tremor(f_1, pxx_1)
+
+    mean_disp, disp, envelope = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_2), lowcut, fs)
+    a2.plot(np.arange(0, len(acceleration_filtered_no_grav_2), 1), acceleration_filtered_no_grav_2,
+            label='Acceleration')
+    a2.set_title('Acceleration')
+    a6.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
+    a6.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
+    a6.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
+    a6.set_xlabel('Time (s)')
+    a6.set_ylabel('Displacement (mm)')
+
+    # WINDOW 3
+    # remove high frequencies
+    x_filt_w3 = butter_lowpass_IIR_filter(x_wins[2], highcut, fs)
+    y_filt_w3 = butter_lowpass_IIR_filter(y_wins[2], highcut, fs)
+    z_filt_w3 = butter_lowpass_IIR_filter(z_wins[2], highcut, fs)
+    time = np.arange(0, len(x_filt_w3), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_3 = calculate_magnitude_acceleration(x_filt_w3, y_filt_w3, z_filt_w3)
+    acceleration_raw_no_gravg_3 = remove_gravity_ENMO(x_filt_w3, y_filt_w3, z_filt_w3)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_3 = calculate_magnitude_acceleration(x_filt_w3, y_filt_w3, z_filt_w3)
+    acceleration_filtered_no_gravg_3 = remove_gravity_ENMO(x_filt_w3, y_filt_w3, z_filt_w3)
+
+    # remove gravity
+    acceleration_filtered_no_grav_3 = gs_to_accel(acceleration_filtered_no_gravg_3)
+
+    f_1, pxx_1 = psd_welch(acceleration_filtered_no_grav_3, fs)
+
+    alert, DF = is_tremor(f_1, pxx_1)
+
+    mean_disp, disp, envelope = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_3), lowcut, fs)
+    a3.plot(np.arange(0, len(acceleration_filtered_no_grav_1), 1), acceleration_filtered_no_grav_3,
+            label='Acceleration')
+    a3.set_title('Acceleration')
+    a7.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
+    a7.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
+    a7.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
+    a7.set_xlabel('Time (s)')
+    a7.set_ylabel('Displacement (mm)')
+
+
+    # WINDOW 4
+    # remove high frequencies
+    x_filt_w4 = butter_lowpass_IIR_filter(x_wins[3], highcut, fs)
+    y_filt_w4 = butter_lowpass_IIR_filter(y_wins[3], highcut, fs)
+    z_filt_w4 = butter_lowpass_IIR_filter(z_wins[3], highcut, fs)
+    time = np.arange(0, len(x_filt_w4), 1) / float(fs)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_rawg_4 = calculate_magnitude_acceleration(x_filt_w4, y_filt_w4, z_filt_w4)
+    acceleration_raw_no_gravg_4 = remove_gravity_ENMO(x_filt_w4, y_filt_w4, z_filt_w4)
+
+    # calculate magnitude of acceleration with and without grav (filtered)
+    acceleration_filteredg_4 = calculate_magnitude_acceleration(x_filt_w4, y_filt_w4, z_filt_w4)
+    acceleration_filtered_no_gravg_4 = remove_gravity_ENMO(x_filt_w4, y_filt_w4, z_filt_w4)
+
+    # remove gravity
+    acceleration_filtered_no_grav_4 = gs_to_accel(acceleration_filtered_no_gravg_4)
+
+    f_4, pxx_4 = psd_welch(acceleration_filtered_no_gravg_4, fs)
+    alert, DF = is_tremor(f_4, pxx_4)
+
+    mean_disp, disp, envelope = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_4), lowcut, fs)
+    a4.plot(np.arange(0, len(acceleration_filtered_no_grav_1), 1), acceleration_filtered_no_grav_4,
+            label='Acceleration')
+    a4.set_title('Acceleration')
+    a8.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
+    a8.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
+    a8.set_title('Mean: %.2f | Tremor: %r' % (mean_disp, alert))
+    a8.set_xlabel('Time (s)')
+    a8.set_ylabel('Displacement (mm)')
+
+
+    f.tight_layout()
+
 
 
 def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
