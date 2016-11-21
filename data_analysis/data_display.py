@@ -758,6 +758,8 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     mean_disp, disp, envelope = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_1), lowcut, fs)
     a1.plot(np.arange(0,len(acceleration_filtered_no_grav_1),1), acceleration_filtered_no_grav_1, label='Acceleration')
     a1.set_title('Acceleration')
+    a1.set_ylabel('m/s$^2$')
+
     a1.legend()
     a5.plot(np.arange(0, len(disp), 1), envelope, color='r', label='Envelope')
     a5.plot(np.arange(0, len(disp), 1), disp, color='g', label='Displacement')
