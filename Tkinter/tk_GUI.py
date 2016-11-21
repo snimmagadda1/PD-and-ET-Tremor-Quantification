@@ -62,13 +62,12 @@ def popupmsg(msg):
 
     pb_hd = ttk.Progressbar(popup, orient='horizontal', mode='determinate')
     pb_hd.pack(expand=True, fill=tk.BOTH, side=tk.TOP)
-    pb_hd.start(300)
+    pb_hd.start(345)
 
 
     popup.geometry("720x440")
     popup.wm_title("Alert")
-
-    popup.after(30000, lambda: popup.destroy())
+    popup.after(35000, lambda: popup.destroy())
     popup.mainloop()
 
 
