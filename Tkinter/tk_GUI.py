@@ -51,19 +51,39 @@ def combine_funcs(*funcs):
 
 
 def popupmsg(msg):
-    """
-    Make a popup window for a message
+    """ Make a popup window for a message that will display for 30 seconds
     :param msg: input message to display (string)
     :return:
     """
+    from PIL import Image, ImageTk
     popup = tk.Tk()
-    popup.wm_title("!")
-    label = tk.Label(popup, text=msg, font=NORM_FONT)
-    label.pack(side="top", fill="x", pady=10)
-    B1 = tk.Button(popup, text="Okay", command=popup.destroy)
-    B1.pack()
+    canvas_popup = tk.Canvas(popup)
+    canvas_popup.pack(side="top", fill='both')
+    canvas_text = canvas_popup.create_text(10, 10, text='', anchor=tk.NW, font=TITLE_FONT)
+    test_string = "Progress:~ ~ ~10%-20%-30%-40%-50%-60%-70%-80%-90%-100% ~ ~ ~"
+
+    # time in ms
+    delta = 500
+    delay = 0
+
+    for i in range(len(test_string) + 1):
+        s = test_string[:i]
+        update_text = lambda s=s: canvas_popup.itemconfigure(canvas_text, text=s)
+        canvas_popup.after(delay, update_text)
+        delay += delta
+
+    popup.geometry("950x480")
+    popup.wm_title("Alert")
+
+
+    popup.after(30000, lambda: popup.destroy())
     popup.mainloop()
 
+
+def delayed_popupmsg(msg):
+    from threading import Timer
+    popupmsg(msg)
+    return
 
 def animate(i):
     """
@@ -169,7 +189,7 @@ class start_page(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text=("""ALPHA Diagnostic Tool. For use with the Essential Tremometer\u2122
+        label = tk.Label(self, text=("""v1.0.0-beta Diagnostic Tool. For use with the Essential Tremometer\u2122
         accelerometer based tremor classification platform."""))
         label.pack(pady=10, padx=10)
 
@@ -243,7 +263,7 @@ class graph_page(tk.Frame):
         topframe.pack(side=tk.TOP)
 
         start_button = tk.Button(topframe, text="Start Measurement",
-                                 command=lambda: spawnthread(bluetooth_acquire))
+                                 command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('\n \n \n \n \n \n Acquiring. Please Wait!')))
         start_button.pack(side=tk.LEFT)
 
         plot_accel_button = tk.Button(topframe, text="Display Acceleration",
@@ -312,7 +332,7 @@ class psd_graph_page(tk.Frame):
         topframe.pack(side=tk.TOP)
 
         start_button = tk.Button(topframe, text="Start Measurement",
-                                 command=lambda: spawnthread(bluetooth_acquire))
+                                 command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('Acquiring. Please Wait')))
         start_button.pack(side=tk.LEFT)
 
         plot_psd_button = tk.Button(topframe, text="Calculate Window Statistics",
