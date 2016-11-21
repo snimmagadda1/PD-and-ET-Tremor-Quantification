@@ -327,20 +327,19 @@ def is_tremor(f, Pxx_den):
 
     DF, mag = get_DF(f, Pxx_den)
 
-    if DF >= 2.95 and DF <= 12 and mag > 0.001:
+    if DF >= 2.95 and DF <= 12 and mag > 0.01:
         isTremor = True
 
     return isTremor, DF
 
 def get_disp_quant(mean_disp):
-    tremor_high = 50
+    tremor_high = 15
     scale_high = 10
 
-    if (mean_disp > scale_high):
+    if (mean_disp > tremor_high):
         return 10
     else:
         return (mean_disp/tremor_high)*scale_high
-
 
 
 

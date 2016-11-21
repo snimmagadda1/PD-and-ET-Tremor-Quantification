@@ -950,7 +950,12 @@ def get_stats():
         df_wins.append(df)
 
 
-    disp_quant = get_disp_quant(np.mean(mean_disp_wins))
+    actual_disps = []
+    for i in range(len(mean_disp_wins)):
+        if is_tremor_wins[i]:
+            actual_disps.append(mean_disp_wins[i])
+    print(np.mean(actual_disps))
+    disp_quant = get_disp_quant(np.mean(actual_disps))
     pd, et = describe_tremor_freq(np.mean(df_wins))
 
     return mean_disp_wins, is_tremor_wins, df_wins, disp_quant, pd, et
