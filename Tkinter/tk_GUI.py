@@ -57,10 +57,10 @@ def popupmsg(msg):
     :return:
     """
     popup = tk.Tk()
-    title_f = tk.Frame(popup, width=1280, height=50, bg=MAIN_COLOR)
+    title_f = tk.Frame(popup, width=1280, height=50, bg='red')
 
     title = tk.Label(title_f, text="Alert: Collecting Data", font=TITLE_FONT,
-                         bg=MAIN_COLOR, fg="white")
+                         bg='red', fg="white")
     title.place(relx=0.5, rely=0.5, anchor='center')
     title_f.pack()
 
