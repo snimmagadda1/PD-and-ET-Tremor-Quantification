@@ -9,6 +9,7 @@ import threading
 import time
 import queue
 import pandas as pd
+import tkinter.ttk as ttk
 
 
 # import statements for user written functions
@@ -55,26 +56,17 @@ def popupmsg(msg):
     :param msg: input message to display (string)
     :return:
     """
-    from PIL import Image, ImageTk
     popup = tk.Tk()
-    canvas_popup = tk.Canvas(popup)
-    canvas_popup.pack(side="top", fill='both')
-    canvas_text = canvas_popup.create_text(10, 10, text='', anchor=tk.NW, font=TITLE_FONT)
-    test_string = "Progress:~ ~ ~10%-20%-30%-40%-50%-60%-70%-80%-90%-100% ~ ~ ~"
+    alert_message = tk.Label(popup, text="Collecting Data", font=TITLE_FONT)
+    alert_message.pack(side='top')
 
-    # time in ms
-    delta = 500
-    delay = 0
+    pb_hd = ttk.Progressbar(popup, orient='horizontal', mode='determinate')
+    pb_hd.pack(expand=True, fill=tk.BOTH, side=tk.TOP)
+    pb_hd.start(300)
 
-    for i in range(len(test_string) + 1):
-        s = test_string[:i]
-        update_text = lambda s=s: canvas_popup.itemconfigure(canvas_text, text=s)
-        canvas_popup.after(delay, update_text)
-        delay += delta
 
-    popup.geometry("950x480")
+    popup.geometry("720x440")
     popup.wm_title("Alert")
-
 
     popup.after(30000, lambda: popup.destroy())
     popup.mainloop()
