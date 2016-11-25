@@ -1,6 +1,6 @@
-# Park & Sons Co. Essential Tremometer: Parkinson's and Essential Tremor Diagnostic and Quantification System
+# Park & Sons Co. Essential Tremometer: Tremor Quantification System
 
-This is a standalone accelerometer based tremor quantification system. Using an array of signal processing techniques, the diagnostic system provides insight into the characteristics of hand/arm tremors. Along with a number of other metrics, analysis includes tremor detection, amplitude quantification, and frequency analysis in the Fourier domain. Using these calculated metrics, a score indicative of the severity of tremor is devised. Additionally, the MDS Unified Parkinson's Disease Rating Scale (MDS-UDPRS) has been fully integrated for physican input. Duke BME 464 senior capstone design project.  
+This is a standalone accelerometer based tremor quantification system for patients with Parkinson's or Essential Tremor (ET). Using an array of signal processing techniques, the diagnostic system provides insight into the characteristics of hand/arm tremors. Along with a number of other metrics, analysis includes tremor detection, amplitude quantification, and frequency analysis in the Fourier domain. Using these calculated metrics, a score indicative of the severity of tremor is devised. Additionally, the MDS Unified Parkinson's Disease Rating Scale (MDS-UDPRS) has been fully integrated for physican input. Duke BME 464 senior capstone design project.  
 
 ## Getting Started
 
