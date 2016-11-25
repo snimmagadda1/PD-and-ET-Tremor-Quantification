@@ -1,10 +1,10 @@
-# Project Title
+# Park & Sons Co. Essential Tremometer: Parkinson's and Essential Tremor Diagnostic and Quantification System
 
-One Paragraph of project description goes here
+This is a standalone accelerometer based tremor quantification system. Using an array of signal processing techniques, the diagnostic system provides insight into the characteristics of hand/arm tremors. Along with a number of other metrics, analysis includes tremor detection, amplitude quantification, and frequency analysis in the Fourier domain. Using these calculated metrics, a score indicative of the severity of tremor is devised. Additionally, the MDS Unified Parkinson's Disease Rating Scale (MDS-UDPRS) has been fully integrated for physican input. Duke BME 464 senior capstone design project.  
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Simply clone and run tk_GUI.py. Makefile in progress.
 
 ### Prerequisites
 
