@@ -28,14 +28,13 @@ v1.0.0-b
 * **Eric Musselman** -*Physical Design* [LinkedIn](https://www.linkedin.com/in/ericmusselman)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
+Note: Due to the nature of this project, overlap existed between job responsibilities. 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+For general insight and guidance: 
+* Patrick Wolf, PhD - Duke University - [Page](http://bme.duke.edu/faculty/patrick-wolf)
+* Mark Draelos, Graduate Student - Duke University - [Page](https://biophotonics.bme.duke.edu/content/draelos)
 
