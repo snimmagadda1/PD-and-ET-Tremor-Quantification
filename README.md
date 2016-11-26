@@ -23,9 +23,9 @@ v1.0.0-b
 ## Authors
 
 * **Sai Nimmagadda** - *Software* - [LinkedIn](https://www.linkedin.com/in/sainimmagadda)
-* **David Whisler** - *Electronics* [LinkedIn](https://www.linkedin.com/in/david-whisler-5bb375104)
-* **Caroline Kittle** -*Testing* [LinkedIn](https://www.linkedin.com/in/carolinekittle)
-* **Eric Musselman** -*Physical Design* [LinkedIn](https://www.linkedin.com/in/ericmusselman)
+* **David Whisler** - *Electronics* - [LinkedIn](https://www.linkedin.com/in/david-whisler-5bb375104)
+* **Caroline Kittle** - *Testing* - [LinkedIn](https://www.linkedin.com/in/carolinekittle)
+* **Eric Musselman** - *Physical Design* - [LinkedIn](https://www.linkedin.com/in/ericmusselman)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 Note: Due to the nature of this project, overlap existed between job responsibilities. 
