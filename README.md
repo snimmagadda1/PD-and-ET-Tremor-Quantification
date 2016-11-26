@@ -18,11 +18,14 @@ python3.5 tk_GUI.py
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+v1.0.0-b
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Sai Nimmagadda** - *Software* - [LinkedIn](https://www.linkedin.com/in/sainimmagadda)
+* **David Whisler** - *Electronics* [LinkedIn](https://www.linkedin.com/in/david-whisler-5bb375104)
+* **Caroline Kittle** -*Testing* [LinkedIn](https://www.linkedin.com/in/carolinekittle)
+* **Eric Musselman** -*Physical Design* [LinkedIn](https://www.linkedin.com/in/ericmusselman)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
