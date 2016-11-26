@@ -7,7 +7,7 @@ This is a standalone accelerometer based tremor quantification system for patien
 Simply clone and run tk_GUI.py. Makefile in progress.
 ```
 git clone git@github.com:snimmagadda1/tremor_quant.git
-python3.5 tk_GUI.py
+python3.5 Tkinter/tk_GUI.py
 ```
 
 ### Prerequisites

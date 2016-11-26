@@ -10,10 +10,9 @@ import time
 import queue
 import pandas as pd
 import tkinter.ttk as ttk
-
-
-# import statements for user written functions
 from data_analysis.data_display import display_acceleration, display_displacement, display_psd
+
+
 
 pd.options.mode.chained_assignment = None
 is_logged = False
@@ -77,9 +76,6 @@ def popupmsg(msg):
     border_f = tk.Frame(popup, width=1280, height=5, bg="black")
     border_f.pack()
 
-    # make button frame
-    # alert_message = tk.Label(popup, text="Collecting Data", font=TITLE_FONT)
-    # alert_message.pack(side='top')
 
     pb_hd = ttk.Progressbar(popup, orient='horizontal', mode='determinate')
     pb_hd.pack(expand=True, fill=tk.BOTH, side=tk.TOP)
@@ -97,13 +93,6 @@ def delayed_popupmsg(msg):
     popupmsg(msg)
     return
 
-def animate(i):
-    """
-    Function to draw graphics
-    :param i:
-    :return:
-    """
-
 
 class ThreadedClient(threading.Thread):
     def __init__(self, queue, fcn):
@@ -113,6 +102,7 @@ class ThreadedClient(threading.Thread):
     def run(self):
         time.sleep(1)
         self.queue.put(self.fcn())
+
 
 # Main app class
 class TremorApp(tk.Tk):
@@ -128,8 +118,7 @@ class TremorApp(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-# ******************************************** MENU STUFF ************************************************************ #
-
+        # menu instantiation
         menubar = tk.Menu(container)
         filemenu = tk.Menu(menubar, tearoff=0)
         filemenu.add_command(label="Export", command=lambda: popupmsg("Not supported just yet!"))
@@ -144,10 +133,7 @@ class TremorApp(tk.Tk):
         setting1.add_command(label="Statistics Page", command=lambda: self.show_frame(stats_page))
         menubar.add_cascade(label="Navigation", menu=setting1)
 
-
         tk.Tk.config(self, menu=menubar)
-
-# ******************************************** MENU STUFF ************************************************************ #
 
         self.frames = {}
         # this is where new pages are added if needed
@@ -636,8 +622,6 @@ UPDRS Scores: Total = %d
 
             i += 2
 
-
-
     def calc_tremor(self, parent):
         from data_analysis.data_display import get_stats
 
@@ -676,7 +660,6 @@ UPDRS Scores: Total = %d
         parent.total_score = sum([int(updrs_motor_page.all_vars[i].get()[0]) for i in range(len(updrs_motor_page.all_vars))])
         parent.total_score += sum([int(updrs_dailyliving_page.all_vars[i].get()[0]) for i in range(len(updrs_dailyliving_page.all_vars))])
         parent.total_score += sum([int(updrs_mentation_page.all_vars[i].get()[0]) for i in range(len(updrs_mentation_page.all_vars))])
-
 
 
 class updrs_motor_page(tk.Frame):
@@ -761,7 +744,6 @@ class updrs_motor_page(tk.Frame):
     score_dict = {}
     total_score = 0
 
-
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
@@ -824,9 +806,9 @@ class updrs_motor_page(tk.Frame):
                                    command=lambda: controller.show_frame(updrs_mentation_page))
         mentation_butt.grid(row=0, column=2)
 
+
 class updrs_dailyliving_page(tk.Frame):
     global is_logged
-
 
     speech_options = ["0 = Normal.",
                       "1 = Mildly affected, no difficulty being understood.",
@@ -961,8 +943,6 @@ class updrs_dailyliving_page(tk.Frame):
 
             i += 2
 
-
-
     def title_frame(self, parent, frame):
         title = tk.Label(frame, text="Unified Parkinson\'s Disease Rating Scale - Activities of Daily Living", font=TITLE_FONT,
                          bg=MAIN_COLOR, fg="white", padx=236, pady=8)
@@ -978,7 +958,6 @@ class updrs_dailyliving_page(tk.Frame):
         mentation_butt = tk.Button(frame, text="Mentation, Behavior, and Mood",
                                    command=lambda: controller.show_frame(updrs_mentation_page))
         mentation_butt.grid(row=0, column=2)
-
 
 
 class updrs_mentation_page(tk.Frame):
@@ -1076,7 +1055,6 @@ class updrs_mentation_page(tk.Frame):
 def main():
     app = TremorApp()
     app.geometry("1280x720")
-    ani = animation.FuncAnimation(f, animate, interval=5000)
     app.mainloop()
 
 if __name__ == '__main__':
