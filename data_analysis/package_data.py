@@ -42,11 +42,10 @@ def get_windows(filename, window_size):
     x,y,z = get_data(filename)
 
     # Write to "clean" text file
-    import csv
-    with open('clean_data.csv', 'w') as f:
-        writer = csv.writer(f, delimiter=',')
-        for i in range(len(x)):
-            writer.writerow([x[i],y[i],z[i]])
+    with open('clean_data.txt', 'w') as f:
+        for i in range(0,len(x)):
+            f.write(str(x[i])+ ',' + str(y[i]) + ',' + str(z[i]) + '\n')
+
 
     x_windows = []
     y_windows = []
