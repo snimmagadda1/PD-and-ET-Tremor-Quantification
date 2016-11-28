@@ -1,46 +1,3 @@
-def bandpass_ifft(X, Low_cutoff, High_cutoff, F_sample, M=None):
-    """Bandpass filtering on a real signal using inverse FFT
-
-    X: 1-D numpy array of floats, the real time domain signal (time series) to be filtered
-    Low_cutoff: float, frequency components below this frequency will not pass the filter (physical frequency in unit of Hz)
-    High_cutoff: float, frequency components above this frequency will not pass the filter (physical frequency in unit of Hz)
-    F_sample: float, the sampling frequency of the signal (physical frequency in unit of Hz)
-
-    1. The input signal must be real, not imaginary nor complex
-    2. The Filtered_signal will have only half of original amplitude. Use abs() to restore.
-    3. In Numpy/Scipy, the frequencies goes from 0 to F_sample/2 and then from negative F_sample to 0.
-
-    Inspiration from : http://forrestbao.blogspot.com/
-
-    Noise generally with square of sampling freq
-
-    """
-    import scipy, numpy
-
-    if M == None:  # if the number of points for FFT is not specified
-        M = X.size  # let M be the length of the time series
-    Spectrum = scipy.fft(X, n=M)
-    [Low_cutoff, High_cutoff, F_sample] = map(float, [Low_cutoff, High_cutoff, F_sample])
-
-    # Convert cutoff frequencies into points on spectrum
-    [Low_point, High_point] = map(lambda F: F / F_sample * M / 2,
-                                  [Low_cutoff, High_cutoff])  # the division by 2 is because the spectrum is symmetric
-
-    Filtered_spectrum = [Spectrum[i] if i >= Low_point and i <= High_point else 0.0 for i in range(M)]  # Filtering
-    Filtered_signal = scipy.ifft(Filtered_spectrum, n=M)  # Construct filtered signal
-    return Spectrum, Filtered_spectrum, Filtered_signal, Low_point, High_point
-
-
-def remove_nan(data):
-    """Remove Nan and empty values from data stream
-    :param data: array of data (np.array)
-    :return:
-    """
-
-    cleaned_list = [x for x in data if str(x) != 'nan']
-    return cleaned_list
-
-
 def get_disp_amplitude(enmofilt, lowcut, fs):
     """Get the average displacement of a subset of raw acceleration data
     :param data: array of filtered acceleration data as ENMO (as numpy array)
@@ -143,24 +100,6 @@ def gs_to_accel(data):
     return np.array(data) * 9.8
 
 
-def gravity_compensate(q, acc):
-    """ Quaternion approach to removing gravity
-
-    :param q: the quaternion representing the orientation of a 9DOM MARG sensor array
-    :param acc: the readings coming from an accelerometer expressed in g
-    :return: 3d vector representing dynamic acceleration expressed in g
-    """
-    g = [0.0, 0.0, 0.0]
-
-    # get expected direction of gravity
-    g[0] = 2 * (q[1] * q[3] - q[0] * q[2])
-    g[1] = 2 * (q[0] * q[1] + q[2] * q[3])
-    g[2] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3]
-
-    # compensate accelerometer readings with the expected direction of gravity
-    return [acc[0] - g[0], acc[1] - g[1], acc[2] - g[2]]
-
-
 def calculate_magnitude_acceleration(accel_x, accel_y, accel_z):
     """ Calculate magnitude of acceleration
 
@@ -196,29 +135,6 @@ def remove_gravity_ENMO(accel_x, accel_y, accel_z):
         ans.append(normedA_0)
 
     return ans
-
-
-def remove_gravity_HFEN(accel_x, accel_y, accel_z):
-    """ Remove gravity from signal using HPF on each raw signal
-    then calculate the euclidean norm
-
-    :param accel_x: acceleration x vector (m/s^2)
-    :param accel_y: acceleration y vector (m/s^2)
-    :param accel_z: acceleration z vector (m/s^2)
-    :return: magnitude of acceleration w/o DC component (gravity)
-    """
-
-
-def remove_gravity_HFENplus(accel_x, accel_y, accel_z):
-    """ Remove gravity from signal using HPF on each raw signals
-    then 4th order Butterworth LPF wc = 0.2 Hz on raw signals,
-    then calculate euclidean norm -1
-
-    :param accel_x: acceleration x vector (m/s^2)
-    :param accel_y: acceleration y vector (m/s^2)
-    :param accel_z: acceleration z vector (m/s^2)
-    :return: magnitude of acceleration w/o DC component (gravity)
-    """
 
 
 def butter_lowpass(highcut, fs, order=4):
@@ -332,6 +248,7 @@ def is_tremor(f, Pxx_den):
 
     return isTremor, DF
 
+
 def get_disp_quant(mean_disp):
     tremor_high = 15
     scale_high = 10
@@ -340,7 +257,6 @@ def get_disp_quant(mean_disp):
         return 10
     else:
         return (mean_disp/tremor_high)*scale_high
-
 
 
 def describe_tremor_freq(df):
