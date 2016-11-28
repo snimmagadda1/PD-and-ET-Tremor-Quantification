@@ -1,7 +1,6 @@
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from matplotlib import style
 import tkinter as tk
@@ -11,8 +10,6 @@ import queue
 import pandas as pd
 import tkinter.ttk as ttk
 from data_analysis.data_display import display_acceleration, display_displacement, display_psd
-
-
 
 pd.options.mode.chained_assignment = None
 is_logged = False
