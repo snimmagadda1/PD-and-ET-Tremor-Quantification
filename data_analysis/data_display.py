@@ -621,7 +621,131 @@ def plot_filter_response_poster():
 
 
 def plot_displacement_errors_poster():
-    # ToDo Recreate caroline error plot
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # get data from caroline
+    x_freq = np.array([2,2.2,2.4,2.6,2.8,3,3.2,3.4,3.6,3.8,4,4.2,4.4,4.6,4.8,5,5.2,5.4,5.6,5.8,6,6.2,6.4,6.6,6.8,7,7.2,7.4,7.6,7.8,8,8.2,8.4,8.6,8.8,9,9.2,9.4,9.6,9.8,10,10.2,10.4,10.6,10.8,11,11.2,11.4,11.6,11.8,12,12.2,12.4,12.6,12.8,13])
+    low_amp=np.array([2,2,2.7,2.7,2.7,2.7,3.3,3.3,3.3,4,4,4,4.3,4.7,4.7,4.7,5.3,5.3,5.3,5.8,6,6,6,6.7,6.7,6.7,7.3,7.3,7.3,7.7,8,8,8.2,8.7,8.7,8.7,9.2,9.3,9.3,9.7,10,10,10.5,10.5,10.7,10.7,10.8,11.2,11.3,11.5,12,12,12,12.4,12.7,12.7])
+    med_amp = np.array([2,2,2.7,2.7,2.7,2.7,3.3,3.3,3.3,4,4,4,4.2,4.7,4.7,4.7,5.3,5.3,5.3,5.8,6,6,6,6.7,6.7,6.7,7.3,7.3,7.3,7.5,8,8,8,8.7,8.7,8.7,9.2,9.3,9.3,9.5,10,10,10,10.5,10.7,10.7,11,11.3,11.3,11.7,12,12,12,12.5,12.7,12.7])
+    high_amp = np.array([2,2,2.7,2.7,2.7,2.7,3.3,3.3,3.3,4,4,4,4,4.7,4.7,4.7,5.3,5.3,5.3,6,6,6,6.3,6.7,6.7,6.7,7.3,7.3,7.3,7.8,8,8,8,8.7,8.7,8.7,9.2,9.3,9.3,9.7,10,10,10,10.7,10.7,10.7,11.2,11.3,11.3,11.5,12,12,12.2,12.7,12.7,12.7])
+
+
+    low_diff = low_amp - x_freq
+    med_diff = med_amp - x_freq
+    high_diff = high_amp - x_freq
+
+    print(low_diff.mean())
+    print(med_diff.mean())
+    print(high_diff.mean())
+
+    f = plt.figure(figsize=(12, 8))
+    ax = f.add_subplot(111)
+    ax.boxplot([low_diff, med_diff, high_diff])
+
+    plt.show()
+
+
+
+def plot_frequency_errors_poster():
+
+
+    from scipy.stats import f_oneway
+    import numpy as np
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+
+    # get data from caroline
+    low_amp = np.array(
+        [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4.3, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 5.8, 6, 6, 6, 6.7, 6.7,
+         6.7, 7.3, 7.3, 7.3, 7.7, 8, 8, 8.2, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.7, 10, 10, 10.5, 10.5, 10.7, 10.7, 10.8,
+         11.2, 11.3, 11.5, 12, 12, 12, 12.4, 12.7, 12.7])
+    med_amp = np.array(
+        [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4.2, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 5.8, 6, 6, 6, 6.7, 6.7,
+         6.7, 7.3, 7.3, 7.3, 7.5, 8, 8, 8, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.5, 10, 10, 10, 10.5, 10.7, 10.7, 11, 11.3,
+         11.3, 11.7, 12, 12, 12, 12.5, 12.7, 12.7])
+    high_amp = np.array(
+        [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 6, 6, 6, 6.3, 6.7, 6.7, 6.7,
+         7.3, 7.3, 7.3, 7.8, 8, 8, 8, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.7, 10, 10, 10, 10.7, 10.7, 10.7, 11.2, 11.3, 11.3,
+         11.5, 12, 12, 12.2, 12.7, 12.7, 12.7])
+
+    # low = 2-5.8 Hz
+    # med = 6-9.8 Hz
+    # highs = 10-13 Hz
+
+    low_freq1 = np.array(low_amp[0:20])
+    low_freq2 = np.array(med_amp[0:20])
+    low_freq3 = np.array(high_amp[0:20])
+
+    med_freq1 = np.array(low_amp[20:40])
+    med_freq2 = np.array(med_amp[20:40])
+    med_freq3 = np.array(high_amp[20:40])
+
+    high_freq1 = np.array(low_amp[40:])
+    high_freq2 = np.array(med_amp[40:])
+    high_freq3 = np.array(high_amp[40:])
+
+
+    x_freq_lows = np.array([2,2.2,2.4,2.6,2.8,3,3.2,3.4,3.6,3.8,4,4.2,4.4,4.6,4.8,5,5.2,5.4,5.6,5.8])
+    x_freq_meds = np.array([6,6.2,6.4,6.6,6.8,7,7.2,7.4,7.6,7.8,8,8.2,8.4,8.6,8.8,9,9.2,9.4,9.6,9.8])
+    x_freq_highs = np.array([10,10.2,10.4,10.6,10.8,11,11.2,11.4,11.6,11.8,12,12.2,12.4,12.6,12.8,13])
+
+    diff_low = np.array([])
+    diff_med = np.array([])
+    diff_high = np.array([])
+
+
+    for i in [low_freq1,low_freq2,low_freq3]:
+        diff1 = i - x_freq_lows
+        diff_low = np.append(diff_low, diff1)
+
+    for i in [med_freq1, med_freq2, med_freq3]:
+        diff2 = i - x_freq_meds
+        diff_med = np.append(diff_med, diff2)
+
+    for i in [high_freq1, high_freq2, high_freq3]:
+        diff3 = i - x_freq_highs
+        diff_high = np.append(diff_high, diff3)
+
+    f = plt.figure()
+    ax = f.add_subplot(111)
+    bp = ax.boxplot([diff_low, diff_med, diff_high], patch_artist=True, notch=True)
+    ax.set_xticklabels(['Low Frequency', 'Medium Frequency', 'High Frequncy'], family='serif', fontsize='12', fontweight='semibold')
+    ax.set_ylabel('Difference (Hz)', family='serif', fontsize='12', fontweight='semibold')
+    ax.set_title('Difference between Test Frequency and Measured Frequency', family='serif', fontsize='16', fontweight='semibold')
+    for box in bp['boxes']:
+        # change outline color
+        box.set(color='#0066cc', linewidth=2)
+        # change fill color
+        box.set(facecolor='#5DBCD2')
+
+    ## change color and linewidth of the whiskers
+    for whisker in bp['whiskers']:
+        whisker.set(color='#0066cc', linewidth=2)
+
+    ## change color and linewidth of the caps
+    for cap in bp['caps']:
+        cap.set(color='#0066cc', linewidth=2)
+
+    ## change color and linewidth of the medians
+    for median in bp['medians']:
+        median.set(color='#0066cc', linewidth=2)
+
+    ## change the style of fliers and their fill
+    for flier in bp['fliers']:
+        flier.set(marker='o', color='#e7298a', alpha=0.5)
+    plt.tight_layout()
+    plt.show()
+
+    F, p = f_oneway(diff_low, diff_med, diff_high)
+
+    print("Pval: " + str(p))
+    print("Fstat: " + str(F))
+
+
+
+
 
 
 
@@ -629,4 +753,4 @@ def plot_displacement_errors_poster():
 
 
 if __name__ == "__main__":
-    plot_filter_response_poster()
+    plot_frequency_errors_poster()
