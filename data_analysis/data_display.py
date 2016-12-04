@@ -73,7 +73,7 @@ def display_displacement(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a8.clear()
 
     highcut = 14
-    lowcut = 1
+    lowcut = 2
     fs = 100
     x_accel, y_accel, z_accel = get_data('data_rate_test.txt')
 
@@ -432,7 +432,7 @@ def get_stats():
     x_wins, y_wins, z_wins = get_windows('data_rate_test.txt', 4)
 
     highcut = 14
-    lowcut = 1
+    lowcut = 2
     fs = 100
 
     mean_disp_wins = []
