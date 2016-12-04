@@ -1,3 +1,6 @@
+from matplotlib import style
+style.use("ggplot")
+
 def display_acceleration(frame, f, a):
     """Display the magnitude of acceleration inside embedded tkinter graph
 
@@ -466,3 +469,164 @@ def get_stats():
     pd, et = describe_tremor_freq(np.mean(df_wins))
 
     return mean_disp_wins, is_tremor_wins, df_wins, disp_quant, pd, et
+
+
+def poster_graphs_acceleration_displacement():
+    from data_analysis.process_data import butter_lowpass_IIR_filter, \
+        remove_gravity_ENMO, gs_to_accel, get_disp_amplitude, is_tremor, psd_welch
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    x_trem = []
+    y_trem = []
+    z_trem = []
+    x_still = []
+    y_still = []
+    z_still = []
+
+    fc = 14
+    fs = 100
+    with open("on_wrist_simulated_tremor1.txt", "r") as f1:
+        for line in f1:
+            curr_reading = line.split(",")
+            x_trem.append(float(curr_reading[0]))
+            y_trem.append(float(curr_reading[1]))
+            z_trem.append(float(curr_reading[2]))
+
+
+    with open("arm_extended_no_tremor.txt", "r") as f2:
+        for line in f2:
+            curr_reading = line.split(",")
+            x_still.append(float(curr_reading[0]))
+            y_still.append(float(curr_reading[1]))
+            z_still.append(float(curr_reading[2]))
+
+    # filter raw accel
+    x_filt_trem = butter_lowpass_IIR_filter(x_trem, fc, fs)
+    y_filt_trem = butter_lowpass_IIR_filter(y_trem, fc, fs)
+    z_filt_trem = butter_lowpass_IIR_filter(z_trem, fc, fs)
+
+    x_filt_still = butter_lowpass_IIR_filter(x_still, fc, fs)
+    y_filt_still = butter_lowpass_IIR_filter(y_still, fc, fs)
+    z_filt_still = butter_lowpass_IIR_filter(z_still, fc, fs)
+    time_trem = np.arange(0, len(x_filt_trem), 1) / float(fs)
+    time_still = np.arange(0, len(x_filt_still), 1) / float(fs)
+
+    # remove gravity and convert to gs
+    acceleration_filtered_no_gravg_trem = remove_gravity_ENMO(x_filt_trem, y_filt_trem, z_filt_trem)
+    acceleration_tremor = gs_to_accel(acceleration_filtered_no_gravg_trem)
+
+    acceleration_filtered_no_gravg_still = remove_gravity_ENMO(x_filt_still, y_filt_still, z_filt_still)
+    acceleration_still = gs_to_accel(acceleration_filtered_no_gravg_still)
+
+
+    # get displacement and envelope
+    mean_disp_trem, disp_trem, envelope_trem = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_trem), 2, 14)
+    mean_disp_still, disp_still, envelope_still = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_still), 2, 14)
+
+    f = plt.figure(figsize=(12, 8))
+    ax1 = f.add_subplot(321)
+    ax2 = f.add_subplot(322, sharey=ax1)
+    ax3 = f.add_subplot(323)
+    ax4 = f.add_subplot(324, sharey=ax3)
+    ax5 = f.add_subplot(325)
+    ax6 = f.add_subplot(326)
+
+    #plot accelerations
+    ax1.plot(time_trem[500:900], acceleration_tremor[500:900], c='b')
+    ax1.set_xticks([5, 6, 7, 8, 9])
+    ax1.set_xticklabels(['0', '1', '2', '3', '4'])
+    ax1.set_title("Arm Extended: Tremor")
+    ax1.set_ylim([-14,14])
+    ax1.set_ylabel("Acceleration (m/s)")
+
+    ax2.plot(time_still[500:900], acceleration_still[500:900], c='b')
+    ax2.set_xticks([5, 6, 7, 8, 9])
+    ax2.set_xticklabels(['0', '1', '2', '3', '4'])
+    ax2.set_title("Arm Extended: No Tremor")
+    ax2.set_ylim([-14,14])
+
+    # plot displacements
+    ax3.plot(time_trem[500:900], disp_trem[500:900], color='g')
+    ax3.plot(time_trem[500:900], envelope_trem[500:900], color='r')
+    ax3.set_xticks([5, 6, 7, 8, 9])
+    ax3.set_yticks([-3, -1.5, 0, 1.5, 3])
+    ax3.set_xticklabels(['0', '1', '2', '3', '4'])
+    ax3.set_ylim([-3,3])
+    ax3.set_ylabel("Displacement (mm)")
+
+    ax4.plot(time_still[500:900], disp_still[500:900], color='g')
+    ax4.plot(time_still[500:900], envelope_still[500:900], color='r')
+    ax4.set_xticks([5, 6, 7, 8, 9])
+    ax4.set_yticks([-3, -1.5, 0, 1.5, 3])
+    ax4.set_xticklabels(['0', '1', '2', '3', '4'])
+    ax4.set_ylim([-3, 3])
+
+    f_trem, pxx_trem = psd_welch(acceleration_tremor, fs)
+
+    alert_trem, DF_trem = is_tremor(f_trem, pxx_trem)
+
+    ax5.semilogy(f_trem, pxx_trem, color='r', label='Power Spectral Density')
+    ax5.set_title('DF = %.2f Hz - Tremor: %r' % (DF_trem, alert_trem))
+    ax5.set_xlabel('Frequency (Hz)')
+    ax5.set_ylabel(r'$\frac{(m/s^2)^2}{\sqrt{Hz}}$', fontweight='bold')
+    ax5.set_ylim([0.0001, 100])
+    ax5.set_xlim([0, 30])
+    ax5.legend()
+
+    f_still, pxx_still = psd_welch(acceleration_still, fs)
+
+    alert_still, DF_still = is_tremor(f_still, pxx_still)
+
+    ax6.semilogy(f_still, pxx_still, color='r', label='Power Spectral Density')
+    ax6.set_title('DF = %.2f Hz - Tremor: %r' % (DF_still, alert_still))
+    ax6.set_xlabel('Frequency (Hz)')
+    ax6.set_ylim([0.0001, 100])
+    ax6.set_xlim([0, 30])
+
+    plt.tight_layout()
+    plt.show()
+
+    return 0
+
+
+def plot_filter_response_poster():
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy.signal import freqz
+    from data_analysis.process_data import butter_lowpass_IIR, butter_highpass_IIR_filter
+
+    plt.figure(1)
+    plt.clf()
+
+    fc = 14
+    fs = 100
+    linewidth = 1
+    for order in [3, 5, 7]:
+        if order == 5:
+            linewidth = 3
+        b, a = butter_lowpass_IIR(fc, fs, order = order)
+        w, h = freqz(b, a, worN=2000)
+
+        plt.plot((fs * 0.5 / np.pi) * w, abs(h), linewidth=linewidth, label="Order = %d" % order)
+        linewidth=1
+
+    plt.plot([0, 0.5 * fs], [np.sqrt(0.5), np.sqrt(0.5)],'--', label=r'$\sqrt{\frac{1}{2}}$')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Gain')
+    plt.grid(True)
+    plt.legend(loc='best')
+
+    plt.show()
+
+
+def plot_displacement_errors_poster():
+    # ToDo Recreate caroline error plot
+
+
+
+
+
+
+if __name__ == "__main__":
+    plot_filter_response_poster()
