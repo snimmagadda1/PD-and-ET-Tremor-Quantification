@@ -384,7 +384,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a3.set_xticklabels(['8', '9', '10', '11', '12'])
 
     # calculate psd of window
-    f_3, pxx_3 = psd_welch(acceleration_filtered_no_gravg_3, fs)
+    f_3, pxx_3 = psd_welch(acceleration_filtered_no_grav_3, fs)
     alert, DF = is_tremor(f_3, pxx_3)
 
     a7.semilogy(f_3, pxx_3, color='r')
@@ -419,7 +419,7 @@ def display_psd(frame, f, a1, a2, a3, a4, a5, a6, a7, a8):
     a4.set_xticklabels(['12', '13', '14', '15', '16'])
 
     # calculate psd of window
-    f_4, pxx_4 = psd_welch(acceleration_filtered_no_gravg_4, fs)
+    f_4, pxx_4 = psd_welch(acceleration_filtered_no_grav_4, fs)
     alert, DF = is_tremor(f_4, pxx_4)
 
     a8.semilogy(f_4, pxx_4, color='r')
@@ -454,7 +454,7 @@ def get_stats():
 
         mean_disp_wins.append(mean_disp)
 
-        freqs, pxx = psd_welch(enmofilt, fs)
+        freqs, pxx = psd_welch(enmofilt*9.8, fs)
         is_trem, df = is_tremor(freqs, pxx)
 
         is_tremor_wins.append(is_trem)
