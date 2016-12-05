@@ -432,6 +432,7 @@ def get_stats():
     from data_analysis.package_data import get_windows
     from data_analysis.process_data import butter_lowpass_IIR_filter, get_disp_amplitude, is_tremor, remove_gravity_ENMO, psd_welch, get_disp_quant,  describe_tremor_freq
     import numpy as np
+
     x_wins, y_wins, z_wins = get_windows('data_rate_test.txt', 4)
 
     highcut = 14
@@ -753,4 +754,4 @@ def plot_frequency_errors_poster():
 
 
 if __name__ == "__main__":
-    plot_frequency_errors_poster()
+    poster_graphs_acceleration_displacement()

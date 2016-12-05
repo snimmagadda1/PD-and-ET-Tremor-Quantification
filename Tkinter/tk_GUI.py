@@ -258,7 +258,7 @@ class graph_page(tk.Frame):
         topframe.pack(side=tk.TOP)
 
         start_button = tk.Button(topframe, text="Start Measurement",
-                                 command=lambda: spawnthread(bluetooth_acquire))
+                                 command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('Acquiring. Please Wait')))
         start_button.pack(side=tk.LEFT)
 
         plot_accel_button = tk.Button(topframe, text="Display Acceleration",
@@ -327,7 +327,7 @@ class displacement_graph_page(tk.Frame):
         topframe.pack(side=tk.TOP)
 
         start_button = tk.Button(topframe, text="Start Measurement",
-                                 command=lambda: spawnthread(bluetooth_acquire))
+                                 command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('Acquiring. Please Wait')))
         start_button.pack(side=tk.LEFT)
 
         calc_displacement_button = tk.Button(topframe, text="Calculate Displacement ",
@@ -401,7 +401,7 @@ class psd_graph_page(tk.Frame):
         topframe.pack(side=tk.TOP)
 
         start_button = tk.Button(topframe, text="Start Measurement",
-                                 command=lambda: spawnthread(bluetooth_acquire))
+                                 command=lambda: combine_funcs(spawnthread(bluetooth_acquire), delayed_popupmsg('Acquiring. Please Wait')))
         start_button.pack(side=tk.LEFT)
 
         plot_psd_button = tk.Button(topframe, text="Calculate Window Statistics",
