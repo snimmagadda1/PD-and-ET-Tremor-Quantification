@@ -525,7 +525,7 @@ def poster_graphs_acceleration_displacement():
     mean_disp_trem, disp_trem, envelope_trem = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_trem), 2, 14)
     mean_disp_still, disp_still, envelope_still = get_disp_amplitude(np.array(acceleration_filtered_no_gravg_still), 2, 14)
 
-    f = plt.figure(figsize=(12, 8))
+    f = plt.figure(figsize=(16, 10))
     ax1 = f.add_subplot(321)
     ax2 = f.add_subplot(322, sharey=ax1)
     ax3 = f.add_subplot(323)
@@ -537,28 +537,30 @@ def poster_graphs_acceleration_displacement():
     ax1.plot(time_trem[500:900], acceleration_tremor[500:900], c='b')
     ax1.set_xticks([5, 6, 7, 8, 9])
     ax1.set_xticklabels(['0', '1', '2', '3', '4'])
-    ax1.set_title("Arm Extended: Tremor")
+    ax1.set_title("Arm Extended: Tremor", fontsize=20)
     ax1.set_ylim([-14,14])
-    ax1.set_ylabel("Acceleration (m/s)")
+    ax1.set_ylabel("Acceleration (m/s)", fontsize=16)
 
     ax2.plot(time_still[500:900], acceleration_still[500:900], c='b')
     ax2.set_xticks([5, 6, 7, 8, 9])
     ax2.set_xticklabels(['0', '1', '2', '3', '4'])
-    ax2.set_title("Arm Extended: No Tremor")
+    ax2.set_title("Arm Extended: No Tremor", fontsize=20)
     ax2.set_ylim([-14,14])
 
     # plot displacements
     ax3.plot(time_trem[500:900], disp_trem[500:900], color='g', label='Displacement')
     ax3.plot(time_trem[500:900], envelope_trem[500:900], color='r', label='Envelope')
     ax3.set_xticks([5, 6, 7, 8, 9])
+    ax3.set_title("Calculated Displacement", fontsize=20)
     ax3.set_yticks([-3, -1.5, 0, 1.5, 3])
     ax3.set_xticklabels(['0', '1', '2', '3', '4'])
     ax3.set_ylim([-3,3])
-    ax3.set_ylabel("Displacement (mm)")
+    ax3.set_ylabel("Displacement (mm)", fontsize=16)
     ax3.legend(loc='upper left')
 
     ax4.plot(time_still[500:900], disp_still[500:900], color='g')
     ax4.plot(time_still[500:900], envelope_still[500:900], color='r')
+    ax4.set_title("Calculated Displacement", fontsize=20)
     ax4.set_xticks([5, 6, 7, 8, 9])
     ax4.set_yticks([-3, -1.5, 0, 1.5, 3])
     ax4.set_xticklabels(['0', '1', '2', '3', '4'])
@@ -569,9 +571,9 @@ def poster_graphs_acceleration_displacement():
     alert_trem, DF_trem = is_tremor(f_trem, pxx_trem)
 
     ax5.semilogy(f_trem, pxx_trem, color='r', label='Power Spectral Density')
-    ax5.set_title('DF = %.2f Hz - Tremor: %r' % (DF_trem, alert_trem))
-    ax5.set_xlabel('Frequency (Hz)')
-    ax5.set_ylabel(r'$\frac{(m/s^2)^2}{\sqrt{Hz}}$', fontweight='bold')
+    ax5.set_title('DF = %.2f Hz Tremor: %r' % (DF_trem, alert_trem), fontsize=20)
+    ax5.set_xlabel('Frequency (Hz)', fontsize=16)
+    ax5.set_ylabel(r'$\frac{(m/s^2)^2}{\sqrt{Hz}}$', fontweight='bold', fontsize=16)
     ax5.set_ylim([0.0001, 100])
     ax5.set_xlim([0, 30])
 
@@ -581,13 +583,13 @@ def poster_graphs_acceleration_displacement():
     alert_still, DF_still = is_tremor(f_still, pxx_still)
 
     ax6.semilogy(f_still, pxx_still, color='r', label='Power Spectral Density')
-    ax6.set_title('DF = NA - Tremor: %r' %  alert_still)
-    ax6.set_xlabel('Frequency (Hz)')
+    ax6.set_title('DF = na Tremor: %r' %  alert_still, fontsize=20)
+    ax6.set_xlabel('Frequency (Hz)', fontsize=16)
     ax6.set_ylim([0.0001, 100])
     ax6.set_xlim([0, 30])
 
     plt.tight_layout()
-    plt.savefig('windows.pdf')
+    plt.savefig('windows.pdf', dpi=300)
     plt.show()
 
     return 0
@@ -615,12 +617,12 @@ def plot_filter_response_poster():
         linewidth=1
 
     plt.plot([0, 0.5 * fs], [np.sqrt(0.5), np.sqrt(0.5)],'--', label=r'$\sqrt{\frac{1}{2}}$')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Gain')
-    plt.title('Frequency Response of Zero-phase IIR Filter')
+    plt.xlabel('Frequency (Hz)', fontsize=16)
+    plt.ylabel('Gain', fontsize=16)
+    plt.title('Frequency Response of Zero-phase IIR Filter', fontsize=20)
     plt.grid(True)
     plt.legend(loc='best')
-    plt.savefig('freq_response.pdf')
+    plt.savefig('freq_response.pdf', dpi=300)
     plt.show()
 
 
@@ -738,9 +740,9 @@ def plot_frequency_errors_poster():
     high_diff = high_amp - x_freq
 
     bp1 = ax2.boxplot([low_diff, med_diff, high_diff], patch_artist=True, notch=True)
-    ax.set_xticklabels(['Low Freq.', 'Medium Freq.', 'High Freq'], fontsize='12')
-    ax.set_ylabel('Difference (Hz)', fontsize='12', fontweight='semibold')
-    ax.set_title('Difference between Expected \nand Measured Frequency', fontsize='16')
+    ax.set_xticklabels(['Low Freq.', 'Medium Freq.', 'High Freq'], fontsize='16')
+    ax.set_ylabel('Difference (Hz)', fontsize='16')
+    ax.set_title('Difference between Expected \nand Measured Frequency', fontsize='20')
     for box in bp['boxes']:
         # change outline color
         box.set(color='#0066cc', linewidth=2)
@@ -785,14 +787,13 @@ def plot_frequency_errors_poster():
     for flier in bp1['fliers']:
         flier.set(marker='o', color='#e7298a', alpha=0.5)
 
-    ax2.set_xticklabels(['Low Amp.', 'Medium Amp.', 'High Amp.'], fontsize='12',
-                       fontweight='semibold')
-    ax2.set_ylabel('Difference (Hz)', fontsize='12')
-    ax2.set_title('Difference between Expected \nand Measured Frequency', fontsize='16')
+    ax2.set_xticklabels(['Low Amp.', 'Medium Amp.', 'High Amp.'], fontsize='16')
+    ax2.set_ylabel('Difference (Hz)', fontsize='16')
+    ax2.set_title('Difference between Expected \nand Measured Frequency', fontsize='20')
 
     ax.set_ylim([-1,1])
     ax2.set_ylim([-1, 1])
-    plt.savefig('box_whisker.pdf')
+    plt.savefig('box_whisker.pdf', dpi=300)
     plt.show()
 
     F, p = f_oneway(diff_low, diff_med, diff_high)
