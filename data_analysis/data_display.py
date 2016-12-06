@@ -537,30 +537,30 @@ def poster_graphs_acceleration_displacement():
     ax1.plot(time_trem[500:900], acceleration_tremor[500:900], c='b')
     ax1.set_xticks([5, 6, 7, 8, 9])
     ax1.set_xticklabels(['0', '1', '2', '3', '4'])
-    ax1.set_title("Arm Extended: Tremor", fontsize=20)
+    ax1.set_title("Arm Extended: Tremor", fontsize=24)
     ax1.set_ylim([-14,14])
-    ax1.set_ylabel("Acceleration (m/s)", fontsize=16)
+    ax1.set_ylabel("Acceleration (m/s)", fontsize=18)
 
     ax2.plot(time_still[500:900], acceleration_still[500:900], c='b')
     ax2.set_xticks([5, 6, 7, 8, 9])
     ax2.set_xticklabels(['0', '1', '2', '3', '4'])
-    ax2.set_title("Arm Extended: No Tremor", fontsize=20)
+    ax2.set_title("Arm Extended: No Tremor", fontsize=24)
     ax2.set_ylim([-14,14])
 
     # plot displacements
     ax3.plot(time_trem[500:900], disp_trem[500:900], color='g', label='Displacement')
     ax3.plot(time_trem[500:900], envelope_trem[500:900], color='r', label='Envelope')
     ax3.set_xticks([5, 6, 7, 8, 9])
-    ax3.set_title("Calculated Displacement", fontsize=20)
+    ax3.set_title("Calculated Displacement", fontsize=24)
     ax3.set_yticks([-3, -1.5, 0, 1.5, 3])
     ax3.set_xticklabels(['0', '1', '2', '3', '4'])
     ax3.set_ylim([-3,3])
-    ax3.set_ylabel("Displacement (mm)", fontsize=16)
+    ax3.set_ylabel("Displacement (mm)", fontsize=18)
     ax3.legend(loc='upper left')
 
     ax4.plot(time_still[500:900], disp_still[500:900], color='g')
     ax4.plot(time_still[500:900], envelope_still[500:900], color='r')
-    ax4.set_title("Calculated Displacement", fontsize=20)
+    ax4.set_title("Calculated Displacement", fontsize=18)
     ax4.set_xticks([5, 6, 7, 8, 9])
     ax4.set_yticks([-3, -1.5, 0, 1.5, 3])
     ax4.set_xticklabels(['0', '1', '2', '3', '4'])
@@ -571,9 +571,9 @@ def poster_graphs_acceleration_displacement():
     alert_trem, DF_trem = is_tremor(f_trem, pxx_trem)
 
     ax5.semilogy(f_trem, pxx_trem, color='r', label='Power Spectral Density')
-    ax5.set_title('DF = %.2f Hz Tremor: %r' % (DF_trem, alert_trem), fontsize=20)
+    ax5.set_title('DF = %.2f Hz Tremor: %r' % (DF_trem, alert_trem), fontsize=24)
     ax5.set_xlabel('Frequency (Hz)', fontsize=16)
-    ax5.set_ylabel(r'$\frac{(m/s^2)^2}{\sqrt{Hz}}$', fontweight='bold', fontsize=16)
+    ax5.set_ylabel(r'$\frac{(m/s^2)^2}{\sqrt{Hz}}$', fontweight='bold', fontsize=18)
     ax5.set_ylim([0.0001, 100])
     ax5.set_xlim([0, 30])
 
@@ -583,8 +583,8 @@ def poster_graphs_acceleration_displacement():
     alert_still, DF_still = is_tremor(f_still, pxx_still)
 
     ax6.semilogy(f_still, pxx_still, color='r', label='Power Spectral Density')
-    ax6.set_title('DF = na Tremor: %r' %  alert_still, fontsize=20)
-    ax6.set_xlabel('Frequency (Hz)', fontsize=16)
+    ax6.set_title('DF = na Tremor: %r' %  alert_still, fontsize=24)
+    ax6.set_xlabel('Frequency (Hz)', fontsize=18)
     ax6.set_ylim([0.0001, 100])
     ax6.set_xlim([0, 30])
 
@@ -601,7 +601,7 @@ def plot_filter_response_poster():
     from scipy.signal import freqz
     from data_analysis.process_data import butter_lowpass_IIR, butter_highpass_IIR_filter
 
-    plt.figure(1)
+    plt.figure(figsize=(12,5))
     plt.clf()
 
     fc = 14
@@ -617,11 +617,12 @@ def plot_filter_response_poster():
         linewidth=1
 
     plt.plot([0, 0.5 * fs], [np.sqrt(0.5), np.sqrt(0.5)],'--', label=r'$\sqrt{\frac{1}{2}}$')
-    plt.xlabel('Frequency (Hz)', fontsize=16)
-    plt.ylabel('Gain', fontsize=16)
-    plt.title('Frequency Response of Zero-phase IIR Filter', fontsize=20)
+    plt.xlabel('Frequency (Hz)', fontsize=18)
+    plt.ylabel('Gain', fontsize=18)
+    plt.title('Frequency Response of Zero-phase IIR Filter', fontsize=24)
     plt.grid(True)
     plt.legend(loc='best')
+    plt.tight_layout()
     plt.savefig('freq_response.pdf', dpi=300)
     plt.show()
 
@@ -654,10 +655,15 @@ def plot_displacement_errors_poster():
 
 
 def plot_frequency_errors_poster():
-    from scipy.stats import f_oneway
+    from scipy.stats import f_oneway, stats
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+    from statsmodels.stats.multicomp import MultiComparison
     import numpy as np
     import matplotlib
     import matplotlib.pyplot as plt
+
+    # caroline data
+    x_freq = np.arange(2, 13.2, 0.2)
 
     # get data from caroline
     low_amp = np.array(
@@ -677,21 +683,21 @@ def plot_frequency_errors_poster():
     # med = 6-9.8 Hz
     # highs = 10-13 Hz
 
-    low_freq1 = np.array(low_amp[0:20])
-    low_freq2 = np.array(med_amp[0:20])
-    low_freq3 = np.array(high_amp[0:20])
+    low_freq1 = np.array(low_amp[0:18])
+    low_freq2 = np.array(med_amp[0:18])
+    low_freq3 = np.array(high_amp[0:18])
 
-    med_freq1 = np.array(low_amp[20:40])
-    med_freq2 = np.array(med_amp[20:40])
-    med_freq3 = np.array(high_amp[20:40])
+    med_freq1 = np.array(low_amp[18:36])
+    med_freq2 = np.array(med_amp[18:36])
+    med_freq3 = np.array(high_amp[18:36])
 
-    high_freq1 = np.array(low_amp[40:])
-    high_freq2 = np.array(med_amp[40:])
-    high_freq3 = np.array(high_amp[40:])
+    high_freq1 = np.array(low_amp[36:54])
+    high_freq2 = np.array(med_amp[36:54])
+    high_freq3 = np.array(high_amp[36:54])
 
-    x_freq_lows = np.array([2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8, 5, 5.2, 5.4, 5.6, 5.8])
-    x_freq_meds = np.array([6, 6.2, 6.4, 6.6, 6.8, 7, 7.2, 7.4, 7.6, 7.8, 8, 8.2, 8.4, 8.6, 8.8, 9, 9.2, 9.4, 9.6, 9.8])
-    x_freq_highs = np.array([10, 10.2, 10.4, 10.6, 10.8, 11, 11.2, 11.4, 11.6, 11.8, 12, 12.2, 12.4, 12.6, 12.8, 13])
+    x_freq_lows = x_freq[0:18]
+    x_freq_meds = x_freq[18:36]
+    x_freq_highs = x_freq[36:54]
 
     diff_low = np.array([])
     diff_med = np.array([])
@@ -712,28 +718,24 @@ def plot_frequency_errors_poster():
 
 
 
-    f = plt.figure(figsize=(12, 10))
+    f = plt.figure(figsize=(14, 10))
     ax = f.add_subplot(121)
     ax2 = f.add_subplot(122)
     bp = ax.boxplot([diff_low, diff_med, diff_high], patch_artist=True, notch=True)
 
-    #caroline data
-    x_freq = np.array(
-        [2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8, 5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4, 6.6,
-         6.8, 7, 7.2, 7.4, 7.6, 7.8, 8, 8.2, 8.4, 8.6, 8.8, 9, 9.2, 9.4, 9.6, 9.8, 10, 10.2, 10.4, 10.6, 10.8, 11, 11.2,
-         11.4, 11.6, 11.8, 12, 12.2, 12.4, 12.6, 12.8, 13])
-    low_amp = np.array(
-        [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4.3, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 5.8, 6, 6, 6, 6.7, 6.7,
-         6.7, 7.3, 7.3, 7.3, 7.7, 8, 8, 8.2, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.7, 10, 10, 10.5, 10.5, 10.7, 10.7, 10.8,
-         11.2, 11.3, 11.5, 12, 12, 12, 12.4, 12.7, 12.7])
-    med_amp = np.array(
-        [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4.2, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 5.8, 6, 6, 6, 6.7, 6.7,
-         6.7, 7.3, 7.3, 7.3, 7.5, 8, 8, 8, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.5, 10, 10, 10, 10.5, 10.7, 10.7, 11, 11.3,
-         11.3, 11.7, 12, 12, 12, 12.5, 12.7, 12.7])
-    high_amp = np.array(
-        [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 6, 6, 6, 6.3, 6.7, 6.7, 6.7,
-         7.3, 7.3, 7.3, 7.8, 8, 8, 8, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.7, 10, 10, 10, 10.7, 10.7, 10.7, 11.2, 11.3, 11.3,
-         11.5, 12, 12, 12.2, 12.7, 12.7, 12.7])
+
+    # low_amp = np.array(
+    #     [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4.3, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 5.8, 6, 6, 6, 6.7, 6.7,
+    #      6.7, 7.3, 7.3, 7.3, 7.7, 8, 8, 8.2, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.7, 10, 10, 10.5, 10.5, 10.7, 10.7, 10.8,
+    #      11.2, 11.3, 11.5, 12, 12, 12, 12.4, 12.7, 12.7])
+    # med_amp = np.array(
+    #     [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4.2, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 5.8, 6, 6, 6, 6.7, 6.7,
+    #      6.7, 7.3, 7.3, 7.3, 7.5, 8, 8, 8, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.5, 10, 10, 10, 10.5, 10.7, 10.7, 11, 11.3,
+    #      11.3, 11.7, 12, 12, 12, 12.5, 12.7, 12.7])
+    # high_amp = np.array(
+    #     [2, 2, 2.7, 2.7, 2.7, 2.7, 3.3, 3.3, 3.3, 4, 4, 4, 4, 4.7, 4.7, 4.7, 5.3, 5.3, 5.3, 6, 6, 6, 6.3, 6.7, 6.7, 6.7,
+    #      7.3, 7.3, 7.3, 7.8, 8, 8, 8, 8.7, 8.7, 8.7, 9.2, 9.3, 9.3, 9.7, 10, 10, 10, 10.7, 10.7, 10.7, 11.2, 11.3, 11.3,
+    #      11.5, 12, 12, 12.2, 12.7, 12.7, 12.7])
 
     low_diff = low_amp - x_freq
     med_diff = med_amp - x_freq
@@ -742,7 +744,7 @@ def plot_frequency_errors_poster():
     bp1 = ax2.boxplot([low_diff, med_diff, high_diff], patch_artist=True, notch=True)
     ax.set_xticklabels(['Low Freq.', 'Medium Freq.', 'High Freq'], fontsize='16')
     ax.set_ylabel('Difference (Hz)', fontsize='16')
-    ax.set_title('Difference between Expected \nand Measured Frequency', fontsize='20')
+    ax.set_title('Difference between Expected \nand Measured Frequency', fontsize='24')
     for box in bp['boxes']:
         # change outline color
         box.set(color='#0066cc', linewidth=2)
@@ -789,21 +791,28 @@ def plot_frequency_errors_poster():
 
     ax2.set_xticklabels(['Low Amp.', 'Medium Amp.', 'High Amp.'], fontsize='16')
     ax2.set_ylabel('Difference (Hz)', fontsize='16')
-    ax2.set_title('Difference between Expected \nand Measured Frequency', fontsize='20')
+    ax2.set_title('Difference between Expected \nand Measured Frequency', fontsize='24')
 
     ax.set_ylim([-1,1])
     ax2.set_ylim([-1, 1])
+    plt.tight_layout()
     plt.savefig('box_whisker.pdf', dpi=300)
     plt.show()
 
+    # anova on frequencies
     F, p = f_oneway(diff_low, diff_med, diff_high)
 
-    print("Pval: " + str(p))
+    # tukey on frequencies
+
+
+    print("Pval: " + str(p*2))
     print("Fstat: " + str(F))
 
 
 
 if __name__ == "__main__":
-    poster_graphs_acceleration_displacement()
-    plot_filter_response_poster()
+    import numpy as np
+
     plot_frequency_errors_poster()
+
+
