@@ -17,6 +17,12 @@ python3.5 Tkinter/tk_GUI.py
 4. [Adafruit Bluefruit LE SPI python library](https://github.com/adafruit/Adafruit_Python_BluefruitLE)
 5. [Pyobjc](https://pythonhosted.org/pyobjc/install.html)
 
+### File Structure
+- poster_bme_464.pdf
+- Tkinter: GUI program files
+- data_analysis: signal processing and data manipulation
+- data_receive: data manipulation and bluetooth calls
+
 ## Versioning
 
 v1.0.0-b
