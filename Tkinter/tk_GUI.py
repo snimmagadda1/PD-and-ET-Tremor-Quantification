@@ -22,8 +22,7 @@ SMALL_FONT = ("Verdana", 8)
 UPDRS_LABEL_FONT = ("Verdana", 14, "bold")
 MAIN_COLOR = "#5DBCD2"
 
-# declare main plot and geometry here and characteristics
-
+# declare main plot and geometry here and characteristics, quickly instantiate plots
 style.use("ggplot")
 f = plt.Figure()
 f2= plt.Figure()
@@ -36,7 +35,6 @@ a1_5 = f3.add_subplot(245)
 a1_6 = f3.add_subplot(246)
 a1_7 = f3.add_subplot(247)
 a1_8 = f3.add_subplot(248)
-
 a = f.add_subplot(111)
 a.tick_params(axis='both')
 a.grid(which='major', linestyle='--', color='grey')

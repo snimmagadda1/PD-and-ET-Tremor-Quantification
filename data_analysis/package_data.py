@@ -85,9 +85,3 @@ def extrapolate_accel_data_testing(filename):
             y.append(float(components[1]))
             z.append(float(components[2]))
     return np.array(x), np.array(y), np.array(z)
-
-if __name__ == "__main__":
-    pass
-
-        
-
