@@ -12,9 +12,10 @@ python3.5 Tkinter/tk_GUI.py
 
 ### Prerequisites
 1. Standalone Park & Son's Co. Essential Tremometer
-2. Python v3.5 **and** Python v2.7 (Anaconda + packages)
-3. [Adafruit Bluefruit LE SPI python library](https://github.com/adafruit/Adafruit_Python_BluefruitLE)
-4. [Pyobjc](https://pythonhosted.org/pyobjc/install.html)
+2. [Embedded Software](https://github.com/snimmagadda1/tremor_embedded)
+3. Python v3.5 **and** Python v2.7 (Anaconda + packages)
+4. [Adafruit Bluefruit LE SPI python library](https://github.com/adafruit/Adafruit_Python_BluefruitLE)
+5. [Pyobjc](https://pythonhosted.org/pyobjc/install.html)
 
 ## Versioning
 
